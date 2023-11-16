@@ -17,20 +17,18 @@
 </head>
 
 <body>
-<script src="assets/static/js/initTheme.js"></script>
+<script src="{{ asset('assets/static/js/initTheme.js') }}"></script>
 <div id="app">
 
 {{--    Sidebar --}}
     @include('admin.layouts.sidebar')
 
-    <div id="main">
-        <header class="mb-3">
-            <a href="#" class="burger-btn d-block d-xl-none">
-                <i class="bi bi-justify fs-3"></i>
-            </a>
-        </header>
+    <div id="main" class='layout-navbar navbar-fixed'>
+        @include('admin.layouts.navbar')
 
-        @yield('content')
+        <div id="main-content">
+            @yield('content')
+        </div>
 
         @include('admin.layouts.footer')
     </div>
@@ -47,11 +45,25 @@
     // If you want to use tooltips in your project, we suggest initializing them globally
     // instead of a "per-page" level.
     document.addEventListener('DOMContentLoaded', function () {
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
-        })
-    }, false);
+
+        var burgerBtn = document.querySelector('.burger-btn');
+        var sidebar = document.querySelector('#sidebar');
+        var currentSidebar = sidebar.classList[1];
+
+        burgerBtn.addEventListener('click', function () {
+            sidebar.classList.remove(currentSidebar);
+            switch (currentSidebar) {
+                case 'active':
+                    currentSidebar = 'inactive';
+                    sidebar.classList.add('inactive');
+                    break;
+                case 'inactive':
+                    currentSidebar = 'active';
+                    sidebar.classList.add('active');
+                    break;
+            }
+        });
+    });
 </script>
 
 </body>
