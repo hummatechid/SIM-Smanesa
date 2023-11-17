@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tooltip - Mazer Admin Dashboard</title>
+    <title>SIM | Smanesa</title>
 
 
 
@@ -50,7 +50,7 @@
         var sidebar = document.querySelector('#sidebar');
         var currentSidebar = sidebar.classList[1];
 
-        burgerBtn.addEventListener('click', function () {
+        burgerBtn.addEventListener('click', function () {1
             sidebar.classList.remove(currentSidebar);
             switch (currentSidebar) {
                 case 'active':
