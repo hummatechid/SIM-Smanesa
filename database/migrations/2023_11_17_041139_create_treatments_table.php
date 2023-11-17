@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('treatments', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('category');
-            $table->int('min_score');
-            $table->int('max_score');
+            $table->integer('min_score');
+            $table->integer('max_score');
             $table->string('action');
             $table->timestamps();
         });

@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('attendances', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('student_id')->constrained('students');
+            $table->uuid('id')->primary();
+            $table->uuid('student_id');
+            $table->foreign('student_id')->references('id')->on('students');
             $table->dateTime('present_at');
             $table->dateTime('return_at')->nullable();
             $table->string('status');

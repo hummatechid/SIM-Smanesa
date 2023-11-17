@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('permissions', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('student_id')->constrained('students');
+        Schema::create('permits', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('student_id');
+            $table->foreign('student_id')->references('id')->on('students');
             $table->bigInteger('created_by');
             $table->bigInteger('accepted_by');
             $table->string('reason');
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('permissions');
+        Schema::dropIfExists('permits');
     }
 };

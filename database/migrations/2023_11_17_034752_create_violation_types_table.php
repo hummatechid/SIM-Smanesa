@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('violation_types', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('name');
-            $table->int('score');
+            $table->integer('score');
             $table->timestamps();
         });
     }

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('students', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('nik');
             $table->string('nisn');
             $table->string('npd');
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('address');
             $table->enum('religion', ['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha', 'Konghucu', 'Lainnya']);
             $table->string('nama_rombel');
-            $table->int('violation_score');
+            $table->integer('violation_score');
             $table->timestamps();
         });
     }
