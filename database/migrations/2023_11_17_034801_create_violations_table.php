@@ -17,6 +17,7 @@ return new class extends Migration
             $table->uuid('violation_type_id');
             $table->foreign('student_id')->references('id')->on('students');
             $table->foreign('violation_type_id')->references('id')->on('violation_types');
+            $table->integer('score');
             $table->timestamps();
         });
     }
