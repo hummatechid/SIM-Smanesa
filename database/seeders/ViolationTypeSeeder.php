@@ -244,9 +244,7 @@ class ViolationTypeSeeder extends Seeder
             ],
         ];
 
-        $datas = [];
-        
-        array_merge($datas, $data_sikap, $data_kerapian, $data_kerajinan);
+        $datas = array_merge($data_sikap, $data_kerapian, $data_kerajinan);
 
         foreach($datas as $data) {
             ViolationType::create($data);
