@@ -15,6 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->integer('score');
+            $table->dateTime('deleted_at')->nullable();
             $table->timestamps();
         });
     }
