@@ -43,8 +43,8 @@
 
 
                 <li
-                    class="sidebar-item  active">
-                    <a href="index.html" class='sidebar-link'>
+                    class="sidebar-item {{ isset($main_menu) && $main_menu == 'dashboard' ? 'active' : '' }}">
+                    <a href="{{ url('/') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Dashboard</span>
                     </a>
@@ -57,7 +57,7 @@
                 <li class="sidebar-title">Master Data</li>
 
                 <li
-                    class="sidebar-item has-sub">
+                    class="sidebar-item {{ isset($main_menu) && $main_menu == 'teacher' ? 'active' : '' }} has-sub">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-stack"></i>
                         <span>Guru</span>
@@ -65,12 +65,12 @@
 
                     <ul class="submenu active">
 
-                        <li class="submenu-item  ">
-                            <a href="component-accordion.html" class="submenu-link">Tambah Guru</a>
+                        <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'teacher-add' ? 'active' : '' }}">
+                            <a href="{{ url('teacher/create') }}" class="submenu-link">Tambah Guru</a>
 
                         </li>
-                        <li class="submenu-item  ">
-                            <a href="component-accordion.html" class="submenu-link">List Guru</a>
+                        <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'teacher-list' ? 'active' : '' }}">
+                            <a href="{{ url('teacher') }}" class="submenu-link">List Guru</a>
 
                         </li>
 
@@ -80,8 +80,8 @@
                 </li>
 
                 <li
-                    class="sidebar-item ">
-                    <a href="index.html" class='sidebar-link'>
+                    class="sidebar-item {{ isset($main_menu) && $main_menu == 'student' ? 'active' : '' }}">
+                    <a href="{{ url('student') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Siswa</span>
                     </a>
@@ -90,7 +90,7 @@
                 </li>
 
                 <li
-                    class="sidebar-item has-sub">
+                    class="sidebar-item has-sub {{ isset($main_menu) && $main_menu == 'user' ? 'active' : '' }}">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-stack"></i>
                         <span>Pengguna</span>
@@ -98,19 +98,19 @@
 
                     <ul class="submenu active">
 
-                        <li class="submenu-item  ">
-                            <a href="component-accordion.html" class="submenu-link">Tambah Pengguna</a>
+                        <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'user-add' ? 'active' : '' }}">
+                            <a href="{{ url('user/create') }}" class="submenu-link">Tambah Pengguna</a>
 
                         </li>
-                        <li class="submenu-item  ">
-                            <a href="component-accordion.html" class="submenu-link">List Pengguna</a>
+                        <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'user-list' ? 'active' : '' }}">
+                            <a href="{{ url('user') }}" class="submenu-link">List Pengguna</a>
 
                         </li>
 
                     </ul>
 
                 <li
-                    class="sidebar-item has-sub">
+                    class="sidebar-item has-sub {{ isset($main_menu) && $main_menu == 'violation-master' ? 'active' : '' }}">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-stack"></i>
                         <span>Pelanggaran</span>
@@ -118,13 +118,13 @@
 
                     <ul class="submenu active">
 
-                        <li class="submenu-item  ">
-                            <a href="component-accordion.html" class="submenu-link">Jenis Pelanggaran</a>
+                        <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'violation-type' ? 'active' : '' }}">
+                            <a href="{{ url('violation-type') }}" class="submenu-link">Jenis Pelanggaran</a>
 
                         </li>
 
-                        <li class="submenu-item  ">
-                            <a href="component-accordion.html" class="submenu-link">Tindak Lanjut</a>
+                        <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'treatment' ? 'active' : '' }}">
+                            <a href="{{ url('treatment') }}" class="submenu-link">Tindak Lanjut</a>
 
                         </li>
                     </ul>
@@ -138,7 +138,7 @@
                 <li class="sidebar-title">Menu</li>
 
                 <li
-                    class="sidebar-item has-sub">
+                    class="sidebar-item has-sub {{ isset($main_menu) && $main_menu == 'attendance' ? 'active' : '' }}">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-stack"></i>
                         <span>Presensi</span>
@@ -146,17 +146,17 @@
 
                     <ul class="submenu active">
 
-                        <li class="submenu-item  ">
-                            <a href="component-accordion.html" class="submenu-link">Overview</a>
+                        <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'attendance-overview' ? 'active' : '' }}">
+                            <a href="{{ url('attendance') }}" class="submenu-link">Overview</a>
 
                         </li>
-                        <li class="submenu-item  ">
-                            <a href="component-accordion.html" class="submenu-link">Manajemen Presensi</a>
+                        <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'attendance-manage' ? 'active' : '' }}">
+                            <a href="{{ url('attendance') }}" class="submenu-link">Manajemen Presensi</a>
 
                         </li>
 
-                        <li class="submenu-item  ">
-                            <a href="component-accordion.html" class="submenu-link">Laporan Presensi</a>
+                        <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'attendance-report' ? 'active' : '' }}">
+                            <a href="{{ url('attendance/report') }}" class="submenu-link">Laporan Presensi</a>
 
                         </li>
                     </ul>
@@ -165,7 +165,7 @@
                 </li>
 
                 <li
-                    class="sidebar-item has-sub">
+                    class="sidebar-item has-sub {{ isset($main_menu) && $main_menu == 'violation' ? 'active' : '' }}">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-stack"></i>
                         <span>Catat Pelanggaran</span>
@@ -173,13 +173,13 @@
 
                     <ul class="submenu active">
 
-                        <li class="submenu-item  ">
-                            <a href="component-accordion.html" class="submenu-link">Pelanggaran</a>
+                        <li class="submenu-item {{ isset($main_menu) && $main_menu == 'violation' ? 'active' : '' }}">
+                            <a href="{{ url('violation') }}" class="submenu-link">Pelanggaran</a>
 
                         </li>
 
-                        <li class="submenu-item  ">
-                            <a href="component-accordion.html" class="submenu-link">Laporan Pelanggaran</a>
+                        <li class="submenu-item {{ isset($main_menu) && $main_menu == 'violation-report' ? 'active' : '' }}">
+                            <a href="{{ url('violation/report') }}" class="submenu-link">Laporan Pelanggaran</a>
 
                         </li>
                     </ul>
