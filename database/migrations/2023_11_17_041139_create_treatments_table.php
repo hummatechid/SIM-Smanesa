@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('min_score');
             $table->integer('max_score');
             $table->string('action');
+            $table->dateTime('deleted_at')->nullable();
             $table->timestamps();
         });
     }
