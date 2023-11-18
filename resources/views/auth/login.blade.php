@@ -24,20 +24,21 @@
         <div class="col-lg-5 col-12">
             <div id="auth-left">
                 <div class="auth-logo">
-                    <a href="index.html"><img src="{{ asset('assets/compiled/svg/logo.svg') }}" alt="Logo"></a>
+                    <a href="{{ url('login') }}"><img src="{{ asset('assets/compiled/svg/logo.svg') }}" alt="Logo"></a>
                 </div>
                 <h1 class="auth-title">Masuk.</h1>
                 <p class="auth-subtitle mb-5">Masuk ke akun anda untuk menuju halaman beranda.</p>
 
-                <form action="index.html">
+                <form action="{{ url('login') }}" method="POST">
+                    @csrf
                     <div class="form-group position-relative has-icon-left mb-4">
-                        <input type="text" class="form-control form-control-xl" placeholder="Email">
+                        <input type="email" name="email" id="email" class="form-control form-control-xl" placeholder="Email">
                         <div class="form-control-icon">
                             <i class="bi bi-envelope"></i>
                         </div>
                     </div>
                     <div class="form-group position-relative has-icon-left mb-4">
-                        <input type="password" class="form-control form-control-xl" placeholder="Password">
+                        <input type="password" name="password" id="password" class="form-control form-control-xl" placeholder="Password">
                         <div class="form-control-icon">
                             <i class="bi bi-shield-lock"></i>
                         </div>
