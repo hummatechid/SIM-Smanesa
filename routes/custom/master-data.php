@@ -20,10 +20,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth'])->group(function () {
     // get controller from ViolationTypeController 
     Route::resource('violation-type', ViolationTypeController::class);
-    Route::post('violation-type/soft-delete/{id}', ViolationTypeController::class);
+    Route::post('violation-type/soft-delete/{id}', [ViolationTypeController::class, "softDestroy"]);
     
     // get controller from TreatmentController 
     Route::resource('treatment', TreatmentController::class);
-    Route::post('treatment/soft-delete/{id}', TreatmentController::class);
+    Route::post('treatment/soft-delete/{id}', [TreatmentController::class, "softDestroy"]);
 
 });
