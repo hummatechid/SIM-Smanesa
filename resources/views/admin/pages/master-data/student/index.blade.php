@@ -36,6 +36,27 @@
         </div>
     </div>
 
+    <!-- Detail Siswa Modal -->
+    <div class="modal fade modal-borderless" id="exampleModalCenter" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable"
+             role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Detail Siswa
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal"
+                            aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-detail-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
     @php
         $data_column = [
             "full_name" => "Nama",
@@ -59,6 +80,62 @@
 @push('custom-script')
     <script>
         $(document).ready(function () {
+
+            $(document).on('click', '.btn-detail', function() {
+               console.log($(this).data('data'))
+                var student = $(this).data('data')
+                var body = `
+                    <table>
+                        <tr>
+                            <th>Nama</th>
+                            <td>:</td>
+                            <td>${student.full_name}</td>
+                        </tr>
+                        <tr>
+                            <th>NISN</th>
+                            <td>:</td>
+                            <td>${student.nisn}</td>
+                        </tr>
+                        <tr>
+                            <th>NIPD</th>
+                            <td>:</td>
+                            <td>${student.nipd}</td>
+                        </tr>
+                        <tr>
+                            <th>NIK</th>
+                            <td>:</td>
+                            <td>${student.nik}</td>
+                        </tr>
+                        <tr>
+                            <th>Jenis Kelamin</th>
+                            <td>:</td>
+                            <td>${student.gender}</td>
+                        </tr>
+                        <tr>
+                            <th>No Handphone</th>
+                            <td>:</td>
+                            <td>${student.phone_number}</td>
+                        </tr>
+                        <tr>
+                            <th>Alamat</th>
+                            <td>:</td>
+                            <td>${student.address}</td>
+                        </tr>
+                        <tr>
+                            <th>Agama</th>
+                            <td>:</td>
+                            <td>${student.religion}</td>
+                        </tr>
+                        <tr>
+                            <th>Poin Pelanggaran</th>
+                            <td>:</td>
+                            <td>${student.violation_score}</td>
+                        </tr>
+                    </table>
+                `;
+
+               $(`#modal-detail-body`).html(body);
+            });
 
             $('#sync-siswa').on('click', function () {
                 // $('.modal').modal('show');

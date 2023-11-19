@@ -57,7 +57,8 @@ class StudentService extends BaseService
             })->addColumn('nama_rombel', function($item) {
                 return $item->nama_rombel;
             })->addColumn('action', function($item) {
-                return '<button class="btn btn-sm btn-danger btn-detail" data-data="{{ $item }}">Detail</button>';
+                return view('admin.pages.master-data.student.datatable', compact('item'));
+//                return '<button class="btn btn-sm btn-danger btn-detail" data-data="{{ $item }}">Detail</button>';
             })->rawColumns(['action'])
             ->make(true);
     }
