@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('religion', 50);
             $table->string('nama_rombel');
             $table->integer('violation_score');
+            $table->dateTime('deleted_at')->nullable();
             $table->timestamps();
         });
     }

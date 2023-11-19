@@ -19,6 +19,7 @@ return new class extends Migration
             $table->dateTime('return_at')->nullable();
             $table->string('status');
             $table->string('permit_file');
+            $table->dateTime('deleted_at')->nullable();
             $table->timestamps();
         });
     }

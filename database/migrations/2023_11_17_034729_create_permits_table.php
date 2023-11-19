@@ -19,6 +19,7 @@ return new class extends Migration
             $table->bigInteger('accepted_by');
             $table->string('reason');
             $table->string('status');
+            $table->dateTime('deleted_at')->nullable();
             $table->timestamps();
         });
     }
