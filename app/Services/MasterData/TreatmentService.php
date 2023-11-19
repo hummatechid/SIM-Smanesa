@@ -6,36 +6,17 @@ use App\Http\Requests\TreatmentRequest;
 use App\Repositories\TreatmentRepository;
 use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\Facades\DataTables;
+use App\Services\BaseService;
 
-class TreatmentService {
-    private $treatmentRepository;
-    private $pageTitle = "Jenis Pelanggaran";
-    private $mainUrl = "treatment";
-    private $mainMenu = "violation-master";
-    private $subMenu = "treatment";
+class TreatmentService extends BaseService {
 
     public function __construct(TreatmentRepository $treatmentRepository)
     {
-        $this->treatmentRepository = $treatmentRepository;
-    }
-
-    /**
-     * Get data to showing in the page data
-     *
-     * @param string $subTitle
-     * @param array $optionalData
-     * @return array
-     */
-    public function getPageData(string $subTitle ,array $optionalData = []) :array
-    {
-        $data = array_merge([
-            "page_title" => $this->pageTitle,
-            "main_url" => $this->mainUrl,
-            "sub_title" => $subTitle,
-            "main_menu" => $this->mainMenu,
-            "sub_menu" => $this->subMenu
-        ], $optionalData);
-        return $data;
+        $this->repository = $treatmentRepository;
+        $this->pageTitle = "Jenis Pelanggaran";
+        $this->mainUrl = "treatment";
+        $this->mainMenu = "violation-master";
+        $this->subMenu = "treatment";
     }
 
     /**
@@ -45,7 +26,7 @@ class TreatmentService {
      */
     public function getDataDatatable() :JsonResponse
     {
-        $data = $this->treatmentRepository->getOrderedData("min_score", "asc");
+        $data = $this->repository->getAll();
 
         return Datatables::of($data)
             ->addIndexColumn()

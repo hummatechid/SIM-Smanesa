@@ -23,7 +23,7 @@ class TreatmentController extends Controller
      */
     public function index()
     {
-        $dataPage = $this->treatmentService->getPageData("");
+        $dataPage = $this->treatmentService->getPageData();
 
         return view('admin.pages.master-data.treatment.index', $dataPage);
     }

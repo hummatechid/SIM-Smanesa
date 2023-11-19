@@ -6,36 +6,16 @@ use App\Http\Requests\ViolationTypeRequest;
 use App\Repositories\ViolationTypeRepository;
 use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\Facades\DataTables;
+use App\Services\BaseService;
 
-class ViolationTypeService {
-    private $violationTypeRepository;
-    private $pageTitle = "Jenis Pelanggaran";
-    private $mainUrl = "violation-type";
-    private $mainMenu = "violation-master";
-    private $subMenu = "violation-type";
-
+class ViolationTypeService extends BaseService {
     public function __construct(ViolationTypeRepository $violationTypeRepository)
     {
-        $this->violationTypeRepository = $violationTypeRepository;
-    }
-
-    /**
-     * Get data to showing in the page data
-     *
-     * @param string $subTitle
-     * @param array $optionalData
-     * @return array
-     */
-    public function getPageData(string $subTitle ,array $optionalData = []) :array
-    {
-        $data = array_merge([
-            "page_title" => $this->pageTitle,
-            "main_url" => $this->mainUrl,
-            "sub_title" => $subTitle,
-            "main_menu" => $this->mainMenu,
-            "sub_menu" => $this->subMenu
-        ], $optionalData);
-        return $data;
+        $this->repository = $violationTypeRepository;
+        $this->pageTitle = "Jenis Pelanggaran";
+        $this->mainUrl = "violation-type";
+        $this->mainMenu = "violation-master";
+        $this->subMenu = "violation-type";
     }
 
     /**
@@ -45,7 +25,7 @@ class ViolationTypeService {
      */
     public function getDataDatatable() :JsonResponse
     {
-        $data = $this->violationTypeRepository->getOrderedData("name", "asc");
+        $data = $this->repository->getAll();
 
         return Datatables::of($data)
             ->addIndexColumn()

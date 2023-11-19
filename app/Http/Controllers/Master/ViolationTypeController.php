@@ -24,7 +24,7 @@ class ViolationTypeController extends Controller
      */
     public function index()
     {
-        $dataPage = $this->violationTypeService->getPageData("");
+        $dataPage = $this->violationTypeService->getPageData();
 
         return view('admin.pages.master-data.violation-type.index', $dataPage);
     }
