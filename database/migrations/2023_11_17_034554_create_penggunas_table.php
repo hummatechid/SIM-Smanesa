@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('phone_number');
             $table->string('address');
             $table->enum('religion', ['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha', 'Konghucu', 'Lainnya']);
-            $table->text('bio');
-            $table->string('photo');
+            $table->text('bio')->nullable();
+            $table->string('photo')->nullable();
             $table->dateTime('deleted_at')->nullable();
             $table->timestamps();
         });

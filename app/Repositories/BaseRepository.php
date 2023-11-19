@@ -8,7 +8,7 @@ class BaseRepository implements RepositoryInterface {
     public $model;
 
     // function for get all data
-    public function getAll(bool $history = null): object
+    public function getAll(bool $history = null): array
     {
         switch ($history){
             case true: 
@@ -21,7 +21,7 @@ class BaseRepository implements RepositoryInterface {
     }
 
     // function for get one data by id data
-    public function getOneById(string $id, bool $fail = false, bool $history = null): object
+    public function getOneById(string $id, bool $fail = false, bool $history = null): object | null
     {
         switch($history)
         {
@@ -47,7 +47,7 @@ class BaseRepository implements RepositoryInterface {
     }
 
     // function for get one data by other column in table data
-    public function getOneByOther(string $column, mixed $data, bool $fail = false, bool $history = null): object
+    public function getOneByOther(string $column, mixed $data, bool $fail = false, bool $history = null): object | null
     {
         switch($history)
         {
@@ -129,24 +129,24 @@ class BaseRepository implements RepositoryInterface {
     }
 
     // function for create data
-    public function create(array $data): object
+    public function create(array $data): object | null
     {
         return $this->model->create($data);
     }
 
     // function for update data by id
-    public function update(string $id, array $data): object
+    public function update(string $id, array $data): object | null
     {
         return $this->model->find($id)->update($data);
     } 
 
     // function for soft delete
-    public function softDelete(string $id): object{
+    public function softDelete(string $id): object | null{
         return $this->model->find($id)->update(['deleted_at' => now()]);
     }
 
     // function for delete permanent
-    public function delete(string $id): object{
+    public function delete(string $id): object | null{
         return $this->model->find($id)->delete();
     }
 
@@ -155,9 +155,9 @@ class BaseRepository implements RepositoryInterface {
      *
      * @param string $column
      * @param string $value
-     * @return object
+     * @return object | null
      */
-    public function getOrderedData(string $column, string $value): object
+    public function getOrderedData(string $column, string $value): object | null
     {
         return $this->model->orderBy($column, $value)->get();
     }
