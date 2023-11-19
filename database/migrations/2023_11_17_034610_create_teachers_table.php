@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('photo');
             $table->string('jenis_ptk');
             $table->boolean('is_dapodik');
+            $table->dateTime('deleted_at')->nullable();
             $table->timestamps();
         });
     }
