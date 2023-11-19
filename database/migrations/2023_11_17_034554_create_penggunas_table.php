@@ -23,6 +23,7 @@ return new class extends Migration
             $table->enum('religion', ['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha', 'Konghucu', 'Lainnya']);
             $table->text('bio');
             $table->string('photo');
+            $table->dateTime('deleted_at')->nullable();
             $table->timestamps();
         });
     }
