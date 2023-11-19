@@ -54,7 +54,7 @@ class StudentController extends Controller
 
         if($students == null) {
             return response()->json([
-                'message' => 'failed'
+                'message' => $students
             ]);
         }
 

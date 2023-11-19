@@ -52,7 +52,7 @@ class StudentRepository extends BaseRepository
             // Handle the error
             echo 'Error: ' . $response->status();
 
-            return null;
+            return  $response->status();
         }
     }
 
