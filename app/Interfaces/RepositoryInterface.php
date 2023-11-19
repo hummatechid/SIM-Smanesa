@@ -5,7 +5,7 @@ namespace App\Interfaces;
 interface RepositoryInterface {
 
     // function for get all data
-    public function getAll(bool $history = null): array;
+    public function getAll(bool $history = null): object;
 
     // function for get one data by id data
     public function getOneById(string $id, bool $fail = false, bool $history = null): object | null;

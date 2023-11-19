@@ -8,7 +8,7 @@ class BaseRepository implements RepositoryInterface {
     public $model;
 
     // function for get all data
-    public function getAll(bool $history = null): array
+    public function getAll(bool $history = null): object
     {
         switch ($history){
             case true: 
