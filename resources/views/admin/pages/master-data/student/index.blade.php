@@ -38,7 +38,7 @@
 
     @php
         $data_column = [
-            "name" => "Nama",
+            "full_name" => "Nama",
             "nisn" => "NISN",
             "nipd" => "NIPD",
             "gender" => "Jenis Kelamin",
@@ -78,6 +78,7 @@
 
                 location.reload();
             });
+            
         }); //end of document.ready
 
 

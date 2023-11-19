@@ -5,7 +5,7 @@ namespace App\Services\MasterData;
 use App\Repositories\StudentRepository;
 use App\Services\BaseService;
 use Illuminate\Http\JsonResponse;
-use Yajra\Datatables\Facades\Datatables;
+use Yajra\DataTables\Facades\DataTables;
 
 class StudentService extends BaseService
 {
@@ -46,8 +46,8 @@ class StudentService extends BaseService
 
         return Datatables::of($data)
             ->addIndexColumn()
-            ->addColumn('name', function($item) {
-                return $item->name;
+            ->addColumn('full_name', function($item) {
+                return $item->full_name;
             })->addColumn('nisn', function($item) {
                 return $item->nisn;
             })->addColumn('nipd', function($item) {
@@ -57,7 +57,7 @@ class StudentService extends BaseService
             })->addColumn('nama_rombel', function($item) {
                 return $item->nama_rombel;
             })->addColumn('action', function($item) {
-                return '<button class="btn btn-sm btn-danger delete-data" data-id="'.$item->id.'">Detail</button>';
+                return '<button class="btn btn-sm btn-danger btn-detail" data-data="{{ $item }}">Detail</button>';
             })->rawColumns(['action'])
             ->make(true);
     }
