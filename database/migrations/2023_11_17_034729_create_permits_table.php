@@ -15,9 +15,9 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('student_id');
             $table->foreign('student_id')->references('id')->on('students');
-            $table->bigInteger('created_by');
-            $table->bigInteger('updated_by')->nullable();
-            $table->bigInteger('accepted_by')->nullable();
+            $table->uuid('created_by');
+            $table->uuid('updated_by')->nullable();
+            $table->uuid('accepted_by')->nullable();
             $table->string('reason');
             $table->string('status');
             $table->dateTime('deleted_at')->nullable();

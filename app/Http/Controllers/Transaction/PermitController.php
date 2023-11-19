@@ -107,12 +107,17 @@ class PermitController extends Controller
         $user = $this->penggunaRepository->getOneById($userAuth->id);
         if(!$user) $user = $this->teacherRepository->getOneById($userAuth->id);
 
+        //set data update
+        $dataUpdate = [
+            "status" => $request->status,
+            "updated_by" => $user->id
+        ];
+
+        if($request->status == "accepted") $dataUpdate["accepted_by"] = $user->id;
+
         try{
             // store data 
-            $permit->update([
-              "status" => $request->status,
-              "updated_by" => $user->id
-            ]);
+            $permit->update($dataUpdate);
 
             return redirect()->route('permit.index')->with('success', "Berhasil memberikan tanggapan di surat izin");
         }catch(\Throwable $th){
