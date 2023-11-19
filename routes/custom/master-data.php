@@ -1,11 +1,10 @@
 <?php
 
-use App\Http\Controllers\Master\{
+use App\Http\Controllers\Master\{StudentController,
     TreatmentController,
     ViolationTypeController,
     TeacherController,
-    PenggunaController
-};
+    PenggunaController};
 use Illuminate\Support\Facades\Route;
 
 /*

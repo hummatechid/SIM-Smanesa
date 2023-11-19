@@ -7,6 +7,7 @@ use App\Repositories\StudentRepository;
 use App\Services\MasterData\StudentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class StudentController extends Controller
 {
@@ -19,11 +20,32 @@ class StudentController extends Controller
         $this->service = $service;
     }
 
-    public function index()
+    /**
+     * show index page
+     *
+     * @return View
+     */
+    public function index(): View
     {
-        return view('admin.pages.student.index');
+        $data = $this->service->getPageData('student-list');
+        return view('admin.pages.master-data.student.index', $data);
     }
 
+    /**
+     * get data for datatables
+     *
+     * @return mixed
+     */
+    public function getDatatablesData()
+    {
+        return $this->service->getDataDatatable();
+    }
+
+    /**
+     * sync student from dapodik
+     *
+     * @return JsonResponse
+     */
     public function syncStudents(): JsonResponse
     {
         $npsn = config('app.web_service_npsn');

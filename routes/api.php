@@ -2,12 +2,11 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Master\{
+use App\Http\Controllers\Master\{StudentController,
     TreatmentController,
     ViolationTypeController,
     TeacherController,
-    PenggunaController,
-};
+    PenggunaController};
 
 /*
 |--------------------------------------------------------------------------
@@ -28,3 +27,4 @@ Route::get('violation-type/get-main-data', [ViolationTypeController::class, 'get
 Route::get('treatment/get-main-data', [TreatmentController::class, 'getDatatablesData']);
 Route::get('teacher/get-main-data', [TeacherController::class, 'getDatatablesData']);
 Route::get('user/get-main-data', [PenggunaController::class, 'getDatatablesData']);
+Route::get('student/get-main-data', [StudentController::class, 'getDatatablesData']);

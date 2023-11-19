@@ -5,12 +5,23 @@ namespace App\Repositories;
 use App\Models\Student;
 use Illuminate\Support\Facades\Http;
 
-class StudentRepository {
+class StudentRepository extends BaseRepository
+{
 
-    private Student $model;
     public function __construct(Student $student)
     {
         $this->model = $student;
+    }
+
+    /**
+     * override get all students
+     *
+     * @param bool|null $history
+     * @return object
+     */
+    public function getAll(bool $history = null): object
+    {
+        return $this->model->query()->get();
     }
 
     /**
@@ -43,15 +54,6 @@ class StudentRepository {
 
             return null;
         }
-    }
-
-    /**
-     * get all student from database
-     * @return mixed
-     */
-    public function getAllStudent(): mixed
-    {
-        return $this->model->all();
     }
 
     /**
