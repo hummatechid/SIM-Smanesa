@@ -15,12 +15,12 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('nik');
             $table->string('nisn');
-            $table->string('npd');
+            $table->string('nipd');
             $table->string('full_name');
             $table->enum('gender', ['Laki-laki', 'Perempuan']);
             $table->string('phone_number');
             $table->string('address');
-            $table->enum('religion', ['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha', 'Konghucu', 'Lainnya']);
+            $table->string('religion', 50);
             $table->string('nama_rombel');
             $table->integer('violation_score');
             $table->timestamps();
