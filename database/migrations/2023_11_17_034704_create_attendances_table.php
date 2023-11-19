@@ -18,7 +18,7 @@ return new class extends Migration
             $table->dateTime('present_at');
             $table->dateTime('return_at')->nullable();
             $table->string('status');
-            $table->string('permit_file');
+            $table->string('permit_file')->nullable();
             $table->dateTime('deleted_at')->nullable();
             $table->timestamps();
         });
