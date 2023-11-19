@@ -21,7 +21,7 @@
 
     @php
         $data_column = [
-            "user" => "Nama",
+            "full_name" => "Nama",
             "email" => "Email",
             "phone_number" => "Nomor",
             "action" => "Aksi"

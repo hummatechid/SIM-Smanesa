@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Master\{
     TreatmentController,
-    ViolationTypeController
+    ViolationTypeController,
+    TeacherController,
+    PenggunaController
 };
 use Illuminate\Support\Facades\Route;
 
@@ -25,5 +27,8 @@ Route::middleware(['auth'])->group(function () {
     // get controller from TreatmentController 
     Route::resource('treatment', TreatmentController::class);
     Route::post('treatment/soft-delete/{id}', [TreatmentController::class, "softDestroy"]);
+    
+    Route::resource('teacher', TeacherController::class);
 
+    Route::resource('user', PenggunaController::class);
 });
