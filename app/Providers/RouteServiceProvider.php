@@ -39,12 +39,12 @@ class RouteServiceProvider extends ServiceProvider
             // custom routes master data
             Route::middleware('web')
                 ->namespace($this->namespace)
-                ->group(base_path('routes/master-data.php'));
+                ->group(base_path('routes/custom/master-data.php'));
 
             // custom routes master transaksi
             Route::middleware('web')
                 ->namespace($this->namespace)
-                ->group(base_path('routes/master-transaction.php'));
+                ->group(base_path('routes/custom/master-transaction.php'));
         });
     }
 }

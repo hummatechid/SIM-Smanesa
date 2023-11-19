@@ -1,9 +1,6 @@
 <?php
 
-use App\Http\Controllers\Master\{
-    TreatmentController,
-    ViolationTypeController
-};
+use App\Http\Controllers\Master\{StudentController, TreatmentController, ViolationTypeController};
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,12 +15,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['auth'])->group(function () {
-    // get controller from ViolationTypeController 
+    // get controller from ViolationTypeController
     Route::resource('violation-type', ViolationTypeController::class);
-    Route::post('violation-type/soft-delete/{id}', ViolationTypeController::class);
-    
-    // get controller from TreatmentController 
+    Route::post('violation-type/soft-delete/{id}', [ViolationTypeController::class, 'softDestroy']);
+
+    // get controller from TreatmentController
     Route::resource('treatment', TreatmentController::class);
-    Route::post('treatment/soft-delete/{id}', TreatmentController::class);
+    Route::post('treatment/soft-delete/{id}', [TreatmentController::class, 'softDestroy']);
+
+    Route::prefix('students')->name('student.')->group(function () {
+        Route::get('/', [StudentController::class, 'index'])->name('index');
+        Route::get('sync-students', [StudentController::class, 'syncStudents'])->name('sync');
+    });
 
 });
