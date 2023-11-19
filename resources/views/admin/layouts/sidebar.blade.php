@@ -81,7 +81,7 @@
 
                 <li
                     class="sidebar-item {{ isset($main_menu) && $main_menu == 'student' ? 'active' : '' }}">
-                    <a href="{{ url('student') }}" class='sidebar-link'>
+                    <a href="{{ route('student.index') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Siswa</span>
                     </a>

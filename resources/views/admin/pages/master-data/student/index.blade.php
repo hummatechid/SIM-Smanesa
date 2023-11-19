@@ -78,7 +78,7 @@
 
                 location.reload();
             });
-            
+
         }); //end of document.ready
 
 
