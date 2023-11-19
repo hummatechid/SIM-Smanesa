@@ -1,6 +1,11 @@
 <?php
 
-use App\Http\Controllers\Master\{StudentController, TreatmentController, ViolationTypeController};
+use App\Http\Controllers\Master\{
+    TreatmentController,
+    ViolationTypeController,
+    TeacherController,
+    PenggunaController
+};
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,4 +33,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('sync-students', [StudentController::class, 'syncStudents'])->name('sync');
     });
 
+    Route::resource('teacher', TeacherController::class);
+
+    Route::resource('user', PenggunaController::class);
 });

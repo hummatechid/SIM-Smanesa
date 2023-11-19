@@ -5,15 +5,17 @@ namespace App\Http\Controllers\Master;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TreatmentRequest;
 use App\Repositories\TreatmentRepository;
+use App\Services\MasterData\TreatmentService;
 use Illuminate\Http\Request;
 
 class TreatmentController extends Controller
 {
-    private $treatmentRepository;
+    private $treatmentRepository, $treatmentService;
 
-    public function __construct(TreatmentRepository $treatmentRepository)
+    public function __construct(TreatmentRepository $treatmentRepository, TreatmentService $treatmentService)
     {
         $this->treatmentRepository = $treatmentRepository;
+        $this->treatmentService = $treatmentService;
     }
 
     /**
@@ -21,7 +23,14 @@ class TreatmentController extends Controller
      */
     public function index()
     {
-        //
+        $dataPage = $this->treatmentService->getPageData();
+
+        return view('admin.pages.master-data.treatment.index', $dataPage);
+    }
+
+    public function getDatatablesData()
+    {
+        return $this->treatmentService->getDataDatatable();
     }
 
     /**
