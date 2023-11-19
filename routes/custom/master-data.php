@@ -21,11 +21,15 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth'])->group(function () {
     // get controller from ViolationTypeController
     Route::resource('violation-type', ViolationTypeController::class);
-    Route::post('violation-type/soft-delete/{id}', [ViolationTypeController::class, 'softDestroy']);
+    Route::post('violation-type/soft-delete/{id}', [ViolationTypeController::class, 'softDestroy'])->name('violation-type.softDelete');
 
     // get controller from TreatmentController
     Route::resource('treatment', TreatmentController::class);
-    Route::post('treatment/soft-delete/{id}', [TreatmentController::class, 'softDestroy']);
+    Route::post('treatment/soft-delete/{id}', [TreatmentController::class, 'softDestroy'])->name('treatment.softDelete');
+
+    // get controller from PenggunaController
+    Route::resource('pengguna', PenggunaController::class);
+    Route::post('pengguna/soft-delete/{id}', [PenggunaController::class, 'softDestroy'])->name('pengguna.softDelete');
 
     Route::prefix('students')->name('student.')->group(function () {
         Route::get('/', [StudentController::class, 'index'])->name('index');

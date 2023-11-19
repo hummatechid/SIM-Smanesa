@@ -17,9 +17,9 @@ class StudentRepository extends BaseRepository
      * override get all students
      *
      * @param bool|null $history
-     * @return object
+     * @return array
      */
-    public function getAll(bool $history = null): object
+    public function getAll(bool $history = null): array
     {
         return $this->model->query()->get();
     }
