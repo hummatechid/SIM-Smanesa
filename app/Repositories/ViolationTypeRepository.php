@@ -173,4 +173,16 @@ class ViolationTypeRepository {
     public function delete(string $id): object{
         return $this->model->find($id)->delete();
     }
+
+    /**
+     * Get data that has been sorted
+     *
+     * @param string $column
+     * @param string $value
+     * @return object
+     */
+    public function getOrderedData(string $column, string $value): object
+    {
+        return $this->model->orderBy($column, $value)->get();
+    }
 }

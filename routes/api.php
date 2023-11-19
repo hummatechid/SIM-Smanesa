@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Master\TreatmentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Master\ViolationTypeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +19,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('violation-type/get-main-data', [ViolationTypeController::class, 'getDatatablesData']);
+Route::get('treatment/get-main-data', [TreatmentController::class, 'getDatatablesData']);

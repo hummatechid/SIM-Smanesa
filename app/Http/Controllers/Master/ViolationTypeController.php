@@ -7,14 +7,16 @@ use App\Http\Requests\ViolationTypeRequest;
 use Illuminate\Http\Request;
 use App\Models\ViolationType;
 use App\Repositories\ViolationTypeRepository;
+use App\Services\MasterData\ViolationTypeService;
 
 class ViolationTypeController extends Controller
 {
-    private $violationTypeModel;
+    private $violationTypeModel, $violationTypeService;
 
-    public function __construct(ViolationTypeRepository $violationTypeModel)
+    public function __construct(ViolationTypeRepository $violationTypeModel, ViolationTypeService $violationTypeService)
     {
         $this->violationTypeModel = $violationTypeModel;
+        $this->violationTypeService = $violationTypeService;
     }
 
     /**
@@ -22,7 +24,14 @@ class ViolationTypeController extends Controller
      */
     public function index()
     {
-        //
+        $dataPage = $this->violationTypeService->getPageData("");
+
+        return view('admin.pages.master-data.violation-type.index', $dataPage);
+    }
+
+    public function getDatatablesData()
+    {
+        return $this->violationTypeService->getDataDatatable();
     }
 
     /**
