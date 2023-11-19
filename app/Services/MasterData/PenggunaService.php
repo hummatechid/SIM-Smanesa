@@ -13,8 +13,8 @@ class PenggunaService extends BaseService {
     {
         $this->repository = $penggunaRepository;
         $this->pageTitle = "Pengguna";
-        $this->mainUrl = "pengguna";
-        $this->mainMenu = "pengguna";
+        $this->mainUrl = "user";
+        $this->mainMenu = "user";
     }
 
     /**
@@ -36,8 +36,8 @@ class PenggunaService extends BaseService {
                 return $item->phone_number;
             })->addColumn('action', function($item) {
                 return 
-                '<div class="d-flex gap-3 justify-content-between align-items-center">
-                    <button class="btn btn-sm btn-danger delete-data" data-id="'.$item->id.'">Hapus</button>
+                '<div class="d-flex gap-2 justify-content-between align-items-center">
+                    <a href="'.url('user/'.$item->id).'" class="btn btn-sm btn-primary">Detail</a>
                     <button class="btn btn-sm btn-danger delete-data" data-id="'.$item->id.'">Hapus</button>
                 </div>';
             })->rawColumns(['action'])

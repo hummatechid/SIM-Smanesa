@@ -2,9 +2,14 @@
 <section class="section">
     <div class="card">
         <div class="card-header">
-            <h5 class="card-title">
-                {{ $cardTitle }}
-            </h5>
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="card-title">
+                    {{ $cardTitle }}
+                </h5>
+                @if(isset($dataAddUrl) && $dataAddUrl)
+                <a href="{{ $dataAddUrl }}" class="btn btn-primary">+Tambah</a>
+                @endif
+            </div>
         </div>
         <div class="card-body">
             <div class="table-responsive datatable-minimal">
@@ -22,6 +27,7 @@
 
 @push('custom-script')
 <script src="https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.js"></script>
+<script src=" https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js "></script>
 
 <script>
     const table_id = "{{ isset($tableId) && $tableId ? $tableId : 'table' }}"
@@ -29,7 +35,12 @@
     let jquery_datatable = $("#"+table_id).DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ url($dataUrl) }}",
+        paging: true,
+        orderClasses: false,
+        deferRender: true,
+        ajax: {
+            url: "{{ url($dataUrl) }}",
+        },
         order: [[{{ isset($defaultOrder) ? $defaultOrder : 1 }}, 'asc']],
         columns: [
             {

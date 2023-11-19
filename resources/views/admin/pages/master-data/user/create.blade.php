@@ -19,21 +19,7 @@
         </div>
     </div>
 
-    @php
-        $data_column = [
-            "full_name" => "Nama",
-            "email" => "Email",
-            "phone_number" => "Nomor",
-            "action" => "Aksi"
-        ];
-    @endphp
-    <x-datatable
-        card-title="Tabel Guru"
-        data-url="{{ url('api/teacher/get-main-data') }}"
-        :table-columns="$data_column"
-        delete-option="teacher/deleted_id"
-        data-add-url="{{ url('teacher/create') }}"
-    />
+    <x-create-user form-action="{{ url('user') }}" card-title="Tambah Pengguna" back-url="{{ url($main_url) }}"/>
 
 </div>
 @endsection
