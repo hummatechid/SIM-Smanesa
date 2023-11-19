@@ -187,6 +187,7 @@ class PenggunaController extends Controller
     {
         // check data pengguna
         $pengguna = $this->penggunaRepository->getOneById($id);
+        if(!$pengguna) $pengguna = $this->penggunaRepository->getOneById($id, true);
 
         if(!$pengguna) {
             return response()->json([

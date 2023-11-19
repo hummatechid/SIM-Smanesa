@@ -131,6 +131,7 @@ class ViolationTypeController extends Controller
     public function destroy(string $id)
     {
         $violation = $this->violationTypeModel->getOneById($id);
+        if(!$violation) $violation = $this->violationTypeModel->getOneById($id, true);
 
         if(!$violation){
             return response()->json([

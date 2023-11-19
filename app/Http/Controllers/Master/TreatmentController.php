@@ -129,9 +129,10 @@ class TreatmentController extends Controller
      */
     public function destroy(string $id)
     {
-        $violation = $this->treatmentRepository->getOneById($id);
+        $treatment = $this->treatmentRepository->getOneById($id);
+        if(!$treatment) $treatment = $this->treatmentRepository->getOneById($id,true);
 
-        if(!$violation){
+        if(!$treatment){
             return response()->json([
                 "success" => false,
                 "message" => "Data jenis tindak lanjut tidak ditemukan"
