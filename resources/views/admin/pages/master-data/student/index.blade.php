@@ -81,6 +81,27 @@
     <script>
         $(document).ready(function () {
 
+            // fetchData()
+            function fetchData() {
+                $.ajax({
+                    headers: {
+                        'Authorization': 'Bearer NsVOp7o8jSrf8Ix',
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    type: 'GET',
+                    url: 'http://dapo.smanesa.id:5774/WebService/getPesertaDidik?npsn=20519298',
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    },
+                });
+            }
+
             $(document).on('click', '.btn-detail', function() {
                console.log($(this).data('data'))
                 var student = $(this).data('data')
