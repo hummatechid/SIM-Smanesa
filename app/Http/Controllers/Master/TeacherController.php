@@ -90,7 +90,7 @@ class TeacherController extends Controller
             return redirect()->route('teacher.index')->with('success', "Data guru berhasil dibuat");
         } catch(\Throwable $th){
             DB::rollBack();
-            return redirect()->back()->with('error',$th->getMessage());
+            return redirect()->back()->with('error',$th->getMessage())->withInput();
         }
     }
 
@@ -150,7 +150,7 @@ class TeacherController extends Controller
             return redirect()->route('teacher.index')->with('success', "Data guru berhasil di rubah");
         } catch(\Throwable $th){
             DB::rollBack();
-            return redirect()->back()->with('error',$th->getMessage());
+            return redirect()->back()->with('error',$th->getMessage())->withInput();
         }
     }
 

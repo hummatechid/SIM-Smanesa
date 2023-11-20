@@ -67,7 +67,7 @@ class PenggunaController extends Controller
         // check role has been has or not
         $role = $this->userRepository->getRole('id',$userRequest->role_id);
 
-        if(!$role) return redirect()->back()->with('error', 'Role tidak ditemukan');
+        if(!$role) return redirect()->back()->with('error', 'Role tidak ditemukan')->withInput();
 
         try {
             DB::beginTransaction();
@@ -99,7 +99,7 @@ class PenggunaController extends Controller
             return redirect()->route('pengguna.index')->with('success', "Data pengguna berhasil dibuat");
         } catch(\Throwable $th){
             DB::rollBack();
-            return redirect()->back()->with('error',$th->getMessage());
+            return redirect()->back()->with('error',$th->getMessage())->withInput();
         }
     }
 
@@ -133,12 +133,12 @@ class PenggunaController extends Controller
         // check has data or not
         $pengguna = $this->penggunaRepository->getOneById($id);
 
-        if(!$pengguna) return redirect()->back()->with('error', 'Pengguna tidak ditemukan');
+        if(!$pengguna) return redirect()->back()->with('error', 'Pengguna tidak ditemukan')->withInput();
         
         // check role has been has or not
         $role = $this->userRepository->getRole('id',$userRequest->role_id);
 
-        if(!$role) return redirect()->back()->with('error', 'Role tidak ditemukan');
+        if(!$role) return redirect()->back()->with('error', 'Role tidak ditemukan')->withInput();
 
         try {
             DB::beginTransaction();
@@ -167,7 +167,7 @@ class PenggunaController extends Controller
             return redirect()->route('pengguna.index')->with('success', "Data pengguna berhasil di rubah");
         } catch(\Throwable $th){
             DB::rollBack();
-            return redirect()->back()->with('error',$th->getMessage());
+            return redirect()->back()->with('error',$th->getMessage())->withInput();
         }
     }
 

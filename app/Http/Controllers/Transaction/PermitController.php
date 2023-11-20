@@ -67,7 +67,7 @@ class PermitController extends Controller
 
             return redirect()->route('permit.index')->with('success', "Berhasil membuat surat izin");
         }catch(\Throwable $th){
-            return redirect()->back()->with("error",$th->getMessage());
+            return redirect()->back()->with("error",$th->getMessage())->withInput();
         }
     }
 
@@ -95,10 +95,10 @@ class PermitController extends Controller
         // check have data permit or not
         $permit = $this->permitRepository->getOneById($id);
 
-        if(!$permit) return redirect()->back()->with('error',"Data izin tidak ditemukan");
+        if(!$permit) return redirect()->back()->with('error',"Data izin tidak ditemukan")->withInput();
 
         // check request status or not
-        if(!$request->status) return redirect()->back()->with('error', 'Anda tidak mengirimkan sebuah tanggapan, mohon cek ulang');
+        if(!$request->status) return redirect()->back()->with('error', 'Anda tidak mengirimkan sebuah tanggapan, mohon cek ulang')->withInput();
 
         // get data user
         $userAuth = Auth::user();
@@ -121,7 +121,7 @@ class PermitController extends Controller
 
             return redirect()->route('permit.index')->with('success', "Berhasil memberikan tanggapan di surat izin");
         }catch(\Throwable $th){
-            return redirect()->back()->with("error",$th->getMessage());
+            return redirect()->back()->with("error",$th->getMessage())->withInput();
         }
     }
 

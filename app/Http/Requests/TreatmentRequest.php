@@ -11,7 +11,7 @@ class TreatmentRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,7 +25,7 @@ class TreatmentRequest extends FormRequest
             'category' => 'required|string',
             'min_score' => 'required|numeric|min:0',
             'max_score' => 'required|numeric',
-            'action' => 'requierd'
+            'action' => 'required'
         ];
     }
 

@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             ViolationTypeSeeder::class,
             TreatmentSeeder::class,
+            StudentSeeder::class
         ]);
         // \App\Models\User::factory(10)->create();
 

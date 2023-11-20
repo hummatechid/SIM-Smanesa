@@ -54,7 +54,7 @@ class TreatmentController extends Controller
             $this->treatmentRepository->create($validateData);
             return redirect()->route('treatment.index')->with('success', "Jenis tindak lanjut berhasil dibuat");
         } catch(\Throwable $th){
-            return redirect()->back()->with('error',$th->getMessage());
+            return redirect()->back()->with('error',$th->getMessage())->withInput();
         }
     }
 
@@ -84,14 +84,14 @@ class TreatmentController extends Controller
         
         $violation = $this->treatmentRepository->getOneById($id);
 
-        if(!$violation) return redirect()->back()->with('error', "Data jenis tindak lanjut tidak ditemukan");
+        if(!$violation) return redirect()->back()->with('error', "Data jenis tindak lanjut tidak ditemukan")->withInput();
 
         try {
             // store data
             $this->treatmentRepository->update($id,$validateData);
             return redirect()->route('treatment.index')->with('success', "Jenis tindak lanjut berhasil di update");
         } catch(\Throwable $th){
-            return redirect()->back()->with('error',$th->getMessage());
+            return redirect()->back()->with('error',$th->getMessage())->withInput();
         }
     }
 

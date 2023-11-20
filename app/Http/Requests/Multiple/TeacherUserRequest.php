@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Multiple;
 
+use App\Http\Requests\TeacherRequest;
+use App\Http\Requests\UserRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
-class PermitRequest extends FormRequest
+class TeacherUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,18 +23,12 @@ class PermitRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'student_id' => 'required',
-            'created_by' => 'nullable',
-            'reason' => 'required',
-        ];
-    }
-
-    public function messages(): array
-    {
-        return [
-            'student_id.required' => 'Data siswa/siwsi harus diisi',
-            'reason.required' => 'Keterangan izin harus diisi',
-        ];
+        $teacher = (new TeacherRequest())->rules();
+        $user = (new UserRequest())->rules();
+        
+        return array_merge(
+            $teacher, 
+            $user
+        );
     }
 }

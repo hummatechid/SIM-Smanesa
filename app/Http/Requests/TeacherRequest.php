@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class TeacherRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class TeacherRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,12 +24,12 @@ class TeacherRequest extends FormRequest
     {
         return [
             "nip" => "required",
-            "nik" => "requierd",
+            "nik" => "required",
             "nuptk" => "required",
             "full_name" => "required",
             'gender' => 'required|in:Laki-laki,Perempuan',
             'phome_number' => "required",
-            "address" => "requierd",
+            "address" => "required",
             "religion" => "required",
             "bio" => "nullable",
             "photo" => "nullable|mimes:png,jpg,jpeg",

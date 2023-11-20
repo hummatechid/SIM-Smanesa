@@ -55,7 +55,7 @@ class ViolationTypeController extends Controller
             $this->violationTypeModel->create($validateData);
             return redirect()->route('violation-type.index')->with('success', "Tipe pelanggaran berhasil dibuat");
         } catch(\Throwable $th){
-            return redirect()->back()->with('error',$th->getMessage());
+            return redirect()->back()->with('error',$th->getMessage())->withInput();
         }
     }
 
@@ -85,14 +85,14 @@ class ViolationTypeController extends Controller
         
         $violation = $this->violationTypeModel->getOneById($id);
 
-        if(!$violation) return redirect()->back()->with('error', "Data tipe pelanggaran tidak ditemukan");
+        if(!$violation) return redirect()->back()->with('error', "Data tipe pelanggaran tidak ditemukan")->withInput();
 
         try {
             // store data
             $this->violationTypeModel->update($id,$validateData);
             return redirect()->route('violation-type.index')->with('success', "Tipe pelanggaran berhasil di update");
         } catch(\Throwable $th){
-            return redirect()->back()->with('error',$th->getMessage());
+            return redirect()->back()->with('error',$th->getMessage())->withInput();
         }
     }
 
