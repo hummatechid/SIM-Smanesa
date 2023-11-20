@@ -66,11 +66,15 @@ class PenggunaController extends Controller
 
         try {
             DB::beginTransaction();
-            // store data pengguna
-            $this->penggunaRepository->create($validateDataPengguna);
-
             // store data user
             $user = $this->userRepository->create($validateDataUser);
+
+            // set user_id
+            $validateDataPengguna["user_id"] = $user->id;
+
+            // store data pengguna
+            $this->penggunaRepository->create($validateDataPengguna);
+            
 
             // asign role user
             $user->assignRole($role->name);
