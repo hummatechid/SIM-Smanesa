@@ -29,7 +29,7 @@ class PenggunaRequest extends FormRequest
             'address' => 'required',
             'religion' => 'required',
             'bio' => 'nullable',
-            'photo' => 'nullable'
+            'photo' => 'nullable|mimes:jpg, jpeg, png'
         ];
     }
 
@@ -43,7 +43,8 @@ class PenggunaRequest extends FormRequest
             'phone_number.required' => 'Nomor telepon harus diisi.',
             'address.required' => 'Alamat harus diisi.',
             'religion.required' => 'Pilih agama.',
-            'religion.in' => 'Agama harus Islam, Kristen, Katolik, Hindu, Buddha, Konghucu, atau Lainnya.'
+            'religion.in' => 'Agama harus Islam, Kristen, Katolik, Hindu, Buddha, Konghucu, atau Lainnya.',
+            'photo.mimes' => 'Foto harus berformat jpg, jpeg atau png'
         ];     
     }
 }

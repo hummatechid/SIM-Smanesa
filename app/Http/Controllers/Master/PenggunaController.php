@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Master;
 
+use App\Helpers\UploadImage;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PenggunaRequest;
 use App\Http\Requests\UserRequest;
@@ -13,6 +14,8 @@ use Illuminate\Support\Facades\DB;
 
 class PenggunaController extends Controller
 {
+    use UploadImage;
+
     private $penggunaService;
     private $penggunaRepository, $userRepository;
 
@@ -68,6 +71,17 @@ class PenggunaController extends Controller
 
         try {
             DB::beginTransaction();
+
+            // storage photo
+            $path = storage_path('images/pengguna/');
+            !is_dir($path) &&
+            mkdir($path, 0777, true);
+            if($requestPengguna->photo) {
+                $file = $requestPengguna->file('photo');
+                $fileData = $this->uploads($file,$path);
+                $validateDataPengguna["photo"] = $fileData["filePath"].$fileData["fileType"];
+            }
+
             // store data user
             $user = $this->userRepository->create($validateDataUser);
 
@@ -128,6 +142,18 @@ class PenggunaController extends Controller
 
         try {
             DB::beginTransaction();
+
+            // set image
+            $path = storage_path('images/pengguna/');
+            !is_dir($path) &&
+            mkdir($path, 0777, true);
+            if($requestPengguna->photo) {
+                $this->deleteImage($pengguna->photo);
+                $file = $requestPengguna->file('photo');
+                $fileData = $this->uploads($file,$path);
+                $validateDataPengguna["photo"] = $fileData["filePath"].$fileData["fileType"];
+            }
+            
             // store data pengguna
             $this->penggunaRepository->update($id, $validateDataPengguna);
 
@@ -171,6 +197,7 @@ class PenggunaController extends Controller
         }
         
         try {
+
             // delete data
             $this->penggunaRepository->softDelete($id);
             $this->userRepository->softDelete($user->id);
@@ -213,6 +240,9 @@ class PenggunaController extends Controller
         }
         
         try {
+            // delete image
+            if($pengguna->photo) $this->deleteImage($pengguna->photo);
+
             // delete data
             $this->penggunaRepository->delete($id);
             $this->userRepository->delete($user->id);

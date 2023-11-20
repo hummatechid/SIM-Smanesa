@@ -62,6 +62,17 @@ class TeacherController extends Controller
 
         try {
             DB::beginTransaction();
+
+            // set image
+            $path = storage_path('images/teacher/');
+            !is_dir($path) &&
+            mkdir($path, 0777, true);
+            if($teacherRequest->photo) {
+                $file = $teacherRequest->file('photo');
+                $fileData = $this->uploads($file,$path);
+                $validateDataTeacher["photo"] = $fileData["filePath"].$fileData["fileType"];
+            }
+
             // store data user
             $user = $this->userRepository->create($validateDataUser);
 
@@ -70,7 +81,7 @@ class TeacherController extends Controller
             $validateDataPengguna["is_dapodik"] = 0;
 
             // store data pengguna
-            $this->teacherRepository->create($validateDataPengguna);
+            $this->teacherRepository->create($validateDataTeacher);
 
             // asign role user
             $user->assignRole("guru");
@@ -104,7 +115,7 @@ class TeacherController extends Controller
      */
     public function update(TeacherRequest $teacherRequest, UserRequest $userRequest, string $id)
     {
-        // validate data request pengguna
+        // validate data request teacher
         $validateDataPengguna = $teacherRequest->validated();
         
         // validate data request user
@@ -117,6 +128,18 @@ class TeacherController extends Controller
 
         try {
             DB::beginTransaction();
+
+            // set image
+            $path = storage_path('images/teacher/');
+            !is_dir($path) &&
+            mkdir($path, 0777, true);
+            if($teacherRequest->photo) {
+                $this->deleteImage($pengguna->photo);
+                $file = $teacherRequest->file('photo');
+                $fileData = $this->uploads($file,$path);
+                $validateDataPengguna["photo"] = $fileData["filePath"].$fileData["fileType"];
+            }
+
             // store data pengguna
             $this->teacherRepository->update($id, $validateDataPengguna);
 
@@ -198,6 +221,9 @@ class TeacherController extends Controller
         }
         
         try {
+            // delete image
+            if($teacher->photo) $this->deleteImage($teacher->photo);
+
             // delete data
             $this->teacherRepository->delete($id);
             $this->userRepository->delete($user->id);
