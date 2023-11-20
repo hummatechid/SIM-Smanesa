@@ -58,7 +58,7 @@ class StudentController extends Controller
             ]);
         }
 
-        $this->service->handleSyncStudent($students['rows']);
+        $this->service->handleSyncStudent($students->rows);
 
         return response()->json([
             'message' => 'success'

@@ -26,7 +26,7 @@ class StudentService extends BaseService
     public function handleSyncStudent(array $students): void
     {
         foreach ($students as $student) {
-            $check = $this->repository->getStudentByNisn($student['nisn']);
+            $check = $this->repository->getStudentByNisn($student->nisn);
             if($check) {
                 $this->repository->updateStudent($check, $student);
             } else {

@@ -36,7 +36,69 @@ class StudentRepository extends BaseRepository
         // Set the authorization header
         $authorizationToken = 'Bearer ' . $key;
 
-        // Make a GET request with the authorization header
+//        try {
+//            $response = file_get_contents($url, false, stream_context_create([
+//                'http' => [
+//                    'method' => 'GET',
+//                    'header' => [
+//                        'Authorization: ' . $authorizationToken,
+//                    ],
+//                ],
+//            ]));
+//
+//// Cek jika request berhasil
+//            if ($response === false) {
+//                die('Error occurred while fetching data');
+//            }
+//
+//            try{
+//                // Membagi respons menjadi header dan body
+//                list($header, $body) = explode("\r\n\r\n", $response, 2);
+//
+//            // Cetak header untuk referensi (jika diperlukan)
+//            //            echo "Header:\n$header\n\n";
+//
+//                // Ubah body JSON menjadi objek PHP
+//                $responseObject = json_decode($body);
+//
+//                // Periksa jika dekoding JSON berhasil
+//                if (json_last_error() === JSON_ERROR_NONE) {
+//                    // Lakukan sesuatu dengan objek
+//                    dd($responseObject);
+//                } else {
+//                    // Tangani kesalahan JSON, jika ada
+//                    echo "Gagal mendekode JSON. Kesalahan: " . json_last_error_msg();
+//                }
+//            }catch (\Exception $e){
+////                dd(json_decode($response)->rows);
+//                return json_decode($response);
+//            }
+//
+//
+//
+//            // Make a GET request with the authorization header
+////            $response = Http::withHeaders([
+////                'Authorization' => $authorizationToken,
+////            ])->get($url);
+////
+////            // Periksa status code
+////            if ($response->status() == 200) {
+////                dd($response);
+////                // Lakukan sesuatu jika status code adalah 200
+////                // Misalnya, mengambil data dari response
+////                $data = $response->json();
+////                // Lakukan sesuatu dengan $data
+////            } else {
+////                // Lempar pengecualian jika status code tidak 200
+////                throw new \Exception('HTTP request failed with status code: ' . $response->status());
+////            }
+////
+////            return $response->json();
+//        }catch (\Exception $e) {
+//            dd($e->getMessage());
+//            return $e->getMessage();
+//        }
+
         $response = Http::withHeaders([
             'Authorization' => $authorizationToken,
         ])->get($url);
