@@ -4,15 +4,18 @@ namespace App\Http\Controllers\Transaction;
 
 use App\Http\Controllers\Controller;
 use App\Services\ViolationService;
+use App\Repositories\{StudentRepository, ViolationTypeRepository};
 use Illuminate\Http\Request;
 
 class ViolationController extends Controller
 {
-    private $violationService;
+    private $violationService, $studentRepository, $violationTypeRepository;
 
-    public function __construct(ViolationService $violationService)
+    public function __construct(ViolationService $violationService, StudentRepository $studentRepository, ViolationTypeRepository $violationTypeRepository)
     {
         $this->violationService = $violationService;
+        $this->studentRepository = $studentRepository;
+        $this->violationTypeRepository = $violationTypeRepository;
     }
     /**
      * Display a listing of the resource.
@@ -33,7 +36,9 @@ class ViolationController extends Controller
      */
     public function create()
     {
-        $data = $this->violationService->getPageData('violation');
+        $user = $this->studentRepository->getAll();
+        $violation_types = $this->violationTypeRepository->getAll();
+        $data = $this->violationService->getPageData('violation', '', ['users' => $user, 'violation_types' =>$violation_types]);
         return view('admin.pages.violation.create', $data);
     }
 
