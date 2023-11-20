@@ -87,7 +87,7 @@ class TeacherController extends Controller
             $user->assignRole("guru");
 
             DB::commit();
-            return redirect()->route('pengguna.index')->with('success', "Data guru berhasil dibuat");
+            return redirect()->route('teacher.index')->with('success', "Data guru berhasil dibuat");
         } catch(\Throwable $th){
             DB::rollBack();
             return redirect()->back()->with('error',$th->getMessage());
@@ -147,7 +147,7 @@ class TeacherController extends Controller
             $user = $this->userRepository->update($pengguna->user_id, $validateDataUser);
 
             DB::commit();
-            return redirect()->route('pengguna.index')->with('success', "Data guru berhasil di rubah");
+            return redirect()->route('teacher.index')->with('success', "Data guru berhasil di rubah");
         } catch(\Throwable $th){
             DB::rollBack();
             return redirect()->back()->with('error',$th->getMessage());

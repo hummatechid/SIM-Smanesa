@@ -52,7 +52,7 @@ class TreatmentController extends Controller
         try {
             // store data
             $this->treatmentRepository->create($validateData);
-            return redirect()->route('violation-type.index')->with('success', "Jenis tindak lanjut berhasil dibuat");
+            return redirect()->route('treatment.index')->with('success', "Jenis tindak lanjut berhasil dibuat");
         } catch(\Throwable $th){
             return redirect()->back()->with('error',$th->getMessage());
         }
@@ -89,7 +89,7 @@ class TreatmentController extends Controller
         try {
             // store data
             $this->treatmentRepository->update($id,$validateData);
-            return redirect()->route('violation-type.index')->with('success', "Jenis tindak lanjut berhasil di update");
+            return redirect()->route('treatment.index')->with('success', "Jenis tindak lanjut berhasil di update");
         } catch(\Throwable $th){
             return redirect()->back()->with('error',$th->getMessage());
         }
