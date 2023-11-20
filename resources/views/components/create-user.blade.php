@@ -1,5 +1,6 @@
 <section class="section">
-    <form class="card" id="{{ isset($formId) && $formId ? $formId : 'form' }}" action="{{ $formAction }}" method="{{ $formMethod != 'GET' ? 'POST' : 'GET' }}" enctype="multipart/form-data">
+    <form class="card" id="{{ isset($formId) && $formId ? $formId : 'form' }}" action="{{ url($formAction) }}" method="{{ $formMethod != 'GET' ? 'POST' : 'GET' }}" enctype="multipart/form-data">
+        @csrf
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <h5 class="card-title">
@@ -8,6 +9,11 @@
             </div>
         </div>
         <div class="card-body">
+            <x-session-alert/>
+            <div class="form-group mb-3">
+                <label for="photo">Foto (opsional)</label>
+                <input type="file" id="upload-image" class="my-pond" name="photo"/>
+            </div>
             <div class="form-group mb-3">
                 <label for="email">Email</label>
                 <input type="email" name="email" id="email" class="form-control" placeholder="Email" value="{{ old('email') }}" required />
@@ -18,7 +24,7 @@
             </div>
             <div class="form-group mb-3">
                 <label for="password_confirmation">Konfirmasi Password</label>
-                <input type="password_confirmation" name="password" id="password_confirmation" class="form-control" placeholder="Konfirmasi Password" required />
+                <input type="password" name="password" id="password_confirmation" class="form-control" placeholder="Konfirmasi Password" required />
             </div>
             <div class="form-group mb-3">
                 <label for="role">Role</label>
@@ -69,8 +75,8 @@
                 <input type="text" name="agama" id="agama" class="form-control" placeholder="Agama" value="{{ old('agama') }}" required />
             </div>
             <div class="form-group mb-3">
-                <label for="bio">Bio</label>
-                <textarea type="text" name="bio" id="bio" class="form-control" placeholder="Bio" required>{{ old('bio') }}</textarea>
+                <label for="bio">Bio (opsional)</label>
+                <textarea type="text" name="bio" id="bio" class="form-control" placeholder="Bio" >{{ old('bio') }}</textarea>
             </div>
         </div>
         <div class="card-footer d-flex justify-content-end gap-2">
@@ -81,11 +87,50 @@
 </section>
 
 @push('custom-style')
-    <link rel="stylesheet" href="{{ asset('assets/extensions/filepond/filepond.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/extensions/filepond/filepond.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.css') }}">
+    <style>
+        .parsley-errors-list {
+            color: var(--bs-danger)
+        }
+        .parsley-error {
+            border-color: var(--bs-danger)!important
+        }
+    </style>
 @endpush
 @push('custom-script')
     <script src="{{ asset('assets/extensions/parsleyjs/parsley.min.js') }}"></script>
-    <script src="{{ asset('assets/extensions/filepond/filepond.min.js') }}"></script>
+    <script src="{{ asset('assets/extensions/filepond/filepond.js') }}"></script>
+    <script src="{{ asset('assets/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.js') }}"></script>
+    <script src="{{ asset('assets/extensions/filepond-plugin-file-validate-type/filepond-plugin-file-validate-type.min.js') }}"></script>
+    <script src="{{ asset('assets/extensions/filepond-plugin-file-validate-size/filepond-plugin-file-validate-size.min.js') }}"></script>
+    <script src="{{ asset('assets/extensions/filepond-plugin-image-crop/filepond-plugin-image-crop.min.js') }}"></script>
+    <script src="{{ asset('assets/extensions/filepond-plugin-image-exif-orientation/filepond-plugin-image-exif-orientation.min.js') }}"></script>
+    <script src="{{ asset('assets/extensions/filepond-plugin-image-filter/filepond-plugin-image-filter.min.js') }}"></script>
+    <script src="{{ asset('assets/extensions/filepond-plugin-image-resize/filepond-plugin-image-resize.min.js') }}"></script>
+    <script src="{{ asset('assets/static/js/pages/filepond.js') }}"></script>
+    <script>
+        FilePond.registerPlugin(
+            FilePondPluginImagePreview,
+            FilePondPluginFileValidateSize,
+            FilePondPluginFileValidateType,
+        )
+        // Filepond: Image Preview
+        FilePond.create(document.getElementById("upload-image"), {
+            credits: null,
+            allowImagePreview: true,
+            allowImageFilter: false,
+            allowImageExifOrientation: false,
+            allowImageCrop: false,
+            acceptedFileTypes: ["image/png", "image/jpg", "image/jpeg"],
+            fileValidateTypeDetectType: (source, type) =>
+                new Promise((resolve, reject) => {
+                // Do custom type detection here and return with promise
+                resolve(type)
+                }),
+            storeAsFile: true,
+        })
+    </script>
     <script>
         let form_id = '{{ isset($formId) && $formId ? $formId : "form" }}'
         $('#'+form_id).parsley()
