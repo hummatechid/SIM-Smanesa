@@ -30,3 +30,8 @@ Route::get('teacher/get-main-data', [TeacherController::class, 'getDatatablesDat
 Route::get('user/get-main-data', [PenggunaController::class, 'getDatatablesData']);
 Route::get('student/get-main-data', [StudentController::class, 'getDatatablesData']);
 Route::get('violation/get-main-data', [ViolationController::class, 'getDatatablesData']);
+
+
+// API MOBILE
+Route::get('/list-permit', [PermitController::class, 'listToday']);
+Route::get('/list-permit', [PermitController::class, 'detailList']);
