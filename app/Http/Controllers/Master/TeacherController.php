@@ -3,15 +3,28 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TeacherRequest;
+use App\Http\Requests\UserRequest;
+use App\Repositories\TeacherRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use App\Services\MasterData\TeacherService;
+use Illuminate\Support\Facades\DB;
 
 class TeacherController extends Controller
 {
     private $teacherService;
-    public function __construct(TeacherService $teacherService)
+    private $teacherRepository, $userRepository;
+
+    public function __construct(
+        TeacherService $teacherService,
+        TeacherRepository $teacherRepository,
+        UserRepository $userRepository
+    )
     {
         $this->teacherService = $teacherService;
+        $this->teacherRepository = $teacherRepository;
+        $this->userRepository = $userRepository;
     }
     /**
      * Display a listing of the resource.
@@ -39,9 +52,35 @@ class TeacherController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(TeacherRequest $teacherRequest, UserRequest $userRequest)
     {
-        //
+        // validate data request pengguna
+        $validateDataTeacher = $teacherRequest->validated();
+         
+        // validate data request user
+        $validateDataUser = $userRequest->validated();
+
+        try {
+            DB::beginTransaction();
+            // store data user
+            $user = $this->userRepository->create($validateDataUser);
+
+            // set user_id
+            $validateDataPengguna["user_id"] = $user->id;
+            $validateDataPengguna["is_dapodik"] = 0;
+
+            // store data pengguna
+            $this->teacherRepository->create($validateDataPengguna);
+
+            // asign role user
+            $user->assignRole("guru");
+
+            DB::commit();
+            return redirect()->route('pengguna.index')->with('success', "Data guru berhasil dibuat");
+        } catch(\Throwable $th){
+            DB::rollBack();
+            return redirect()->back()->with('error',$th->getMessage());
+        }
     }
 
     /**
@@ -63,9 +102,74 @@ class TeacherController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(TeacherRequest $teacherRequest, UserRequest $userRequest, string $id)
     {
-        //
+        // validate data request pengguna
+        $validateDataPengguna = $teacherRequest->validated();
+        
+        // validate data request user
+        $validateDataUser = $userRequest->validated();
+
+        // check has data or not
+        $pengguna = $this->teacherRepository->getOneById($id);
+
+        if(!$pengguna) return redirect()->back()->with('error', 'Teacher tidak ditemukan');
+
+        try {
+            DB::beginTransaction();
+            // store data pengguna
+            $this->teacherRepository->update($id, $validateDataPengguna);
+
+            // store data user
+            $user = $this->userRepository->update($pengguna->user_id, $validateDataUser);
+
+            DB::commit();
+            return redirect()->route('pengguna.index')->with('success', "Data guru berhasil di rubah");
+        } catch(\Throwable $th){
+            DB::rollBack();
+            return redirect()->back()->with('error',$th->getMessage());
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function softDestroy(string $id)
+    {
+        // check data pengguna
+        $teacher = $this->teacherRepository->getOneById($id);
+
+        if(!$teacher) {
+            return response()->json([
+                "success" => false,
+                "message" => "Data guru tidak ditemukan"
+            ], 404);
+        }
+
+        // check data user
+        $user = $this->userRepository->getOneById($teacher->user_id);
+
+        if(!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "Data user tidak ditemukan"
+            ], 404);
+        }
+        
+        try {
+            // delete data
+            $this->teacherRepository->softDelete($id);
+            $this->userRepository->softDelete($user->id);
+            return response()->json([
+                "success" => true,
+                "message" => "Data guru berhasil di hapus"
+            ], 201);
+        } catch(\Throwable $th){
+            return response()->json([
+                "success" => false,
+                "message" => $th->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -73,6 +177,39 @@ class TeacherController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // check data pengguna
+        $teacher = $this->teacherRepository->getOneById($id);
+
+        if(!$teacher) {
+            return response()->json([
+                "success" => false,
+                "message" => "Data guru tidak ditemukan"
+            ], 404);
+        }
+
+        // check data user
+        $user = $this->userRepository->getOneById($teacher->user_id);
+
+        if(!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "Data user tidak ditemukan"
+            ], 404);
+        }
+        
+        try {
+            // delete data
+            $this->teacherRepository->delete($id);
+            $this->userRepository->delete($user->id);
+            return response()->json([
+                "success" => true,
+                "message" => "Data guru berhasil di hapus permnanent"
+            ], 201);
+        } catch(\Throwable $th){
+            return response()->json([
+                "success" => false,
+                "message" => $th->getMessage()
+            ], 500);
+        }
     }
 }

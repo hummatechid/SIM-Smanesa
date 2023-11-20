@@ -27,7 +27,7 @@ class PenggunaRequest extends FormRequest
             'gender' => 'required|in:Laki-laki,Perempuan',
             'phone_number' => 'required',
             'address' => 'required',
-            'religion' => 'required|in:Islam,Kristen,Katolik,Hindu,Buddha,Konghucu,Lainnya',
+            'religion' => 'required',
             'bio' => 'nullable',
             'photo' => 'nullable'
         ];
