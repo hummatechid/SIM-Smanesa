@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('gender', ['Laki-laki', 'Perempuan']);
             $table->string('phone_number');
             $table->string('address');
-            $table->enum('religion', ['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha', 'Konghucu', 'Lainnya']);
+            $table->string('religion', 50);
             $table->text('bio')->nullable();
             $table->string('photo')->nullable();
             $table->dateTime('deleted_at')->nullable();

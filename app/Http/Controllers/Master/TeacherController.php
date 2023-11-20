@@ -32,7 +32,8 @@ class TeacherController extends Controller
      */
     public function create()
     {
-        //
+        $data = $this->teacherService->getPageData('teacher-add');
+        return view('admin.pages.master-data.teacher.create', $data);
     }
 
     /**

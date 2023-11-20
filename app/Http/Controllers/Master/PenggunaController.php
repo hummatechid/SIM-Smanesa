@@ -31,7 +31,7 @@ class PenggunaController extends Controller
      */
     public function index()
     {
-        $data = $this->penggunaService->getPageData("pengguna-list", "List Pengguna");
+        $data = $this->penggunaService->getPageData("user-list", "List Pengguna");
 
         return view("admin.pages.master-data.user.index", $data);
     }
@@ -45,7 +45,9 @@ class PenggunaController extends Controller
      */
     public function create()
     {
-        //
+        $data = $this->penggunaService->getPageData('user-add', 'Tambah Pengguna');
+
+        return view('admin.pages.master-data.user.create', $data);
     }
 
     /**
