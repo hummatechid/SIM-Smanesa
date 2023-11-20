@@ -6,8 +6,9 @@ use App\Http\Controllers\Master\{StudentController,
     TreatmentController,
     ViolationTypeController,
     TeacherController,
-    PenggunaController};
-
+    PenggunaController
+};
+use App\Http\Controllers\Transaction\ViolationController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -28,3 +29,4 @@ Route::get('treatment/get-main-data', [TreatmentController::class, 'getDatatable
 Route::get('teacher/get-main-data', [TeacherController::class, 'getDatatablesData']);
 Route::get('user/get-main-data', [PenggunaController::class, 'getDatatablesData']);
 Route::get('student/get-main-data', [StudentController::class, 'getDatatablesData']);
+Route::get('violation/get-main-data', [ViolationController::class, 'getDatatablesData']);

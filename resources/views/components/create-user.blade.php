@@ -71,8 +71,8 @@
                 <input type="text" name="address" id="address" class="form-control" placeholder="Alamat" value="{{ old('address') }}" required />
             </div>
             <div class="form-group mb-3">
-                <label for="agama">Agama</label>
-                <input type="text" name="agama" id="agama" class="form-control" placeholder="Agama" value="{{ old('agama') }}" required />
+                <label for="religion">Agama</label>
+                <input type="text" name="religion" id="religion" class="form-control" placeholder="Agama" value="{{ old('religion') }}" required />
             </div>
             <div class="form-group mb-3">
                 <label for="bio">Bio (opsional)</label>

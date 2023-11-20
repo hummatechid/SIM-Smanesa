@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Transaction\PermitController;
+use App\Http\Controllers\Transaction\{PermitController, ViolationController};
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,4 +18,5 @@ Route::middleware(['auth'])->group(function () {
     // get controller from PermitController
     Route::resource('permit', PermitController::class);
     Route::post('permit/soft-delete/{id}', [PermitController::class, 'softDestroy'])->name('permit.softDelete');
+    Route::resource('violation', ViolationController::class);
 });
