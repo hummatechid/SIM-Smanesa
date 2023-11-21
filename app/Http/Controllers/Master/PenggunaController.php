@@ -83,6 +83,7 @@ class PenggunaController extends Controller
             }
 
             // store data user
+            $validateDataUser["password"] = bcrypt($validateDataUser["password"]); 
             $user = $this->userRepository->create($validateDataUser);
 
             // set user_id
@@ -91,7 +92,6 @@ class PenggunaController extends Controller
             // store data pengguna
             $this->penggunaRepository->create($validateDataPengguna);
             
-
             // asign role user
             $user->assignRole($role->name);
 
@@ -158,6 +158,7 @@ class PenggunaController extends Controller
             $this->penggunaRepository->update($id, $validateDataPengguna);
 
             // store data user
+            if($validateDataUser["password"]) $validateDataUser["password"] = bcrypt($validateDataUser["password"]); 
             $user = $this->userRepository->update($pengguna->user_id, $validateDataUser);
 
             // asign role user

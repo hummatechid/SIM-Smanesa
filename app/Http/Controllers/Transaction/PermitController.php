@@ -187,4 +187,89 @@ class PermitController extends Controller
             ], 500);
         }
     }
+
+
+    /**
+     * Api For Moble
+     * Permit with status
+     *  
+     * */
+    public function listToday(Request $request)
+    { 
+        try{
+            if($request->status){
+                $list = $this->permitRepository->listTodayWithCondition("status",$request->status);
+            } else {
+                $list = $this->permitRepository->listToday();
+            }
+    
+            if($request->limit) $list = $list->take($request->limit);
+    
+            return response()->json([
+                "status" => "success",
+                "messages" => "Berhasil memuat data surat izin",
+                "data" => $list
+            ], 200);
+        }catch(\Throwable $th){
+            return response()->json([
+                "status" => "error",
+                "messages" => $th->getMessage(),
+                "data" => null
+            ], 500);
+        }
+    }
+
+    /**
+     * Api For Moble
+     * Permit detail
+     *  
+     * */
+    public function detailList(Request $request, string $id)
+    { 
+        try{
+            //set relationship;
+            $relation = ["student"];
+            $permit = $this->permitRepository->relationship($relation, "first");
+
+            if(!$permit) {
+                return response()->json([
+                    "status" => "error",
+                    "messages" => "Surat izin tidak ditemukan",
+                    "data" => null
+                ], 404);
+            }
+
+            // get data user created permit
+            $user_created = $this->penggunaRepository->getOneById($permit->created_by);
+            if(!$user_created) $user_created = $this->teacherRepository->getOneById($permit->created_by);
+
+            // check data user created
+            if(!$user_created) {
+                return response()->json([
+                    "status" => "error",
+                    "messages" => "Data user yang membuat tidak ditemukan",
+                    "data" => null
+                ], 404);
+            } else {
+                $permit->user_created = $user_created;
+            }
+
+            // get data user acepted
+            $user_accepted = $this->penggunaRepository->getOneById($permit->created_by);
+            $permit->user_accepted = $user_accepted;
+    
+            return response()->json([
+                "status" => "success",
+                "messages" => "Berhasil memuat data surat izin",
+                "data" => $permit
+            ], 200);
+        }catch(\Throwable $th){
+            return response()->json([
+                "status" => "error",
+                "messages" => $th->getMessage(),
+                "data" => null
+            ], 500);
+        }
+    }
+     
 }
