@@ -59,13 +59,13 @@ class TeacherController extends Controller
      */
     public function store(TeacherRequest $teacherRequest, UserRequest $userRequest)
     {
+        // validate data request pengguna
+        $validateDataTeacher = $teacherRequest->validated();
+        
+        // validate data request user
+        $validateDataUser = $userRequest->validated();
         
         try {
-            // validate data request pengguna
-            $validateDataTeacher = $teacherRequest->validated();
-            
-            // validate data request user
-            $validateDataUser = $userRequest->validated();
 
             DB::beginTransaction();
 

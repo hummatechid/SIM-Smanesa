@@ -63,6 +63,15 @@
         });
     });
 </script>
+<script>
+    $('.only-number').on('input', function() {
+        $(this).val(toNumber($(this).val()))
+    })
+    function toNumber(text) {
+        var str = text.toString()
+        return str.replace(/[^0-9.]/g, '')
+    }
+</script>
 @stack("custom-script")
 
 </body>

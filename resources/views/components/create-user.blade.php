@@ -61,15 +61,31 @@
             <div class="form-group mb-3">
                 <label for="nip">NIP</label>
                 <input type="text" name="nip" id="nip" class="form-control @error('nip') is-invalid @enderror" placeholder="NIP" value="{{ old('nip') }}" required />
+                @error('nip')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
             <div class="form-group mb-3">
                 <label for="nuptk">NUPTK</label>
                 <input type="text" name="nuptk" id="nuptk" class="form-control @error('nuptk') is-invalid @enderror" placeholder="NUPTK" value="{{ old('nuptk') }}" required />
+                @error('nuptk')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="form-group mb-">
+                <label for="jenis_ptk">Jenis PTK</label>
+                <input type="text" name="jenis_ptk" id="jenis_ptk" class="form-control @error('jenis_ptk') is-invalid @enderror" placeholder="Jenis PTK" value="{{ old('jenis_ptk') }}" required />
+                @error('jenis_ptk')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
             @endif
             <div class="form-group mb-3">
                 <label for="full_name">Nama Lengkap</label>
                 <input type="text" name="full_name" id="full_name" class="form-control @error('full_name') is-invalid @enderror" placeholder="Nama Lengkap" value="{{ old('full_name') }}" required />
+                @error('full_name')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
             <div class="form-group mb-3">
                 <label for="gender">Jenis Kelamin</label>
@@ -78,18 +94,37 @@
                     <option value="Laki-laki" {{ old('gender') == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
                     <option value="Perempuan" {{ old('gender') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
                 </Select>
+                @error('gender')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="form-group mb-3">
+                <label for="phone_number">Nomor Telepon</label>
+                <input type="text" name="phone_number" id="phone_number" class="form-select only-number @error('phone_number') is-invalid @enderror" placeholder="Nomor Telepon" value="{{ old('phone_number') }}" required />
+                @error('phone_number')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
             <div class="form-group mb-3">
                 <label for="address">Alamat</label>
                 <input type="text" name="address" id="address" class="form-control @error('address') is-invalid @enderror" placeholder="Alamat" value="{{ old('address') }}" required />
+                @error('address')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
             <div class="form-group mb-3">
                 <label for="religion">Agama</label>
                 <input type="text" name="religion" id="religion" class="form-control @error('religion') is-invalid @enderror" placeholder="Agama" value="{{ old('religion') }}" required />
+                @error('religion')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
             <div class="form-group mb-3">
                 <label for="bio">Bio (opsional)</label>
                 <textarea type="text" name="bio" id="bio" class="form-control @error('bio') is-invalid @enderror" placeholder="Bio" >{{ old('bio') }}</textarea>
+                @error('bio')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
         </div>
         <div class="card-footer d-flex justify-content-end gap-2">
