@@ -7,6 +7,7 @@ use App\Http\Requests\TeacherRequest;
 use App\Http\Requests\UserRequest;
 use App\Repositories\TeacherRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\RoleRepository;
 use Illuminate\Http\Request;
 use App\Services\MasterData\TeacherService;
 use Illuminate\Support\Facades\DB;
@@ -14,17 +15,19 @@ use Illuminate\Support\Facades\DB;
 class TeacherController extends Controller
 {
     private $teacherService;
-    private $teacherRepository, $userRepository;
+    private $teacherRepository, $userRepository, $roleRepository;
 
     public function __construct(
         TeacherService $teacherService,
         TeacherRepository $teacherRepository,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        RoleRepository $roleRepository
     )
     {
         $this->teacherService = $teacherService;
         $this->teacherRepository = $teacherRepository;
         $this->userRepository = $userRepository;
+        $this->roleRepository = $roleRepository;
     }
     /**
      * Display a listing of the resource.
@@ -45,7 +48,9 @@ class TeacherController extends Controller
      */
     public function create()
     {
-        $data = $this->teacherService->getPageData('teacher-add');
+        $data_role = $this->roleRepository->getCustomColumnValue('name', 'guru');
+        $data = $this->teacherService->getPageData('teacher-add', '', ['data_role' => $data_role]);
+
         return view('admin.pages.master-data.teacher.create', $data);
     }
 
@@ -54,13 +59,14 @@ class TeacherController extends Controller
      */
     public function store(TeacherRequest $teacherRequest, UserRequest $userRequest)
     {
-        // validate data request pengguna
-        $validateDataTeacher = $teacherRequest->validated();
-         
-        // validate data request user
-        $validateDataUser = $userRequest->validated();
-
+        
         try {
+            // validate data request pengguna
+            $validateDataTeacher = $teacherRequest->validated();
+            
+            // validate data request user
+            $validateDataUser = $userRequest->validated();
+
             DB::beginTransaction();
 
             // set image

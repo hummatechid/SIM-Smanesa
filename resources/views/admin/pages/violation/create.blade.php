@@ -39,6 +39,9 @@
                         <option value="{{ $user->id }}">{{$user->full_name}} ({{ $user->nisn }})</option>
                         @endforeach
                     </select>
+                    @error('user_id')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div class="form-group mb-3">
                     <label for="violation_type_id">Pelanggaran</label>
@@ -48,6 +51,9 @@
                         <option value="{{ $violation->id }}">{{ $violation->name }}({{ $violation->score }})</option>
                         @endforeach
                     </select>
+                    @error('violation_type_id')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
                 </div>
             </div>
             <div class="card-footer d-flex justify-content-end gap-2">

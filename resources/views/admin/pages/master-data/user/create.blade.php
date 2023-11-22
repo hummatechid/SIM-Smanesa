@@ -19,7 +19,7 @@
         </div>
     </div>
 
-    <x-create-user form-action="{{ url('user') }}" card-title="Tambah Pengguna" back-url="{{ url($main_url) }}"/>
+    <x-create-user form-action="{{ url('user') }}" card-title="Tambah Pengguna" back-url="{{ url($main_url) }}" :data-role="$data_role"/>
 
 </div>
 @endsection

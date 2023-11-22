@@ -8,6 +8,7 @@ use App\Http\Requests\PenggunaRequest;
 use App\Http\Requests\UserRequest;
 use App\Repositories\PenggunaRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\RoleRepository;
 use Illuminate\Http\Request;
 use App\Services\MasterData\PenggunaService;
 use Illuminate\Support\Facades\DB;
@@ -17,17 +18,19 @@ class PenggunaController extends Controller
     use UploadImage;
 
     private $penggunaService;
-    private $penggunaRepository, $userRepository;
+    private $penggunaRepository, $userRepository, $roleRepository;
 
     public function __construct(
         PenggunaService $penggunaService,
         PenggunaRepository $penggunaRepository,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        RoleRepository $roleRepository
     )
     {
         $this->penggunaService = $penggunaService;
         $this->penggunaRepository = $penggunaRepository;
         $this->userRepository = $userRepository;
+        $this->roleRepository = $roleRepository;
     }
     /**
      * Display a listing of the resource.
@@ -48,7 +51,8 @@ class PenggunaController extends Controller
      */
     public function create()
     {
-        $data = $this->penggunaService->getPageData('user-add', 'Tambah Pengguna');
+        $data_role = $this->roleRepository->getWhereNotIn('name', ['guru']);
+        $data = $this->penggunaService->getPageData('user-add', 'Tambah Pengguna', ['data_role' => $data_role]);
 
         return view('admin.pages.master-data.user.create', $data);
     }

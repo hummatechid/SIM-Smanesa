@@ -8,17 +8,17 @@ use Illuminate\View\Component;
 
 class CreateUser extends Component
 {
-    
+
     public function __construct
     (
         public string $cardTitle,
         public string $formAction,
         public string $backUrl,
+        public object|array|null $dataRole,
         public string $formMethod = "POST",
-        public string|null $formFor = null
+        public string|null $formFor = null,
     )
     {
-        //
     }
 
     /**

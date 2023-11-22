@@ -13,54 +13,67 @@
             <div class="form-group mb-3">
                 <label for="photo">Foto (opsional)</label>
                 <input type="file" id="upload-image" class="my-pond" name="photo"/>
+                @error('photo')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
             <div class="form-group mb-3">
                 <label for="email">Email</label>
-                <input type="email" name="email" id="email" class="form-control" placeholder="Email" value="{{ old('email') }}" required />
+                <input type="email" name="email" id="email" class="form-control @error('email') is-invalid @enderror" placeholder="Email" value="{{ old('email') }}" required />
+                @error('email')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
             <div class="form-group mb-3">
                 <label for="password">Password</label>
-                <input type="password" name="password" id="password" class="form-control" placeholder="Password" required />
+                <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password" required />
+                @error('password')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
             <div class="form-group mb-3">
                 <label for="password_confirmation">Konfirmasi Password</label>
-                <input type="password" name="password" id="password_confirmation" class="form-control" placeholder="Konfirmasi Password" required />
+                <input type="password" name="password_confirmation" id="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" placeholder="Konfirmasi Password" required />
+                @error('password')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
             <div class="form-group mb-3">
-                <label for="role">Role</label>
-                <Select name="role" id="role" class="form-select" required>
-                    <option value="" {{ !old('role') ? 'selected' : '' }}>-- pilih jenis pengguna --</option>
-                    @if(isset($formFor) && $formFor == "guru")
-                    <option value="guru" {{ old('role') == 'guru' ? 'selected' : '' }}>Guru</option>
-                    @else
-                    <option value="satpam" {{ old('role') == 'satpam' ? 'selected' : '' }}>Satpam</option>
-                    <option value="staf" {{ old('role') == 'staf' ? 'selected' : '' }}>Staf</option>
-                    <option value="pimpinan" {{ old('role') == 'pimpinan' ? 'selected' : '' }}>Pimpinan</option>
-                    <option value="superadmin" {{ old('role') == 'superadmin' ? 'selected' : '' }}>Superadmin</option>
-                    @endif
+                <label for="role_id">Role</label>
+                <Select name="role_id" id="role_id" class="form-select @error('role_id') is-invalid @enderror" required>
+                    <option value="" {{ !old('role_id') ? 'selected' : '' }}>-- pilih jenis pengguna --</option>
+                    @foreach($dataRole as $role)
+                    <option value="{{ $role->id }}" {{ old('role_id') == $role->id ? 'selected' : '' }}>{{ $role->name }}</option>
+                    @endforeach
                 </Select>
+                @error('role_id')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
             <div class="form-group mb-3">
                 <label for="nik">NIK</label>
-                <input type="text" name="nik" id="nik" class="form-control only-number" placeholder="NIK" value="{{ old('nik') }}" required />
+                <input type="text" name="nik" id="nik" class="form-control @error('nik') is-invalid @enderror only-number" placeholder="NIK" value="{{ old('nik') }}" required />
+                @error('nik')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
             @if(isset($formFor) && $formFor == 'guru')
             <div class="form-group mb-3">
                 <label for="nip">NIP</label>
-                <input type="text" name="nip" id="nip" class="form-control" placeholder="NIP" value="{{ old('nip') }}" required />
+                <input type="text" name="nip" id="nip" class="form-control @error('nip') is-invalid @enderror" placeholder="NIP" value="{{ old('nip') }}" required />
             </div>
             <div class="form-group mb-3">
                 <label for="nuptk">NUPTK</label>
-                <input type="text" name="nuptk" id="nuptk" class="form-control" placeholder="NUPTK" value="{{ old('nuptk') }}" required />
+                <input type="text" name="nuptk" id="nuptk" class="form-control @error('nuptk') is-invalid @enderror" placeholder="NUPTK" value="{{ old('nuptk') }}" required />
             </div>
             @endif
             <div class="form-group mb-3">
                 <label for="full_name">Nama Lengkap</label>
-                <input type="text" name="full_name" id="full_name" class="form-control" placeholder="Nama Lengkap" value="{{ old('full_name') }}" required />
+                <input type="text" name="full_name" id="full_name" class="form-control @error('full_name') is-invalid @enderror" placeholder="Nama Lengkap" value="{{ old('full_name') }}" required />
             </div>
             <div class="form-group mb-3">
                 <label for="gender">Jenis Kelamin</label>
-                <Select name="gender" id="gender" class="form-select" required>
+                <Select name="gender" id="gender" class="form-select @error('gender') is-invalid @enderror" required>
                     <option value="" {{ !old('gender') ? 'selected' : '' }}>-- pilih jenis kelamin --</option>
                     <option value="Laki-laki" {{ old('gender') == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
                     <option value="Perempuan" {{ old('gender') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
@@ -68,15 +81,15 @@
             </div>
             <div class="form-group mb-3">
                 <label for="address">Alamat</label>
-                <input type="text" name="address" id="address" class="form-control" placeholder="Alamat" value="{{ old('address') }}" required />
+                <input type="text" name="address" id="address" class="form-control @error('address') is-invalid @enderror" placeholder="Alamat" value="{{ old('address') }}" required />
             </div>
             <div class="form-group mb-3">
                 <label for="religion">Agama</label>
-                <input type="text" name="religion" id="religion" class="form-control" placeholder="Agama" value="{{ old('religion') }}" required />
+                <input type="text" name="religion" id="religion" class="form-control @error('religion') is-invalid @enderror" placeholder="Agama" value="{{ old('religion') }}" required />
             </div>
             <div class="form-group mb-3">
                 <label for="bio">Bio (opsional)</label>
-                <textarea type="text" name="bio" id="bio" class="form-control" placeholder="Bio" >{{ old('bio') }}</textarea>
+                <textarea type="text" name="bio" id="bio" class="form-control @error('bio') is-invalid @enderror" placeholder="Bio" >{{ old('bio') }}</textarea>
             </div>
         </div>
         <div class="card-footer d-flex justify-content-end gap-2">
