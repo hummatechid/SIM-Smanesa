@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Master\{StudentController,
@@ -30,3 +31,16 @@ Route::get('teacher/get-main-data', [TeacherController::class, 'getDatatablesDat
 Route::get('user/get-main-data', [PenggunaController::class, 'getDatatablesData']);
 Route::get('student/get-main-data', [StudentController::class, 'getDatatablesData']);
 Route::get('violation/get-main-data', [ViolationController::class, 'getDatatablesData']);
+
+
+// API MOBILE
+
+// autentikasi
+Route::post('/login', [AuthController::class, 'login']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
+
+// list permit
+Route::get('/list-permit', [PermitController::class, 'listToday']);
+Route::get('/list-permit/{id}', [PermitController::class, 'detailList']);

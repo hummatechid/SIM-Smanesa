@@ -80,6 +80,7 @@ class TeacherController extends Controller
             }
 
             // store data user
+            $validateDataUser["password"] = bcrypt($validateDataUser["password"]); 
             $user = $this->userRepository->create($validateDataUser);
 
             // set user_id
@@ -150,6 +151,7 @@ class TeacherController extends Controller
             $this->teacherRepository->update($id, $validateDataPengguna);
 
             // store data user
+            if($validateDataUser["password"]) $validateDataUser["password"] = bcrypt($validateDataUser["password"]); 
             $user = $this->userRepository->update($pengguna->user_id, $validateDataUser);
 
             DB::commit();
