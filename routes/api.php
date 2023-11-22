@@ -42,5 +42,8 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 // list permit
-Route::get('/list-permit', [PermitController::class, 'listToday']);
-Route::get('/list-permit/{id}', [PermitController::class, 'detailList']);
+Route::prefix('permit')->group(function (){
+    Route::post('/', [PermitController::class, 'updateStatus']);
+    Route::get('/{id}', [PermitController::class, 'detailList']);
+    Route::get('/list-today', [PermitController::class, 'listToday']);
+});
