@@ -271,5 +271,77 @@ class PermitController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Api For Mobile
+     * Update status permit
+     * 
+     */
+    public function updateStatus(Request $request)
+    {
+        // check request id
+        if(!$request->id) {
+            return response()->json([
+                "status" => "error",
+                "messages" => "Dimohon check ulang pengiriman id",
+                "data" => null
+            ], 400);
+        }
+
+        // check request status
+        $status = ["accepted","rejected","back"];
+        if(!$request->status) {
+            return response()->json([
+                "status" => "error",
+                "messages" => "Dimohon check ulang pengiriman status",
+                "data" => null
+            ], 400);
+        }
+
+        // check status has or not
+        if(in_array($request->status, $status)) {
+            return response()->json([
+                "status" => "error",
+                "messages" => "Status tidak terdaftar, silahkan cek ulang",
+                "data" => null
+            ], 400);
+        }
+
+        // check data user
+        if(!$request->user_id) {
+            return response()->json([
+                "status" => "error",
+                "messages" => "Data user harus dikirim, silahkan cek ulang.",
+                "data" => null
+            ], 400);
+        }
+
+        $data = [
+            "status" => $request->status,
+            "updated_by" => $request->user_id
+        ];
+
+        if($request->status == "accepted") $data["accepted_by"] = $request->user_id;
+
+        $permit = $this->permitRepository->getOneById($request->id);
+
+        // check permit
+        if(!$permit){
+            return response()->json([
+                "status" => "error",
+                "messages" => "Surat izin tidak ditemukan",
+                "data" => null
+            ], 404);   
+        }
+
+        // update data
+        $permit->update($data);
+
+        return response()->json([
+            "status" => "success",
+            "messages" => "Berhasil memberikan tanggapan",
+            "data" => $permit
+        ], 200);
+    }
      
 }
