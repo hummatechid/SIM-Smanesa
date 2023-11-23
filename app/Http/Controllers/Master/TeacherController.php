@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Master;
 
+use App\Helpers\UploadImage;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TeacherRequest;
 use App\Http\Requests\UserRequest;
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\DB;
 
 class TeacherController extends Controller
 {
+    use UploadImage;
+
     private $teacherService;
     private $teacherRepository, $userRepository, $roleRepository;
 
@@ -71,8 +74,8 @@ class TeacherController extends Controller
 
             // set image
             $path = storage_path('images/teacher/');
-            !is_dir($path) &&
-            mkdir($path, 0777, true);
+            !is_dir($path) && mkdir($path, 0777, true);
+            
             if($teacherRequest->photo) {
                 $file = $teacherRequest->file('photo');
                 $fileData = $this->uploads($file,$path);
@@ -80,12 +83,12 @@ class TeacherController extends Controller
             }
 
             // store data user
-            $validateDataUser["password"] = bcrypt($validateDataUser["password"]); 
+            $validateDataUser["password"] = bcrypt($validateDataUser["password"]);  
             $user = $this->userRepository->create($validateDataUser);
 
             // set user_id
-            $validateDataPengguna["user_id"] = $user->id;
-            $validateDataPengguna["is_dapodik"] = 0;
+            $validateDataTeacher["user_id"] = $user->id;
+            $validateDataTeacher["is_dapodik"] = 0;
 
             // store data pengguna
             $this->teacherRepository->create($validateDataTeacher);
@@ -133,6 +136,15 @@ class TeacherController extends Controller
 
         if(!$pengguna) return redirect()->back()->with('error', 'Teacher tidak ditemukan');
 
+        // check if user want change password
+        if($userRequest->password){
+            $userRequest->validate([
+                'password' => 'confirmed' 
+            ],[
+                'password.confirmed' => 'Password konfirmasi tidak sama.'
+            ]);
+        }
+
         try {
             DB::beginTransaction();
 
@@ -151,7 +163,7 @@ class TeacherController extends Controller
             $this->teacherRepository->update($id, $validateDataPengguna);
 
             // store data user
-            if($validateDataUser["password"]) $validateDataUser["password"] = bcrypt($validateDataUser["password"]); 
+            if($userRequest->password) $validateDataUser["password"] = bcrypt($userRequest->password); 
             $user = $this->userRepository->update($pengguna->user_id, $validateDataUser);
 
             DB::commit();

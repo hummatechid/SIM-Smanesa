@@ -144,6 +144,15 @@ class PenggunaController extends Controller
 
         if(!$role) return redirect()->back()->with('error', 'Role tidak ditemukan')->withInput();
 
+        // check if user want change password
+        if($userRequest->password){
+            $userRequest->validate([
+                'password' => 'confirmed' 
+            ],[
+                'password.confirmed' => 'Password konfirmasi tidak sama.'
+            ]);
+        }
+
         try {
             DB::beginTransaction();
 
@@ -162,7 +171,7 @@ class PenggunaController extends Controller
             $this->penggunaRepository->update($id, $validateDataPengguna);
 
             // store data user
-            if($validateDataUser["password"]) $validateDataUser["password"] = bcrypt($validateDataUser["password"]); 
+            if($userRequest->password) $validateDataUser["password"] = bcrypt($userRequest->password); 
             $user = $this->userRepository->update($pengguna->user_id, $validateDataUser);
 
             // asign role user

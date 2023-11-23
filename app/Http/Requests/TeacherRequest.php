@@ -28,7 +28,7 @@ class TeacherRequest extends FormRequest
             "nuptk" => "required",
             "full_name" => "required",
             'gender' => 'required|in:Laki-laki,Perempuan',
-            'phome_number' => "required",
+            'phone_number' => "required",
             "address" => "required",
             "religion" => "required",
             "bio" => "nullable",

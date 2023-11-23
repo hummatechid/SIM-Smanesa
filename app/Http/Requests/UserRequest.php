@@ -40,7 +40,6 @@ class UserRequest extends FormRequest
             return [
                 'email' => ['required','email', Rule::unique('users')->ignore($user->user_id)],
                 'role_id' => 'required',
-                'password' => 'nullable|confirmed'
             ];
         } else {
             // create rules
