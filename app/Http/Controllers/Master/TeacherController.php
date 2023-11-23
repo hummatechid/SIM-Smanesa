@@ -73,7 +73,7 @@ class TeacherController extends Controller
             DB::beginTransaction();
 
             // set image
-            $path = storage_path('images/teacher/');
+            $path = 'images/teacher/';
             !is_dir($path) && mkdir($path, 0777, true);
             
             if($teacherRequest->photo) {
@@ -149,11 +149,11 @@ class TeacherController extends Controller
             DB::beginTransaction();
 
             // set image
-            $path = storage_path('images/teacher/');
+            $path = 'images/teacher/';
             !is_dir($path) &&
             mkdir($path, 0777, true);
             if($teacherRequest->photo) {
-                $this->deleteImage($pengguna->photo);
+                if($pengguna->photo) $this->deleteImage($pengguna->photo);
                 $file = $teacherRequest->file('photo');
                 $fileData = $this->uploads($file,$path);
                 $validateDataPengguna["photo"] = $fileData["filePath"].$fileData["fileType"];

@@ -77,7 +77,7 @@ class PenggunaController extends Controller
             DB::beginTransaction();
 
             // storage photo
-            $path = storage_path('images/pengguna/');
+            $path = 'images/pengguna/';
             !is_dir($path) &&
             mkdir($path, 0777, true);
             if($requestPengguna->photo) {
@@ -157,11 +157,11 @@ class PenggunaController extends Controller
             DB::beginTransaction();
 
             // set image
-            $path = storage_path('images/pengguna/');
+            $path = 'images/pengguna/';
             !is_dir($path) &&
             mkdir($path, 0777, true);
             if($requestPengguna->photo) {
-                $this->deleteImage($pengguna->photo);
+                if($pengguna->photo) $this->deleteImage($pengguna->photo);
                 $file = $requestPengguna->file('photo');
                 $fileData = $this->uploads($file,$path);
                 $validateDataPengguna["photo"] = $fileData["filePath"].$fileData["fileType"];
