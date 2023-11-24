@@ -2,7 +2,7 @@
 
 namespace App\Services\MasterTransaction;
 
-use App\Repositories\MasterData\PermitRepository;
+use App\Repositories\MasterTransaction\PermitRepository;
 use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\Facades\DataTables;
 use App\Services\BaseService;
@@ -28,19 +28,27 @@ class PermitService extends BaseService {
 
         return Datatables::of($data)
             ->addIndexColumn()
-            ->addColumn('full_name', function($item) {
-                return $item->full_name;
-            })->addColumn('email', function($item) {
-                return $item->user->email;
-            })->addColumn('phone_number', function($item) {
-                return $item->phone_number;
+            ->addColumn('student', function($item) {
+                return $item->student->full_name;
+            })->addColumn('reason', function($item) {
+                return $item->reason;
+            })->addColumn('status', function($item) {
+                if($item->status == "pending") {
+                    return `<span class="badge bg-secondary">Pending</span>`;
+                } else if($item->status == "rejected") {
+                    return `<span class="badge bg-danger">Ditolak</span>`;
+                } else if($item->status == "accepted") {
+                    return `<span class="badge bg-success">Diterima</span>`;
+                } else {
+                    return `<span class="badge bg-primary">Telah Kembali</span>`;
+                }
             })->addColumn('action', function($item) {
                 return 
                 '<div class="d-flex gap-3 justify-content-between align-items-center">
-                    <button class="btn btn-sm btn-danger delete-data" data-id="'.$item->id.'">Hapus</button>
+                    <a href="'+route('permit.show', $item->id)+'" class="btn btn-sm btn-danger delete-data" data-id="'.$item->id.'">Detail</a>
                     <button class="btn btn-sm btn-danger delete-data" data-id="'.$item->id.'">Hapus</button>
                 </div>';
-            })->rawColumns(['action'])
+            })->rawColumns(['action', 'status'])
             ->make(true);
     }
 }

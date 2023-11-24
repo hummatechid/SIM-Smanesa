@@ -1,6 +1,6 @@
 <?php 
 
-namespace App\Repositories\MasterData;
+namespace App\Repositories\MasterTransaction;
 
 use App\Repositories\BaseRepository;
 use App\Models\Permit;

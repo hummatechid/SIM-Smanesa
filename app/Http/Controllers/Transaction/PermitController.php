@@ -4,26 +4,32 @@ namespace App\Http\Controllers\Transaction;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PermitRequest;
-use App\Repositories\MasterData\PermitRepository;
+use App\Repositories\MasterTransaction\PermitRepository;
 use App\Repositories\PenggunaRepository;
 use App\Repositories\TeacherRepository;
+use App\Repositories\StudentRepository;
+use App\Services\MasterTransaction\PermitService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PermitController extends Controller
 {
-    private $penggunaRepository, $teacherRepository;
-    private $permitRepository;
+    private $penggunaRepository, $teacherRepository, $permitRepository, $studentRepository;
+    private $permitService;
 
     public function __construct(
         PermitRepository $permitRepository,
         PenggunaRepository $penggunaRepository,
-        TeacherRepository $teacherRepository
+        TeacherRepository $teacherRepository,
+        StudentRepository $studentRepository,
+        PermitService $permitService,
     )
     {
         $this->permitRepository = $permitRepository;
         $this->penggunaRepository = $penggunaRepository;
         $this->teacherRepository = $teacherRepository;
+        $this->studentRepository = $studentRepository;
+        $this->permitService = $permitService;
     }
 
     /**
@@ -31,7 +37,13 @@ class PermitController extends Controller
      */
     public function index()
     {
-        //
+        $data = $this->permitService->getPageData('permit-list');
+        return view('admin.pages.permit.index', $data);
+    }
+
+    public function getDatatablesData()
+    {
+        return $this->permitService->getDataDatatable();
     }
 
     /**
@@ -39,7 +51,11 @@ class PermitController extends Controller
      */
     public function create()
     {
-        //
+        $data = $this->permitService->getPageData('permit-add', '', [
+            'students' => $this->studentRepository->getAll()
+        ]);
+
+        return view('admin.pages.permit.create', $data);
     }
 
     /**
@@ -342,6 +358,11 @@ class PermitController extends Controller
             "messages" => "Berhasil memberikan tanggapan",
             "data" => $permit
         ], 200);
+    }
+
+    public function showAccListPage()
+    {
+        return view('admin.pages.permit.acc');
     }
      
 }

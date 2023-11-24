@@ -9,6 +9,7 @@ use App\Http\Controllers\Master\{StudentController,
     TeacherController,
     PenggunaController
 };
+use App\Http\Controllers\Transaction\PermitController;
 use App\Http\Controllers\Transaction\ViolationController;
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,7 @@ Route::get('teacher/get-main-data', [TeacherController::class, 'getDatatablesDat
 Route::get('user/get-main-data', [PenggunaController::class, 'getDatatablesData']);
 Route::get('student/get-main-data', [StudentController::class, 'getDatatablesData']);
 Route::get('violation/get-main-data', [ViolationController::class, 'getDatatablesData']);
+Route::get('permit/get-main-data', [PermitController::class, 'getDatatablesData']);
 
 
 // API MOBILE
