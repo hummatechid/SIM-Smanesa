@@ -171,4 +171,14 @@ class BaseRepository implements RepositoryInterface {
     {
         return $this->model->whereNotIn($column, $arrayNotIn)->get();
     }
+
+    public function oneConditionOneRelation(string $column, string $value, string $relation, string $method = 'get')
+    {
+        switch($method) {
+            case 'first' :
+                return $this->model->where($column, $value)->with($relation)->first();
+            default :
+                return $this->model->where($column, $value)->with($relation)->get();
+        }
+    }
 }

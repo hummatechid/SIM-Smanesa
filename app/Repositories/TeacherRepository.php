@@ -12,4 +12,11 @@ class TeacherRepository extends BaseRepository {
     {
         $this->model = $teacher;    
     }
+
+    public function byIdWithRole(string $id)
+    {
+        return $this->model->with(['user' => function($q) {
+            $q->with('roles');
+        }])->where('id', $id)->firstOrFail();
+    }
 }

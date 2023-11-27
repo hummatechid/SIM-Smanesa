@@ -109,7 +109,12 @@ class TeacherController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $teacher = $this->teacherRepository->getOneById($id);
+        $data = $this->teacherService->getPageData('teacher-list', '', [
+            'teacher' => $teacher,
+
+        ]);
+        return view('admin.pages.master-data.teacher.show', $data);
     }
 
     /**
@@ -117,7 +122,13 @@ class TeacherController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $teacher = $this->teacherRepository->byIdWithRole($id);
+        $data_role = $this->roleRepository->getCustomColumnValue('name', 'guru');
+        $data = $this->teacherService->getPageData('teacher-list', '', [
+            'teacher' => $teacher,
+            'data_role' => $data_role
+        ]);
+        return view('admin.pages.master-data.teacher.edit', $data);
     }
 
     /**

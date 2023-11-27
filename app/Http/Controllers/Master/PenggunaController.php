@@ -112,7 +112,12 @@ class PenggunaController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $user = $this->penggunaRepository->getOneById($id);
+        $data = $this->penggunaService->getPageData('user-list', '', [
+            'user' => $user,
+
+        ]);
+        return view('admin.pages.master-data.user.show', $data);
     }
 
     /**
@@ -120,7 +125,13 @@ class PenggunaController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = $this->penggunaRepository->byIdWithRole($id);
+        $data_role = $this->roleRepository->getWhereNotIn('name', ['guru']);
+        $data = $this->penggunaService->getPageData('user-list', '', [
+            'user' => $user,
+            'data_role' => $data_role
+        ]);
+        return view('admin.pages.master-data.user.edit', $data);
     }
 
     /**
