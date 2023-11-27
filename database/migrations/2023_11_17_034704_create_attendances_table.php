@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('student_id');
             $table->foreign('student_id')->references('id')->on('students');
-            $table->dateTime('present_at');
+            $table->dateTime('present_at')->nullable();
             $table->dateTime('return_at')->nullable();
             $table->string('status');
             $table->string('permit_file')->nullable();

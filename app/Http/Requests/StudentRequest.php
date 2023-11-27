@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PermitRequest extends FormRequest
+class StudentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,17 +22,7 @@ class PermitRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'student_id' => 'required',
-            'created_by' => 'nullable',
-            'reason' => 'required',
-        ];
-    }
-
-    public function messages(): array
-    {
-        return [
-            'student_id.required' => 'Data siswa/siwsi harus diisi',
-            'reason.required' => 'Keterangan izin harus diisi',
+            //
         ];
     }
 }

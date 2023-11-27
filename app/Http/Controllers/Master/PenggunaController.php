@@ -2,29 +2,35 @@
 
 namespace App\Http\Controllers\Master;
 
+use App\Helpers\UploadImage;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PenggunaRequest;
 use App\Http\Requests\UserRequest;
 use App\Repositories\PenggunaRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\RoleRepository;
 use Illuminate\Http\Request;
 use App\Services\MasterData\PenggunaService;
 use Illuminate\Support\Facades\DB;
 
 class PenggunaController extends Controller
 {
+    use UploadImage;
+
     private $penggunaService;
-    private $penggunaRepository, $userRepository;
+    private $penggunaRepository, $userRepository, $roleRepository;
 
     public function __construct(
         PenggunaService $penggunaService,
         PenggunaRepository $penggunaRepository,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        RoleRepository $roleRepository
     )
     {
         $this->penggunaService = $penggunaService;
         $this->penggunaRepository = $penggunaRepository;
         $this->userRepository = $userRepository;
+        $this->roleRepository = $roleRepository;
     }
     /**
      * Display a listing of the resource.
@@ -45,7 +51,8 @@ class PenggunaController extends Controller
      */
     public function create()
     {
-        $data = $this->penggunaService->getPageData('user-add', 'Tambah Pengguna');
+        $data_role = $this->roleRepository->getWhereNotIn('name', ['guru']);
+        $data = $this->penggunaService->getPageData('user-add', 'Tambah Pengguna', ['data_role' => $data_role]);
 
         return view('admin.pages.master-data.user.create', $data);
     }
@@ -64,11 +71,23 @@ class PenggunaController extends Controller
         // check role has been has or not
         $role = $this->userRepository->getRole('id',$userRequest->role_id);
 
-        if(!$role) return redirect()->back()->with('error', 'Role tidak ditemukan');
+        if(!$role) return redirect()->back()->with('error', 'Role tidak ditemukan')->withInput();
 
         try {
             DB::beginTransaction();
+
+            // storage photo
+            $path = 'images/pengguna/';
+            !is_dir($path) &&
+            mkdir($path, 0777, true);
+            if($requestPengguna->photo) {
+                $file = $requestPengguna->file('photo');
+                $fileData = $this->uploads($file,$path);
+                $validateDataPengguna["photo"] = $fileData["filePath"].$fileData["fileType"];
+            }
+
             // store data user
+            $validateDataUser["password"] = bcrypt($validateDataUser["password"]); 
             $user = $this->userRepository->create($validateDataUser);
 
             // set user_id
@@ -77,7 +96,6 @@ class PenggunaController extends Controller
             // store data pengguna
             $this->penggunaRepository->create($validateDataPengguna);
             
-
             // asign role user
             $user->assignRole($role->name);
 
@@ -85,7 +103,7 @@ class PenggunaController extends Controller
             return redirect()->route('pengguna.index')->with('success', "Data pengguna berhasil dibuat");
         } catch(\Throwable $th){
             DB::rollBack();
-            return redirect()->back()->with('error',$th->getMessage());
+            return redirect()->back()->with('error',$th->getMessage())->withInput();
         }
     }
 
@@ -94,7 +112,12 @@ class PenggunaController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $user = $this->penggunaRepository->getOneById($id);
+        $data = $this->penggunaService->getPageData('user-list', '', [
+            'user' => $user,
+
+        ]);
+        return view('admin.pages.master-data.user.show', $data);
     }
 
     /**
@@ -102,7 +125,13 @@ class PenggunaController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = $this->penggunaRepository->byIdWithRole($id);
+        $data_role = $this->roleRepository->getWhereNotIn('name', ['guru']);
+        $data = $this->penggunaService->getPageData('user-list', '', [
+            'user' => $user,
+            'data_role' => $data_role
+        ]);
+        return view('admin.pages.master-data.user.edit', $data);
     }
 
     /**
@@ -119,19 +148,41 @@ class PenggunaController extends Controller
         // check has data or not
         $pengguna = $this->penggunaRepository->getOneById($id);
 
-        if(!$pengguna) return redirect()->back()->with('error', 'Pengguna tidak ditemukan');
+        if(!$pengguna) return redirect()->back()->with('error', 'Pengguna tidak ditemukan')->withInput();
         
         // check role has been has or not
         $role = $this->userRepository->getRole('id',$userRequest->role_id);
 
-        if(!$role) return redirect()->back()->with('error', 'Role tidak ditemukan');
+        if(!$role) return redirect()->back()->with('error', 'Role tidak ditemukan')->withInput();
+
+        // check if user want change password
+        if($userRequest->password){
+            $userRequest->validate([
+                'password' => 'confirmed' 
+            ],[
+                'password.confirmed' => 'Password konfirmasi tidak sama.'
+            ]);
+        }
 
         try {
             DB::beginTransaction();
+
+            // set image
+            $path = 'images/pengguna/';
+            !is_dir($path) &&
+            mkdir($path, 0777, true);
+            if($requestPengguna->photo) {
+                if($pengguna->photo) $this->deleteImage($pengguna->photo);
+                $file = $requestPengguna->file('photo');
+                $fileData = $this->uploads($file,$path);
+                $validateDataPengguna["photo"] = $fileData["filePath"].$fileData["fileType"];
+            }
+            
             // store data pengguna
             $this->penggunaRepository->update($id, $validateDataPengguna);
 
             // store data user
+            if($userRequest->password) $validateDataUser["password"] = bcrypt($userRequest->password); 
             $user = $this->userRepository->update($pengguna->user_id, $validateDataUser);
 
             // asign role user
@@ -141,7 +192,7 @@ class PenggunaController extends Controller
             return redirect()->route('pengguna.index')->with('success', "Data pengguna berhasil di rubah");
         } catch(\Throwable $th){
             DB::rollBack();
-            return redirect()->back()->with('error',$th->getMessage());
+            return redirect()->back()->with('error',$th->getMessage())->withInput();
         }
     }
 
@@ -171,6 +222,7 @@ class PenggunaController extends Controller
         }
         
         try {
+
             // delete data
             $this->penggunaRepository->softDelete($id);
             $this->userRepository->softDelete($user->id);
@@ -213,6 +265,9 @@ class PenggunaController extends Controller
         }
         
         try {
+            // delete image
+            if($pengguna->photo) $this->deleteImage($pengguna->photo);
+
             // delete data
             $this->penggunaRepository->delete($id);
             $this->userRepository->delete($user->id);

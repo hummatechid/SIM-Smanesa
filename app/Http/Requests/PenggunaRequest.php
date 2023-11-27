@@ -11,7 +11,7 @@ class PenggunaRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -27,9 +27,9 @@ class PenggunaRequest extends FormRequest
             'gender' => 'required|in:Laki-laki,Perempuan',
             'phone_number' => 'required',
             'address' => 'required',
-            'religion' => 'required|in:Islam,Kristen,Katolik,Hindu,Buddha,Konghucu,Lainnya',
+            'religion' => 'required',
             'bio' => 'nullable',
-            'photo' => 'nullable'
+            'photo' => 'nullable|mimes:jpg, jpeg, png'
         ];
     }
 
@@ -43,7 +43,8 @@ class PenggunaRequest extends FormRequest
             'phone_number.required' => 'Nomor telepon harus diisi.',
             'address.required' => 'Alamat harus diisi.',
             'religion.required' => 'Pilih agama.',
-            'religion.in' => 'Agama harus Islam, Kristen, Katolik, Hindu, Buddha, Konghucu, atau Lainnya.'
+            'religion.in' => 'Agama harus Islam, Kristen, Katolik, Hindu, Buddha, Konghucu, atau Lainnya.',
+            'photo.mimes' => 'Foto harus berformat jpg, jpeg atau png'
         ];     
     }
 }

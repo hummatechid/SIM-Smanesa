@@ -13,6 +13,7 @@ class UserRepository extends BaseRepository {
     public function __construct(User $user, Role $role)
     {
         $this->model = $user;    
+        $this->role = $role;
     }
 
     // function get role user

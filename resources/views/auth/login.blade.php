@@ -32,7 +32,7 @@
                 <form action="{{ url('login') }}" method="POST">
                     @csrf
                     <div class="form-group position-relative has-icon-left mb-4">
-                        <input type="email" name="email" id="email" class="form-control form-control-xl" placeholder="Email">
+                        <input type="email" name="email" id="email" class="form-control form-control-xl" placeholder="Email" autofocus>
                         <div class="form-control-icon">
                             <i class="bi bi-envelope"></i>
                         </div>

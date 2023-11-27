@@ -6,19 +6,16 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class CreateUser extends Component
+class ShowUser extends Component
 {
 
     public function __construct
     (
         public string $cardTitle,
-        public string $formAction,
+        public string $editUrl,
         public string $backUrl,
-        public object|array|null $dataRole,
-        public string $formMethod = "POST",
+        public $dataUser,
         public string|null $formFor = null,
-        public bool $isEdit = false,
-        public object|array|null $dataUser = null
     )
     {
     }
@@ -28,6 +25,6 @@ class CreateUser extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.create-user');
+        return view('components.show-user');
     }
 }

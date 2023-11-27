@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+    @extends('admin.layouts.app')
 
 @section('content')
 <div class="page-heading">
@@ -19,7 +19,21 @@
         </div>
     </div>
 
-    <x-create-user form-action="{{ url('teacher') }}" card-title="Tambah Guru" back-url="{{ url($main_url) }}" form-for="guru" :data-role="$data_role"/>
+    @php
+        $data_column = [
+            "student" => "Siswa",
+            "reason" => "Alasan",
+            "status" => "Status",
+            "action" => "Aksi"
+        ];
+    @endphp
+    <x-datatable
+        card-title="Tabel Izin"
+        data-url="{{ url('api/permit/get-main-data') }}"
+        :table-columns="$data_column"
+        delete-option="permit/deleted_id"
+        data-add-url="{{ url('permit/create') }}"
+    />
 
 </div>
 @endsection

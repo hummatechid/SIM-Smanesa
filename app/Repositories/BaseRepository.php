@@ -161,4 +161,24 @@ class BaseRepository implements RepositoryInterface {
     {
         return $this->model->orderBy($column, $value)->get();
     }
+
+    public function getCustomColumnValue(string $column, string $value): object|null
+    {
+        return $this->model->where($column, $value)->get();
+    }
+
+    public function getWhereNotIn(string $column, array $arrayNotIn) : object|null
+    {
+        return $this->model->whereNotIn($column, $arrayNotIn)->get();
+    }
+
+    public function oneConditionOneRelation(string $column, string $value, string $relation, string $method = 'get')
+    {
+        switch($method) {
+            case 'first' :
+                return $this->model->where($column, $value)->with($relation)->first();
+            default :
+                return $this->model->where($column, $value)->with($relation)->get();
+        }
+    }
 }

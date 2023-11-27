@@ -12,4 +12,11 @@ class PenggunaRepository extends BaseRepository {
     {
         $this->model = $pengguna;    
     }
+
+    public function byIdWithRole(string $id)
+    {
+        return $this->model->with(['user' => function($q) {
+            $q->with('roles');
+        }])->where('id', $id)->firstOrFail();
+    }
 }

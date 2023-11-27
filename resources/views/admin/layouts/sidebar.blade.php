@@ -163,6 +163,31 @@
 
 
                 </li>
+                <li
+                    class="sidebar-item has-sub {{ isset($main_menu) && $main_menu == 'permit' ? 'active' : '' }}">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-stack"></i>
+                        <span>Izin Keluar-Masuk</span>
+                    </a>
+
+                    <ul class="submenu active">
+
+                        <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'permit-add' ? 'active' : '' }}">
+                            <a href="{{ url('permit/create') }}" class="submenu-link">Tambah Izin</a>
+
+                        </li>
+                        <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'permit-list' ? 'active' : '' }}">
+                            <a href="{{ url('permit') }}" class="submenu-link">List Izin</a>
+
+                        </li>
+
+                        <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'permit-acc' ? 'active' : '' }}">
+                            <a href="{{ url('permit/waiting-acception') }}" class="submenu-link">Acc Izin</a>
+                        </li>
+                    </ul>
+
+
+                </li>
 
                 <li
                     class="sidebar-item has-sub {{ isset($main_menu) && $main_menu == 'violation' ? 'active' : '' }}">

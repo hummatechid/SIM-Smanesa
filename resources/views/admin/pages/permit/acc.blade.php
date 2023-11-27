@@ -19,7 +19,21 @@
         </div>
     </div>
 
-    <x-create-user form-action="{{ url('teacher') }}" card-title="Tambah Guru" back-url="{{ url($main_url) }}" form-for="guru" :data-role="$data_role"/>
+    @php
+        $data_column = [
+            "full_name" => "Nama",
+            "email" => "Email",
+            "phone_number" => "Nomor",
+            "action" => "Aksi"
+        ];
+    @endphp
+    <x-datatable
+        card-title="Tabel Guru"
+        data-url="{{ url('api/teacher/get-main-data') }}"
+        :table-columns="$data_column"
+        delete-option="teacher/deleted_id"
+        data-add-url="{{ url('teacher/create') }}"
+    />
 
 </div>
 @endsection
