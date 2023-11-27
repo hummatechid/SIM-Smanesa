@@ -29,13 +29,13 @@ interface RepositoryInterface {
     public function create(array $data): object | null;
 
     // function for update data by id
-    public function update(string $id, array $data): object | null;
+    public function update(string $id, array $data): object | null | bool;
 
     // function for soft delete
-    public function softDelete(string $id): object | null;
+    public function softDelete(string $id): object | null | bool;
 
     // function for delete permanent
-    public function delete(string $id): object | null;
+    public function delete(string $id): object | null | bool;
 
     /**
      * Get data that has been sorted
