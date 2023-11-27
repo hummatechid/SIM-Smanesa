@@ -79,7 +79,7 @@ class TeacherController extends Controller
             if($teacherRequest->photo) {
                 $file = $teacherRequest->file('photo');
                 $fileData = $this->uploads($file,$path);
-                $validateDataTeacher["photo"] = $fileData["filePath"].$fileData["fileType"];
+                $validateDataTeacher["photo"] = $fileData["filePath"].".".$fileData["fileType"];
             }
 
             // store data user
@@ -167,7 +167,7 @@ class TeacherController extends Controller
                 if($pengguna->photo) $this->deleteImage($pengguna->photo);
                 $file = $teacherRequest->file('photo');
                 $fileData = $this->uploads($file,$path);
-                $validateDataPengguna["photo"] = $fileData["filePath"].$fileData["fileType"];
+                $validateDataPengguna["photo"] = $fileData["filePath"].".".$fileData["fileType"];
             }
 
             // store data pengguna

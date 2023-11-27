@@ -13,9 +13,9 @@ trait UploadImage {
             $file_name_timestamp = date('dmyhms');
             // $fileName   = time() . $file->getClientOriginalName();
             $fileName   = time() . $file->getClientOriginalName();
-            Storage::disk('public')->put($path . $fileName, File::get($file));
-            $file_name  = $file->getClientOriginalName();
             $file_type  = $file->getClientOriginalExtension();
+            Storage::disk('public')->put($path . $file_name_timestamp. "." .$file_type , File::get($file));
+            $file_name  = $file->getClientOriginalName();
             $filePath   = $path . $file_name_timestamp;
 
             return $file = [
