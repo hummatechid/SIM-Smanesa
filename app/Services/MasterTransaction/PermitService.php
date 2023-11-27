@@ -33,22 +33,24 @@ class PermitService extends BaseService {
             })->addColumn('reason', function($item) {
                 return $item->reason;
             })->addColumn('status', function($item) {
+                // return $item->status;
                 if($item->status == "pending") {
-                    return `<span class="badge bg-secondary">Pending</span>`;
+                    return '<span class="badge bg-secondary">Pending</span>';
                 } else if($item->status == "rejected") {
-                    return `<span class="badge bg-danger">Ditolak</span>`;
+                    return '<span class="badge bg-danger">Ditolak</span>';
                 } else if($item->status == "accepted") {
-                    return `<span class="badge bg-success">Diterima</span>`;
+                    return '<span class="badge bg-success">Diterima</span>';
                 } else {
-                    return `<span class="badge bg-primary">Telah Kembali</span>`;
+                    return '<span class="badge bg-primary">Telah Kembali</span>';
                 }
             })->addColumn('action', function($item) {
                 return 
-                '<div class="d-flex gap-3 justify-content-between align-items-center">
-                    <a href="'+route('permit.show', $item->id)+'" class="btn btn-sm btn-danger delete-data" data-id="'.$item->id.'">Detail</a>
+                '<div class="d-flex gap-3 justify-content-start align-items-center">
+                    <a href="'.route('permit.show', $item->id).'" class="btn btn-sm btn-primary delete-data" data-id="'.$item->id.'">Detail</a>
                     <button class="btn btn-sm btn-danger delete-data" data-id="'.$item->id.'">Hapus</button>
                 </div>';
-            })->rawColumns(['action', 'status'])
+            })
+            ->rawColumns(['action', 'status'])
             ->make(true);
     }
 }

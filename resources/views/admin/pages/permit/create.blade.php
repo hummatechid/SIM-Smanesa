@@ -108,5 +108,53 @@
         </script>
     @endpush
 
+    @push('custom-style')
+        <link rel="stylesheet" href="{{ asset('assets/extensions/choices.js/public/assets/styles/choices.css') }}" />
+        <style>
+            .choices__inner {
+                padding: 3.5px 7.5px 3.75px;
+                background: white;
+                min-height: 22px;
+            }
+        
+            .choices[data-type*=select-one] .choices__inner {
+                padding-bottom: 2.5px;
+            }
+        </style>
+        <style>
+            .parsley-errors-list {
+                color: var(--bs-danger)
+            }
+            .parsley-error {
+                border-color: var(--bs-danger)!important
+            }
+        </style>
+    @endpush
+    @push('custom-script')
+        <script src="{{ asset('assets/extensions/parsleyjs/parsley.min.js') }}"></script>
+        <script src="{{ asset('assets/extensions/choices.js/public/assets/scripts/choices.js') }}"></script>
+        <script>
+            let choices = document.querySelectorAll(".choices");
+            let initChoice;
+
+            for (let i = 0; i < choices.length; i++) {
+                if (choices[i].classList.contains("multiple-remove")) {
+                    initChoice = new Choices(choices[i], {
+                        delimiter: ",",
+                        editItems: true,
+                        maxItemCount: -1,
+                        removeItemButton: true,
+                    });
+                } else {
+                    initChoice = new Choices(choices[i]);
+                }
+            }
+        </script>
+        
+        <script>
+            $('#form').parsley()
+        </script>
+    @endpush
+
 </div>
 @endsection
