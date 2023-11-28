@@ -1,32 +1,65 @@
 {{-- S:Datatable --}}
 <section class="section">
+    @if($dataAddUrl && $dataAddType == "modal")
+    <div class="modal fade" id="modal-add-new-data" tabindex="-1">
+        <div class="modal-dialog">
+            <form action="{{ $dataAddUrl }}" class="modal-content" method="POST">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title">Tambah Data</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    @if(isset($dataAddSettings))
+                    @foreach($dataAddSettings as $key => $data)
+                    @if($data['type'] == "select")
+                    <div class="form-group mb-3">
+                        <label for="{{ $key }}">{{ $data['title'] }}</label>
+                        <select name="{{ $key }}" id="{{ $key }}" class="form-select"  @foreach($data['attr'] as $attr => $value) {{ $attr.'='.$value }} @endforeach>
+                            @if(isset($data['first_option'])) <option value="" selected disabled>{{ $data['first_option'] }}</option> @endif
+                            @foreach($data['options'] as $value => $title)
+                            <option value="{{ $value }}">{{ $title }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @elseif($data['type'] == "textarea")
+                    <div class="form-group mb-3">
+                        <label for="{{ $key }}">{{ $data['title'] }}</label>
+                        <textarea name="{{ $key }}" id="{{ $key }}" class="form-control" placeholder="{{ $data['title'] }}" @foreach($data['attr'] as $attr => $value) {{ $attr.'='.$value }} @endforeach></textarea>
+                    </div>
+                    @else
+                    <div class="form-group mb-3">
+                        <label for="{{ $key }}">{{ $data['title'] }}</label>
+                        <input type="{{ $data['type'] }}" class="form-control" name="{{ $key }}" placeholder="{{ $data['title'] }}" @foreach($data['attr'] as $attr => $value) {{ $attr.'='.$value }} @endforeach>
+                    </div>
+                    @endif
+                    @endforeach
+                    @endif
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-success">Tambah</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    @endif
+
     <div class="card">
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <h5 class="card-title">
                     {{ $cardTitle }}
                 </h5>
-                @if(isset($dataAddUrl) && $dataAddUrl)
+                @if($dataAddUrl && $dataAddType == "new_page")
                 <a href="{{ $dataAddUrl }}" class="btn btn-primary">+Tambah</a>
+                @elseif($dataAddUrl && $dataAddType == "modal")
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-add-new-data">+Tambah</button>
                 @endif
             </div>
         </div>
         <div class="card-body">
-            @if(isset($usingAlert) && $usingAlert)
-                @if (session('success'))
-                    <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
-                        {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"
-                            aria-label="Close"></button>
-                    </div>
-                @elseif (session('danger'))
-                    <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
-                        {{ session('danger') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"
-                            aria-label="Close"></button>
-                    </div>
-                @endif
-            @endif
+            <x-session-alert/>
             <div class="table-responsive datatable-minimal">
                 <table class="table" id="{{ isset($tableId) && $tableId ? $tableId : 'table' }}">
                 </table>
@@ -102,7 +135,7 @@
                 console.log(urlDelete)
 
                 $.ajax({
-                    type: "DELETE",
+                    type: "POST",
                     url: urlDelete,
                     data: {
                         _token: "{{ csrf_token() }}",

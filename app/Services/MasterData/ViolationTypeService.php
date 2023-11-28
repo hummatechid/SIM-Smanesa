@@ -34,7 +34,7 @@ class ViolationTypeService extends BaseService {
             })->addColumn('score', function($item) {
                 return $item->score;
             })->addColumn('action', function($item) {
-                return '<button class="btn btn-sm btn-danger delete-data" data-id="'.$item->id.'">Hapus</button>';
+                return view('admin.pages.master-data.violation-type.datatables-action', ['item' => $item]);
             })->rawColumns(['action'])
             ->make(true);
     }

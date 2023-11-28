@@ -21,13 +21,88 @@
 
     @php
         $data_column = ["name" => "Pelanggaran", "score" => "Poin", "action" => "Aksi"];
+        $data_settings = [
+            "name" => [
+                "title" => "Pelanggaran",
+                "type" => "text",
+                "attr" => ["required" => "required"]
+            ], "score" => [
+                "title" => "Poin",
+                "type" => "number",
+                "attr" => ["required" => "required", "min"=>1]
+            ]
+        ];
     @endphp
     <x-datatable
         card-title="Tabel Jenis Pelanggaran"
         data-url="api/violation-type/get-main-data"
         :table-columns="$data_column"
-        delete-option="violation-type/deleted_id"
+        delete-option="violation-type/soft-delete/deleted_id"
+        data-add-url="{{ route('violation-type.store') }}"
+        data-add-type="modal"
+        :data-add-settings="$data_settings"
     />
 
 </div>
 @endsection
+
+@push('custom-script')
+<script>
+    $(document).on('click', '.show-detail', function() {
+        console.log($(this).data('data'))
+        var student = $(this).data('data')
+
+        // var body = `
+        //     <table>
+        //         <tr>
+        //             <th>Nama</th>
+        //             <td>:</td>
+        //             <td>${student.full_name}</td>
+        //         </tr>
+        //         <tr>
+        //             <th>NISN</th>
+        //             <td>:</td>
+        //             <td>${student.nisn}</td>
+        //         </tr>
+        //         <tr>
+        //             <th>NIPD</th>
+        //             <td>:</td>
+        //             <td>${student.nipd}</td>
+        //         </tr>
+        //         <tr>
+        //             <th>NIK</th>
+        //             <td>:</td>
+        //             <td>${student.nik}</td>
+        //         </tr>
+        //         <tr>
+        //             <th>Jenis Kelamin</th>
+        //             <td>:</td>
+        //             <td>${student.gender}</td>
+        //         </tr>
+        //         <tr>
+        //             <th>No Handphone</th>
+        //             <td>:</td>
+        //             <td>${student.phone_number}</td>
+        //         </tr>
+        //         <tr>
+        //             <th>Alamat</th>
+        //             <td>:</td>
+        //             <td>${student.address}</td>
+        //         </tr>
+        //         <tr>
+        //             <th>Agama</th>
+        //             <td>:</td>
+        //             <td>${student.religion}</td>
+        //         </tr>
+        //         <tr>
+        //             <th>Poin Pelanggaran</th>
+        //             <td>:</td>
+        //             <td>${student.violation_score}</td>
+        //         </tr>
+        //     </table>
+        // `;
+
+        // $(`#modal-detail-body`).html(body);
+    });
+</script>
+@endpush

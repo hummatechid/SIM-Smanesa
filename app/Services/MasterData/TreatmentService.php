@@ -13,7 +13,7 @@ class TreatmentService extends BaseService {
     public function __construct(TreatmentRepository $treatmentRepository)
     {
         $this->repository = $treatmentRepository;
-        $this->pageTitle = "Jenis Pelanggaran";
+        $this->pageTitle = "Tindak Lanjut";
         $this->mainUrl = "treatment";
         $this->mainMenu = "violation-master";
         $this->subMenu = "treatment";
@@ -37,7 +37,7 @@ class TreatmentService extends BaseService {
             })->addColumn('treatment', function($item) {
                 return $item->action;
             })->addColumn('action', function($item) {
-                return '<button class="btn btn-sm btn-danger delete-data" data-id="'.$item->id.'">Hapus</button>';
+                return view('admin.pages.master-data.treatment.datatables-action', ['item' => $item]);
             })->rawColumns(['action'])
             ->make(true);
     }

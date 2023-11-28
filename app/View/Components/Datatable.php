@@ -16,6 +16,8 @@ class Datatable extends Component {
         public string|null $dataAddUrl = null,
         public string|array|null $deleteOption = null,
         public bool $usingAlert = true,
+        public string $dataAddType = 'new_page',
+        public array $dataAddSettings = [],
     ) { }
 
     public function render() :View

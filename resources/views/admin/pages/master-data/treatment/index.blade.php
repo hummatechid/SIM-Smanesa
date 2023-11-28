@@ -21,13 +21,42 @@
 
     @php
         $data_column = ["category" => "Kategori", "score" => "Poin","treatment" => "Tindakan" ,"action" => "Aksi"];
+        $data_settings = [
+            "category" => [
+                "title" => "Kategori",
+                "type" => "select",
+                "first_option" => "-- pilih kategori pelanggaran --",
+                "options" => [
+                    "Pelanggaran ringan" => "Pelanggaran Ringan",
+                    "Pelanggaran sedang" => "Pelanggaran Ringan",
+                    "Pelanggaran berat" => "Pelanggaran Berat",
+                ],
+                "attr" => ["required" => "required"],
+            ], "min_score" => [
+                "title" => "Skor Minimum",
+                "type" => "number",
+                "attr" => ["required" => "required", "min"=>1, "max"=>999]
+            ], "max_score" => [
+                "title" => "Skor Maksimum",
+                "type" => "number",
+                "attr" => ["required" => "required", "min"=>1, "max"=>999]
+            ],
+            "action" => [
+                "title" => "Tindakan",
+                "type" => "text",
+                "attr" => ["required" => "required"]
+            ], 
+        ];
     @endphp
     <x-datatable
         card-title="Tabel Tindak Lanjut"
         data-url="api/treatment/get-main-data"
         :table-columns="$data_column"
-        delete-option="treatment/deleted_id"
+        delete-option="treatment/soft-delete/deleted_id"
         :default-order="2"
+        data-add-url="{{ route('treatment.store') }}"
+        data-add-type="modal"
+        :data-add-settings="$data_settings"
     />
 
 </div>
