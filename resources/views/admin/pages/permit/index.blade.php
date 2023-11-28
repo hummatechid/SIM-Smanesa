@@ -31,7 +31,7 @@
         card-title="Tabel Izin"
         data-url="{{ url('api/permit/get-main-data') }}"
         :table-columns="$data_column"
-        delete-option="permit/deleted_id"
+        delete-option="permit/soft-delete/deleted_id"
         data-add-url="{{ url('permit/create') }}"
     />
 
