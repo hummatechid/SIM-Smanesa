@@ -10,7 +10,7 @@
         <div class="card-body">
             <x-session-alert/>
             <div class="form-group mb-3">
-                <img src="{{ asset('storage/'.$dataUser->photo) }}" alt="foto pengguna" style="width: 300px">
+                <img src="{{ $dataUser->photo ? asset($dataUser->photo) : asset('assets/compiled/jpg/0.webp') }}" alt="foto pengguna" class="rounded-4 mb-2" style="width: 200px; height: 200px; object-fit: cover;">
             </div>
             <div class="form-group mb-3">
                 <label for="email">Email</label>
