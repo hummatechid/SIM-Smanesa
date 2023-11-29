@@ -12,7 +12,7 @@ class PermitService extends BaseService {
     public function __construct(PermitRepository $permitRepository)
     {
         $this->repository = $permitRepository;
-        $this->pageTitle = "Permit";
+        $this->pageTitle = "Izin";
         $this->mainUrl = "permit";
         $this->mainMenu = "permit";
     }
@@ -46,7 +46,7 @@ class PermitService extends BaseService {
             })->addColumn('action', function($item) {
                 return 
                 '<div class="d-flex gap-3 justify-content-start align-items-center">
-                    <a href="'.route('permit.show', $item->id).'" class="btn btn-sm btn-primary delete-data" data-id="'.$item->id.'">Detail</a>
+                    <a href="'.route('permit.show', $item->id).'" class="btn btn-sm btn-primary" data-id="'.$item->id.'">Detail</a>
                     <button class="btn btn-sm btn-danger delete-data" data-id="'.$item->id.'">Hapus</button>
                 </div>';
             })

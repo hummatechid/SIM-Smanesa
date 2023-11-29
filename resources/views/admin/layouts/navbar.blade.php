@@ -70,7 +70,12 @@
                             </div>
                             <div class="user-img d-flex align-items-center">
                                 <div class="avatar avatar-md">
-                                    <img src="./assets/compiled/jpg/1.jpg">
+                                    <img class="rounded-3" src="@if(Auth::user()->teacher && Auth::user()->teacher->photo)
+                                        {{ asset(Storage::url(Auth::user()->teacher->photo)) }}
+                                        @elseif( Auth::user()->pengguna && Auth::user()->pengguna->photo )
+                                        {{ asset(Storage::url(Auth::user()->pengguna->photo)) }}
+                                        @else {{ asset('assets/compiled/jpg/0.webp') }}
+                                        @endif">
                                 </div>
                             </div>
                         </div>

@@ -28,6 +28,7 @@
         :table-columns="$data_column"
         default-order="4"
         data-add-url="{{ url('violation/create') }}"
+        delete-option="violation/soft-delete/delete_id"
     />
 
 </div>

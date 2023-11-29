@@ -67,11 +67,7 @@ class PermitController extends Controller
         $validateData = $request->validated();
 
         // get data user
-        $userAuth = Auth::user();
-
-        // get data user from pengguna or teacher
-        $user = $this->penggunaRepository->getOneById($userAuth->id);
-        if(!$user) $user = $this->teacherRepository->getOneById($userAuth->id);
+        $user = Auth::user();
 
         // set user created
         $validateData["created_by"] = $user->id;
@@ -117,11 +113,7 @@ class PermitController extends Controller
         if(!$request->status) return redirect()->back()->with('error', 'Anda tidak mengirimkan sebuah tanggapan, mohon cek ulang')->withInput();
 
         // get data user
-        $userAuth = Auth::user();
-
-        // get data user from pengguna or teacher
-        $user = $this->penggunaRepository->getOneById($userAuth->id);
-        if(!$user) $user = $this->teacherRepository->getOneById($userAuth->id);
+        $user = Auth::user();
 
         //set data update
         $dataUpdate = [

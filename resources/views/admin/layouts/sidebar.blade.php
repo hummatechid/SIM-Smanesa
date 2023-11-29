@@ -2,8 +2,11 @@
     <div class="sidebar-wrapper active">
         <div class="sidebar-header position-relative">
             <div class="d-flex justify-content-between align-items-center">
-                <div class="logo">
-                    <a href="index.html"><img src="{{ asset('assets/compiled/svg/logo.svg') }}" alt="Logo" srcset=""></a>
+                <div class="logo mt-2">
+                    <a href="{{ url('/') }}" class="d-flex gap-1 justify-content-center align-items-center">
+                        <img src="{{ asset('assets/compiled/logos/logo-sm.png') }}" alt="SMAN 1 Purwosari" width="50" style="height: auto">
+                        {{-- <span class="fs-6">SMANESA</span> --}}
+                    </a>
                 </div>
                 <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
@@ -216,7 +219,7 @@
 
                 <li
                     class="sidebar-item  ">
-                    <a href="https://zuramai.github.io/mazer/docs" class='sidebar-link'>
+                    <a href="#" class='sidebar-link'>
                         <i class="bi bi-life-preserver"></i>
                         <span>Akun</span>
                     </a>
@@ -224,14 +227,15 @@
 
                 </li>
 
-                <li
-                    class="sidebar-item  ">
-                    <a href="https://github.com/zuramai/mazer/blob/main/CONTRIBUTING.md" class='sidebar-link'>
+                <li class="sidebar-item">
+                    <form action="{{ route('logout') }}" method="post">
+                    @csrf
+                    
+                    <button type="submit" class='sidebar-link w-100 border-0'>
                         <i class="bi bi-puzzle"></i>
                         <span>Keluar</span>
-                    </a>
-
-
+                    </button>
+                    </form>
                 </li>
 
             </ul>

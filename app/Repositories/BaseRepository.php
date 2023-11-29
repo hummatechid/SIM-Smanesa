@@ -135,18 +135,20 @@ class BaseRepository implements RepositoryInterface {
     }
 
     // function for update data by id
-    public function update(string $id, array $data): object | null
+    public function update(string $id, array $data): object | null | bool
     {
         return $this->model->find($id)->update($data);
     } 
 
     // function for soft delete
-    public function softDelete(string $id): object | null{
+    public function softDelete(string $id): object | null | bool
+    {
         return $this->model->find($id)->update(['deleted_at' => now()]);
     }
 
     // function for delete permanent
-    public function delete(string $id): object | null{
+    public function delete(string $id): object | null | bool
+    {
         return $this->model->find($id)->delete();
     }
 

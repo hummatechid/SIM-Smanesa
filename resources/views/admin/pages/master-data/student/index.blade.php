@@ -71,7 +71,7 @@
         card-title="Tabel Siswa"
         data-url="api/student/get-main-data"
         :table-columns="$data_column"
-        delete-option="student/deleted_id"
+        delete-option="student/soft-delete/deleted_id"
     />
 
 </div>
