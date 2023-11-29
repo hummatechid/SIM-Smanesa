@@ -1,71 +1,85 @@
 <section class="section">
-    <div class="card">
-        <div class="card-header">
-            <div class="d-flex justify-content-between align-items-center">
-                <h5 class="card-title">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <h4 class="card-body text-center m-0 p-4">
                     {{ $cardTitle }}
-                </h5>
+                </h4>
             </div>
         </div>
-        <div class="card-body">
-            <x-session-alert/>
-            <div class="form-group mb-3">
-                <img src="{{ $dataUser->photo ? asset($dataUser->photo) : asset('assets/compiled/jpg/0.webp') }}" alt="foto pengguna" class="rounded-4 mb-2" style="width: 200px; height: 200px; object-fit: cover;">
-            </div>
-            <div class="form-group mb-3">
-                <label for="email">Email</label>
-                <div class="form-control">{{ $dataUser->user->email }}</div>
-            </div>
-            <div class="form-group mb-3">
-                <label for="role_id">Role</label>
-                <div class="form-control">{{ $dataUser->user->roles[0]->name }}</div>
-            </div>
-            <div class="form-group mb-3">
-                <label for="nik">NIK</label>
-                <div class="form-control">{{ $dataUser->nik }}</div>
-            </div>
-            @if(isset($formFor) && $formFor == 'guru')
-            <div class="form-group mb-3">
-                <label for="nip">NIP</label>
-                <div class="form-control">{{ $dataUser->nip }}</div>
-            </div>
-            <div class="form-group mb-3">
-                <label for="nuptk">NUPTK</label>
-                <div class="form-control">{{ $dataUser->nuptk }}</div>
-            </div>
-            <div class="form-group mb-">
-                <label for="jenis_ptk">Jenis PTK</label>
-                <div class="form-control">{{ $dataUser->jenis_ptk }}</div>
-            </div>
-            @endif
-            <div class="form-group mb-3">
-                <label for="full_name">Nama Lengkap</label>
-                <div class="form-control">{{ $dataUser->full_name }}</div>
-            </div>
-            <div class="form-group mb-3">
-                <label for="gender">Jenis Kelamin</label>
-                <div class="form-control">{{ $dataUser->gender }}</div>
-            </div>
-            <div class="form-group mb-3">
-                <label for="phone_number">Nomor Telepon</label>
-                <div class="form-control">{{ $dataUser->phone_number }}</div>
-            </div>
-            <div class="form-group mb-3">
-                <label for="address">Alamat</label>
-                <textarea class="form-control" readonly>{{ $dataUser->address }}</textarea>
-            </div>
-            <div class="form-group mb-3">
-                <label for="religion">Agama</label>
-                <div class="form-control">{{ $dataUser->religion }}</div>
-            </div>
-            <div class="form-group mb-3">
-                <label for="bio">Bio</label>
-                <textarea class="form-control">{{ $dataUser->bio }}</textarea>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="mb-4 d-flex justify-content-center">
+                        <img src="{{ $dataUser->photo ? asset(Storage::url($dataUser->photo)) : asset('assets/compiled/jpg/0.webp') }}" alt="foto pengguna" class="rounded-4 mb-2" style="width: 200px; height: 200px; object-fit: cover;">
+                    </div>
+                    <div class="mb-3 text-center">
+                        <div class="lead">{{ $dataUser->full_name }}</div>
+                        <div class="fw-bold">{{ $dataUser->user->email }}</div>
+                    </div>
+                    <div class="d-flex justify-content-center gap-2">
+                        <a href="{{ $backUrl }}" class="btn btn-secondary">Kembali</a>
+                        <a href="{{ $editUrl }}" class="btn btn-primary @if($dataUser->is_dapodik) disabled @endif">Ubah</a>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="card-footer d-flex justify-content-end gap-2">
-            <a href="{{ $backUrl }}" class="btn btn-secondary">Kembali</a>
-            <a href="{{ $editUrl }}" class="btn btn-primary">Ubah</a>
+        <div class="col-md-8 mb-3">
+            <div class="card h-100">
+                @if($dataUser->bio)
+                <div class="card-header bg-primary">
+                    <div class="card-title">Bio :</div>
+                    <p class="fw-lighter lh-sm m-0">
+                        {{ $dataUser->bio }}
+                    </p>
+                </div>
+                @endif
+                <div class="card-body">
+                    <x-session-alert/>
+                    <table class="table mb-0 mt-3">
+                        @if($formFor != 'guru')
+                        <tr>
+                            <th>Role</th>
+                            <td>{{ $dataUser->user->roles[0]->role }}</td>
+                        </tr>
+                        @endif
+                        <tr>
+                            <th>NIK</th>
+                            <td>{{ $dataUser->nik }}</td>
+                        </tr>
+                        @if($formFor == 'guru')
+                        <tr>
+                            <th>NIP</th>
+                            <td>{{ $dataUser->nip }}</td>
+                        </tr>
+                        <tr>
+                            <th>NUPTK</th>
+                            <td>{{ $dataUser->nuptk }}</td>
+                        </tr>
+                        <tr>
+                            <th>Jenis PTK</th>
+                            <td>{{ $dataUser->jenis_ptk }}</td>
+                        </tr>
+                        @endif
+                        <tr>
+                            <th>Jenis Kelamin</th>
+                            <td>{{ $dataUser->gender }}</td>
+                        </tr>
+                        <tr>
+                            <th>Telepon</th>
+                            <td>{{ $dataUser->phone_number }}</td>
+                        </tr>
+                        <tr>
+                            <th>Alamat</th>
+                            <td>{{ $dataUser->address }}</td>
+                        </tr>
+                        <tr>
+                            <th>Agama</th>
+                            <td>{{ $dataUser->religion }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </section>
