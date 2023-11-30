@@ -59,9 +59,23 @@
             </div>
         </div>
         <div class="card-body">
+            <div class="d-flex justify-content-start gap-3">
+                @foreach ($withCustomGroups as $name => $props)
+                <div class="form-group gap-1 d-flex justify-content-center align-items-center mb-3">
+                    <div class="d-flex align-items-center h-100">
+                        <label for="group_{{ $name }}">{{ $props['title'] }}:</label>
+                    </div>
+                    <select name="group_{{ $name }}" id="group_{{ $name }}" class="form-select">
+                    @foreach ($props['options'] as $value => $title)
+                        <option value="{{ $value }}">{{ $title }}</option>
+                    @endforeach
+                    </select>
+                </div>
+                @endforeach
+            </div>
             <x-session-alert/>
             <div class="table-responsive datatable-minimal">
-                <table class="table" id="{{ isset($tableId) && $tableId ? $tableId : 'table' }}">
+                <table class="table w-100" id="{{ isset($tableId) && $tableId ? $tableId : 'table' }}">
                 </table>
             </div>
         </div>
@@ -88,20 +102,28 @@
         deferRender: true,
         ajax: {
             url: "{{ url($dataUrl) }}",
+            data: {
+                _token: "{{ csrf_token() }}",
+                @foreach($withCustomGroups as $name => $props)
+                {{ $name }}: $("#group_{{ $name }}").val(),
+                @endforeach
+            }
         },
         order: [[{{ isset($defaultOrder) ? $defaultOrder : 1 }}, 'asc']],
         columns: [
+            @if(!$withMultipleSelect)
             {
                 data: "DT_RowIndex",
                 title: "No",
                 orderable: false,
                 searchable: false
             },
+            @endif
             @foreach($tableColumns as $column => $value)
-                @if($column === "action")
+                @if($column === "action" || $column === "selection")
                 {
                     data: "{{ $column }}",
-                    title: "Aksi",
+                    title: "{{ $value }}",
                     orderable: false,
                     searchable: false
                 },
@@ -114,6 +136,12 @@
             @endforeach
         ],
     });
+
+    @foreach($withCustomGroups as $name => $props)
+    $("#group_{{ $name }}").on('change', function() {
+        jquery_datatable.ajax.reload()
+    })
+    @endforeach
 </script>
 
 @if(isset($deleteOption))

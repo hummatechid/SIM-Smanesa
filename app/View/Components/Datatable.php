@@ -18,6 +18,8 @@ class Datatable extends Component {
         public bool $usingAlert = true,
         public string $dataAddType = 'new_page',
         public array $dataAddSettings = [],
+        public bool $withMultipleSelect = false,
+        public array $withCustomGroups = []
     ) { }
 
     public function render() :View

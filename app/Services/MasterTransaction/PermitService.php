@@ -28,6 +28,9 @@ class PermitService extends BaseService {
 
         return Datatables::of($data)
             ->addIndexColumn()
+            ->addColumn('selection', function($item) {
+                return '<input type="checkbox" name="permit" value="'.$item->id.'" />';
+            })
             ->addColumn('student', function($item) {
                 return $item->student->full_name;
             })->addColumn('reason', function($item) {
@@ -44,13 +47,9 @@ class PermitService extends BaseService {
                     return '<span class="badge bg-primary">Telah Kembali</span>';
                 }
             })->addColumn('action', function($item) {
-                return 
-                '<div class="d-flex gap-3 justify-content-start align-items-center">
-                    <a href="'.route('permit.show', $item->id).'" class="btn btn-sm btn-primary" data-id="'.$item->id.'">Detail</a>
-                    <button class="btn btn-sm btn-danger delete-data" data-id="'.$item->id.'">Hapus</button>
-                </div>';
+                return view('admin.pages.permit.datatables-action', ['item' => $item]);
             })
-            ->rawColumns(['action', 'status'])
+            ->rawColumns(['action', 'status', 'selection'])
             ->make(true);
     }
 }
