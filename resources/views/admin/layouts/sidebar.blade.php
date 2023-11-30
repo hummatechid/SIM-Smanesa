@@ -183,10 +183,6 @@
                             <a href="{{ url('permit') }}" class="submenu-link">List Izin</a>
 
                         </li>
-
-                        <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'permit-acc' ? 'active' : '' }}">
-                            <a href="{{ url('permit/waiting-acception') }}" class="submenu-link">Acc Izin</a>
-                        </li>
                     </ul>
 
 

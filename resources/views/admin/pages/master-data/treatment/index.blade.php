@@ -50,7 +50,7 @@
     @endphp
     <x-datatable
         card-title="Tabel Tindak Lanjut"
-        data-url="api/treatment/get-main-data"
+        data-url="{{ route('treatment.get-main-datatables') }}"
         :table-columns="$data_column"
         delete-option="treatment/soft-delete/deleted_id"
         :default-order="2"

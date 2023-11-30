@@ -19,11 +19,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['auth'])->group(function () {
-    // get controller from ViolationTypeController
+    // get controller from ViolationTypeController    
+    Route::get('violation-type/get-main-data', [ViolationTypeController::class, 'getDatatablesData'])->name('violation-type.get-main-datatables');
     Route::resource('violation-type', ViolationTypeController::class);
     Route::post('violation-type/soft-delete/{id}', [ViolationTypeController::class, 'softDestroy'])->name('violation-type.softDelete');
 
     // get controller from TreatmentController
+    Route::get('treatment/get-main-data', [TreatmentController::class, 'getDatatablesData'])->name('treatment.get-main-datatables');
     Route::resource('treatment', TreatmentController::class);
     Route::post('treatment/soft-delete/{id}', [TreatmentController::class, 'softDestroy'])->name('treatment.softDelete');
 
@@ -32,11 +34,15 @@ Route::middleware(['auth'])->group(function () {
     Route::post('pengguna/soft-delete/{id}', [PenggunaController::class, 'softDestroy'])->name('pengguna.softDelete');
 
     Route::prefix('students')->name('student.')->group(function () {
+        Route::get('get-main-data', [StudentController::class, 'getDatatablesData'])->name('get-main-datatables');
         Route::get('/', [StudentController::class, 'index'])->name('index');
         Route::get('sync-students', [StudentController::class, 'syncStudents'])->name('sync');
     });
 
+    Route::get('teacher/get-main-data', [TeacherController::class, 'getDatatablesData'])->name('teacher.get-main-datatables');
     Route::resource('teacher', TeacherController::class);
 
+    Route::get('user/get-main-data', [PenggunaController::class, 'getDatatablesData'])->name('user.get-main-datatables');
     Route::resource('user', PenggunaController::class);
+
 });

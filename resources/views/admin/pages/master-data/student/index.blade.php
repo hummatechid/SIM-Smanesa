@@ -69,7 +69,7 @@
     @endphp
     <x-datatable
         card-title="Tabel Siswa"
-        data-url="api/student/get-main-data"
+        data-url="{{ route('student.get-main-datatables') }}"
         :table-columns="$data_column"
         delete-option="student/soft-delete/deleted_id"
     />

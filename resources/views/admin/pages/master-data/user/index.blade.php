@@ -29,7 +29,7 @@
     @endphp
     <x-datatable
         card-title="Tabel Pengguna"
-        data-url="{{ url('api/user/get-main-data') }}"
+        data-url="{{ route('user.get-main-datatables') }}"
         :table-columns="$data_column"
         delete-option="user/soft-delete/deleted_id"
         data-add-url="{{ url('user/create') }}"

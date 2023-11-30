@@ -24,7 +24,7 @@
     @endphp
     <x-datatable
         card-title="Tabel Data Pelanggaran"
-        data-url="api/violation/get-main-data"
+        data-url="{{ route('violation.get-main-datatables') }}"
         :table-columns="$data_column"
         default-order="4"
         data-add-url="{{ url('violation/create') }}"

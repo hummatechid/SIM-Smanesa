@@ -26,14 +26,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('violation-type/get-main-data', [ViolationTypeController::class, 'getDatatablesData']);
-Route::get('treatment/get-main-data', [TreatmentController::class, 'getDatatablesData']);
-Route::get('teacher/get-main-data', [TeacherController::class, 'getDatatablesData']);
-Route::get('user/get-main-data', [PenggunaController::class, 'getDatatablesData']);
-Route::get('student/get-main-data', [StudentController::class, 'getDatatablesData']);
-Route::get('violation/get-main-data', [ViolationController::class, 'getDatatablesData']);
-Route::get('permit/get-main-data', [PermitController::class, 'getDatatablesData']);
-
 
 // API MOBILE
 

@@ -17,7 +17,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth'])->group(function () {
     // get controller from PermitController
     Route::get('permit/waiting-acception', [PermitController::class, 'showAccListPage']);
+    Route::get('permit/get-main-data', [PermitController::class, 'getDatatablesData'])->name('permit.get-main-datatables');
     Route::resource('permit', PermitController::class);
     Route::post('permit/soft-delete/{id}', [PermitController::class, 'softDestroy'])->name('permit.softDelete');
+    Route::get('violation/get-main-data', [ViolationController::class, 'getDatatablesData'])->name('violation.get-main-datatables');
     Route::resource('violation', ViolationController::class);
+    
 });

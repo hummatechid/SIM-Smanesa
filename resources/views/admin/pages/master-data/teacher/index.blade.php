@@ -29,7 +29,7 @@
     @endphp
     <x-datatable
         card-title="Tabel Guru"
-        data-url="{{ url('api/teacher/get-main-data') }}"
+        data-url="{{ route('teacher.get-main-datatables') }}"
         :table-columns="$data_column"
         delete-option="teacher/soft-delete/deleted_id"
         data-add-url="{{ url('teacher/create') }}"

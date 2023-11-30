@@ -35,7 +35,7 @@
     @endphp
     <x-datatable
         card-title="Tabel Jenis Pelanggaran"
-        data-url="api/violation-type/get-main-data"
+        data-url="{{ route('violation-type.get-main-datatables') }}"
         :table-columns="$data_column"
         delete-option="violation-type/soft-delete/deleted_id"
         data-add-url="{{ route('violation-type.store') }}"
