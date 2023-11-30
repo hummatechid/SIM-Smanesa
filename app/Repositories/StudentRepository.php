@@ -101,12 +101,13 @@ class StudentRepository extends BaseRepository
 
         $response = Http::withHeaders([
             'Authorization' => $authorizationToken,
-        ])->get($url);
+        ])->timeout(1200)->get($url);
 
         // Check if the request was successful (status code 2xx)
         if ($response->successful()) {
             // Get the response body as an array or JSON object
             $data = $response->json();
+//            dd($data);
             return $data;
             // Output the data
 //            print_r($data);
@@ -130,12 +131,18 @@ class StudentRepository extends BaseRepository
     }
 
     /**
-     * insert student to database
+     * update or create student to database
      * @param array $student
      */
-    public function insertStudent(array $student): void
+    public function updateOrCreateStudent(array $student): void
     {
-        $this->model->create([
+        $this->model->query()
+        ->updateOrCreate(
+            [
+                'nik' => $student['nik'],
+                'nisn' => $student['nisn'],
+            ],
+            [
             'nik' => $student['nik'],
             'nisn' => $student['nisn'],
             'nipd' => $student['nipd'],
@@ -146,28 +153,6 @@ class StudentRepository extends BaseRepository
             'religion' => $student['agama_id_str'],
             'nama_rombel' => $student['nama_rombel'],
             'violation_score' => 0,
-        ]);
-    }
-
-    /**
-     * update student to database
-     *
-     * @param Student $student
-     * @param array $newStudent
-     * @return void
-     */
-    public function updateStudent(Student $student, array $newStudent): void
-    {
-        $student->update([
-            'nik' => $newStudent['nik'],
-            'nisn' => $newStudent['nisn'],
-            'nipd' => $newStudent['nipd'],
-            'full_name' => $newStudent['nama'],
-            'gender' => ($newStudent['jenis_kelamin'] == 'L') ? 'Laki-laki' : 'Perempuan',
-            'phone_number' => $newStudent['nomor_telepon_seluler'],
-            'address' => $newStudent['alamat_jalan'],
-            'religion' => $newStudent['agama_id_str'],
-            'nama_rombel' => $newStudent['nama_rombel']
         ]);
     }
 }
