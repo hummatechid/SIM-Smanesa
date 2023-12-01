@@ -186,6 +186,21 @@ class TeacherController extends Controller
     }
 
     /**
+     * Show the form for editing password the specified resource.
+     */
+    public function editPassword(string $id)
+    {
+        $teacher = $this->teacherRepository->byIdWithRole($id);
+        $data_role = $this->roleRepository->getCustomColumnValue('name', 'guru');
+        $data = $this->teacherService->getPageData('teacher-list', '', [
+            'teacher' => $teacher,
+            'data_role' => $data_role
+        ]);
+        return view('admin.pages.master-data.teacher.edit-password', $data);
+    }
+
+
+    /**
      * Remove the specified resource from storage.
      */
     public function softDestroy(string $id)

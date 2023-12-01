@@ -19,7 +19,7 @@
         </div>
     </div>
 
-    <x-show-user card-title="Detail Guru" back-url="{{ url($main_url) }}" edit-url="{{ route('teacher.edit', $teacher->id) }}" edit-password-url="{{ route('teacher.editPassword', $teacher->id) }}" form-for="guru" :data-user="$teacher"/>
+    <x-edit-password card-title="Ubah Password" back-url="{{ url($main_url) }}" update-url="{{ route('user.updatePassword', $user->id) }}" :data-user="$user"/>
 
 </div>
 @endsection
