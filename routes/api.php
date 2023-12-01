@@ -31,13 +31,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // autentikasi
 Route::post('/login', [AuthController::class, 'login']);
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('custom.sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-});
 
-// list permit
-Route::prefix('permit')->group(function (){
-    Route::post('/', [PermitController::class, 'updateStatus']);
-    Route::get('/{id}', [PermitController::class, 'detailList']);
-    Route::get('/list-today', [PermitController::class, 'listToday']);
+    // list permit
+    Route::prefix('permit')->group(function (){
+        Route::post('/', [PermitController::class, 'updateStatus']);
+        Route::get('/list-today', [PermitController::class, 'listToday']);
+        Route::get('/{id}', [PermitController::class, 'detailList']);
+    });
 });

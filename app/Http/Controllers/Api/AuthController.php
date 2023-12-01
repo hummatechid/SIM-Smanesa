@@ -7,11 +7,10 @@ use App\Models\Pengguna;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    use HasApiTokens;
     
     public function login(Request $request){
         // check request send
@@ -30,7 +29,7 @@ class AuthController extends Controller
         }
 
         // check password user
-        if($user->password != bcrypt($request->password)){
+        if(!Hash::check($request->password,$user->password)){
             return response()->json([
                 'message' => 'Password yang anda masukkan salah'
             ], 400);
@@ -52,13 +51,13 @@ class AuthController extends Controller
     }
 
     public function logout(Request $request){
-        if(!Auth::guard("sacntum")->check()) {
+        if(!Auth::guard("sanctum")->check()) {
             return response()->json([
                 'message' => 'Tidak terautentikasi'
             ], 401);;
         }
         // 
-        $id = Auth::guard("sacntum")->id();
+        $id = Auth::guard("sanctum")->id();
         $user = User::find($id);
         $user->tokens()->delete();
         return response()->json([
