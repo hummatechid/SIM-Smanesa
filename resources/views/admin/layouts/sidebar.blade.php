@@ -56,9 +56,11 @@
                 </li>
 
 
-
+                @unlessrole('satpam')
                 <li class="sidebar-title">Master Data</li>
+                @endunlessrole
 
+                @hasrole(['staf', 'superadmin', 'pimpinan'])
                 <li
                     class="sidebar-item {{ isset($main_menu) && $main_menu == 'teacher' ? 'active' : '' }} has-sub">
                     <a href="#" class='sidebar-link'>
@@ -81,7 +83,9 @@
 
 
                 </li>
+                @endhasrole
 
+                @hasrole(['staf', 'superadmin', 'pimpinan', 'guru'])
                 <li
                     class="sidebar-item {{ isset($main_menu) && $main_menu == 'student' ? 'active' : '' }}">
                     <a href="{{ route('student.index') }}" class='sidebar-link'>
@@ -91,7 +95,9 @@
 
 
                 </li>
+                @endhasrole
 
+                @hasrole('superadmin')
                 <li
                     class="sidebar-item has-sub {{ isset($main_menu) && $main_menu == 'user' ? 'active' : '' }}">
                     <a href="#" class='sidebar-link'>
@@ -111,7 +117,10 @@
                         </li>
 
                     </ul>
+                </li>
+                @endhasrole
 
+                @hasrole(['guru', 'staf', 'superadmin'])
                 <li
                     class="sidebar-item has-sub {{ isset($main_menu) && $main_menu == 'violation-master' ? 'active' : '' }}">
                     <a href="#" class='sidebar-link'>
@@ -134,9 +143,7 @@
 
 
                 </li>
-
-
-                </li>
+                @endhasrole
 
                 <li class="sidebar-title">Menu</li>
 
@@ -166,6 +173,7 @@
 
 
                 </li>
+
                 <li
                     class="sidebar-item has-sub {{ isset($main_menu) && $main_menu == 'permit' ? 'active' : '' }}">
                     <a href="#" class='sidebar-link'>
@@ -188,6 +196,7 @@
 
                 </li>
 
+                @hasrole(['guru', 'staf', 'superadmin'])
                 <li
                     class="sidebar-item has-sub {{ isset($main_menu) && $main_menu == 'violation' ? 'active' : '' }}">
                     <a href="#" class='sidebar-link'>
@@ -210,6 +219,7 @@
 
 
                 </li>
+                @endhasrole
 
                 <li class="sidebar-title">Pengaturan</li>
 

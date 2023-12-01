@@ -29,7 +29,7 @@ class PermitService extends BaseService {
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('selection', function($item) {
-                return '<input type="checkbox" name="permit" value="'.$item->id.'" />';
+                return '<input type="checkbox" name="permit" data-response="'.$item->status.'" value="'.$item->id.'" />';
             })
             ->addColumn('student', function($item) {
                 return $item->student->full_name;
@@ -42,7 +42,7 @@ class PermitService extends BaseService {
                 } else if($item->status == "rejected") {
                     return '<span class="badge bg-danger">Ditolak</span>';
                 } else if($item->status == "accepted") {
-                    return '<span class="badge bg-success">Diterima</span>';
+                    return '<span class="badge bg-success">Diizinkan</span>';
                 } else {
                     return '<span class="badge bg-primary">Telah Kembali</span>';
                 }

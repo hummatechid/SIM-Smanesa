@@ -54,7 +54,7 @@
         <div class="card-body d-flex justify-content-start align-items-center gap-3">
             <div class="input-group">
                 <input type="checkbox" name="select-all" id="select-all" class="me-2">
-                <label for="select-all">pilih semua</label>
+                <label for="select-all">pilih semua data pending</label>
             </div>
             <div class="input-group">
                 <select name="select-action" id="select-action" class="form-select">
@@ -75,7 +75,8 @@
         $(function(){
 
             $('#select-all').on('click', function() {
-                $('input:checkbox[name=permit]').prop('checked', $(this).prop('checked'))
+                $('input:checkbox[name=permit][data-response=pending]').prop('checked', $(this).prop('checked'))
+                $('input:checkbox[name=permit][data-response=""]').prop('checked', $(this).prop('checked'))
             })
 
             $('#select-action').on('change', function() {
