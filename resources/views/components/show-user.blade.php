@@ -17,9 +17,12 @@
                         <div class="lead">{{ $dataUser->full_name }}</div>
                         <div class="fw-bold">{{ $dataUser->user->email }}</div>
                     </div>
-                    <div class="d-flex justify-content-center gap-2">
-                        <a href="{{ $backUrl }}" class="btn btn-secondary">Kembali</a>
-                        <a href="{{ $editUrl }}" class="btn btn-primary @if($dataUser->is_dapodik) disabled @endif">Ubah</a>
+                    <div class="d-flex flex-column align-items-center gap-2">
+                        <div class="d-flex justify-content-center  gap-2">
+                            <a href="{{ $backUrl }}" class="btn btn-secondary">Kembali</a>
+                            <a href="{{ $editUrl }}" class="btn btn-primary @if($dataUser->is_dapodik) disabled @endif">Ubah</a>
+                        </div>
+                        <a href="{{ $editPasswordUrl }}" class="btn btn-primary">Ubah Password</a>
                     </div>
                 </div>
             </div>

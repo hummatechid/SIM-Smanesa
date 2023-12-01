@@ -13,6 +13,7 @@ class ShowUser extends Component
     (
         public string $cardTitle,
         public string $editUrl,
+        public string $editPasswordUrl,
         public string $backUrl,
         public $dataUser,
         public string|null $formFor = null,

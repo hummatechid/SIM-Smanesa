@@ -11,7 +11,7 @@
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url('/') }}">Dashboard</a></li>
                         <li class="breadcrumb-item active" aria-current="page">{{ $page_title }}</li>
                     </ol>
                 </nav>
@@ -19,7 +19,13 @@
         </div>
     </div>
 
-    <x-show-user card-title="Detail Guru" back-url="{{ url($main_url) }}" edit-url="{{ route('teacher.edit', $teacher->id) }}" edit-password-url="{{ route('teacher.editPassword', $teacher->id) }}" form-for="guru" :data-user="$teacher"/>
+    <x-edit-password
+        update-url="{{ route('teacher.updatePassword', $teacher->id) }}"
+        card-title="Ubah Password"
+        back-url="{{ url($main_url) }}"
+        form-for="guru"
+        :data-user="$teacher"
+    />
 
 </div>
 @endsection

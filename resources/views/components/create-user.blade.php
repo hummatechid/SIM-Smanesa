@@ -161,7 +161,7 @@
                             <label for="phone_number">Nomor Telepon <span class="text-danger">*</span></label>
                         </div>
                         <div class="form-group col-md-9">
-                            <input type="text" name="phone_number" id="phone_number" class="form-select only-number @error('phone_number') is-invalid @enderror" placeholder="Nomor Telepon" value="{{ old('phone_number', ($dataUser ? $dataUser->phone_number : '')) }}" required @if(isset($dataUser->is_dapodik) && $dataUser->is_dapodik ) readonly @endif />
+                            <input type="text" name="phone_number" id="phone_number" class="form-control only-number @error('phone_number') is-invalid @enderror" placeholder="Nomor Telepon" value="{{ old('phone_number', ($dataUser ? $dataUser->phone_number : '')) }}" required @if(isset($dataUser->is_dapodik) && $dataUser->is_dapodik ) readonly @endif />
                             @error('phone_number')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror

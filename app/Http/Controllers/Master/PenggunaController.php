@@ -197,6 +197,20 @@ class PenggunaController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     */
+    public function editPassword(string $id)
+    {
+        $user = $this->penggunaRepository->byIdWithRole($id);
+        $data_role = $this->roleRepository->getWhereNotIn('name', ['guru']);
+        $data = $this->penggunaService->getPageData('user-list', '', [
+            'user' => $user,
+            'data_role' => $data_role
+        ]);
+        return view('admin.pages.master-data.user.edit-password', $data);
+    }
+
+    /**
      * Soft remove the specified resource from storage.
      */
     public function softDestroy(string $id)

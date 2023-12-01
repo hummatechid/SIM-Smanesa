@@ -32,17 +32,22 @@ Route::middleware(['auth'])->group(function () {
     // get controller from PenggunaController
     Route::resource('pengguna', PenggunaController::class);
     Route::post('pengguna/soft-delete/{id}', [PenggunaController::class, 'softDestroy'])->name('pengguna.softDelete');
+    
+    Route::get('teacher/get-main-data', [TeacherController::class, 'getDatatablesData'])->name('teacher.get-main-datatables');
+    Route::get('teacher/{id}/edit-password', [TeacherController::class, 'editPassword'])->name('teacher.editPassword');
+    Route::patch('teacher/{id}/update-password', [TeacherController::class, 'updatePassword'])->name('teacher.updatePassword');
+    Route::resource('teacher', TeacherController::class);
+    Route::post('teacher/soft-delete/{id}', [TeacherController::class, 'softDestroy'])->name('teacher.softDestroy');
+    
+    Route::get('user/get-main-data', [PenggunaController::class, 'getDatatablesData'])->name('user.get-main-datatables');
+    Route::get('user/{id}/edit-password', [PenggunaController::class, 'editPassword'])->name('user.editPassword');
+    Route::patch('user/{id}/update-password', [PenggunaController::class, 'updatePassword'])->name('user.updatePassword');
+    Route::resource('user', PenggunaController::class);
+    Route::post('user/soft-delete/{id}', [PenggunaController::class, 'softDestroy'])->name('user.softDelete');
 
     Route::prefix('students')->name('student.')->group(function () {
         Route::get('get-main-data', [StudentController::class, 'getDatatablesData'])->name('get-main-datatables');
         Route::get('/', [StudentController::class, 'index'])->name('index');
         Route::get('sync-students', [StudentController::class, 'syncStudents'])->name('sync');
     });
-
-    Route::get('teacher/get-main-data', [TeacherController::class, 'getDatatablesData'])->name('teacher.get-main-datatables');
-    Route::resource('teacher', TeacherController::class);
-
-    Route::get('user/get-main-data', [PenggunaController::class, 'getDatatablesData'])->name('user.get-main-datatables');
-    Route::resource('user', PenggunaController::class);
-
 });
