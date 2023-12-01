@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Transaction\{PermitController, ViolationController};
+use App\Http\Controllers\Transaction\{AttendanceController, PermitController, ViolationController};
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,11 +15,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['auth'])->group(function () {
+    
+    Route::resource('attendance', AttendanceController::class);
+    
     // get controller from PermitController
     Route::get('permit/waiting-acception', [PermitController::class, 'showAccListPage']);
     Route::get('permit/get-main-data', [PermitController::class, 'getDatatablesData'])->name('permit.get-main-datatables');
     Route::resource('permit', PermitController::class);
     Route::post('permit/soft-delete/{id}', [PermitController::class, 'softDestroy'])->name('permit.softDelete');
+
     Route::get('violation/get-main-data', [ViolationController::class, 'getDatatablesData'])->name('violation.get-main-datatables');
     Route::resource('violation', ViolationController::class);
     
