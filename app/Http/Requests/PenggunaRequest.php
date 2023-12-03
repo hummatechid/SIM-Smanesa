@@ -26,7 +26,7 @@ class PenggunaRequest extends FormRequest
             'full_name' => 'required',
             'gender' => 'required|in:Laki-laki,Perempuan',
             'phone_number' => 'required',
-            'address' => 'required',
+            'address' => 'nullable',
             'religion' => 'required',
             'bio' => 'nullable',
             'photo' => 'nullable|mimes:jpg, jpeg, png'
