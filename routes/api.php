@@ -40,4 +40,10 @@ Route::middleware('custom.sanctum')->group(function () {
         Route::get('/list-today', [PermitController::class, 'listToday']);
         Route::get('/{id}', [PermitController::class, 'detailList']);
     });
+
+    // student api
+    Route::prefix('student')->group(function (){
+        Route::get('/many-data', [StudentController::class, 'detailManyStudent'])->name('student.detail.many');
+        Route::get('/one-data/{id}', [StudentController::class, 'detailOneStudent'])->name('student.detail.one');
+    });
 });

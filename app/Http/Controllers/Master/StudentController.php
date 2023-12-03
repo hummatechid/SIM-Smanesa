@@ -64,4 +64,32 @@ class StudentController extends Controller
             'message' => 'success'
         ]);
     }
+
+    public function detailOneStudent(string $id){
+        $student = $this->repository->getOneById($id);
+
+        return response()->json([
+            "message" => "Sukses mengambil data student",
+            "data" => $student
+        ]);
+    }
+    
+    public function detailManyStudent(Request $request)
+    {
+        // check request ids
+        if(!$request->ids){
+            return response()->json([
+                "message" => "Data ids harus dikirim, dan harus berupa array",
+                "data" => null
+            ], 400);
+        }
+
+        // get data
+        $student = $this->repository->getWhereIn("id",$request->ids);
+    
+        return response()->json([
+            "message" => "Sukses mengambil data student",
+            "data" => $student
+        ]);
+    }
 }
