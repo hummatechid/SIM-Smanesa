@@ -19,10 +19,13 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('attendance', AttendanceController::class);
     
     // get controller from PermitController
-    Route::get('permit/waiting-acception', [PermitController::class, 'showAccListPage']);
-    Route::get('permit/get-main-data', [PermitController::class, 'getDatatablesData'])->name('permit.get-main-datatables');
-    Route::resource('permit', PermitController::class);
-    Route::post('permit/soft-delete/{id}', [PermitController::class, 'softDestroy'])->name('permit.softDelete');
+    Route::prefix('permit')->group(function(){
+        Route::get('/waiting-acception', [PermitController::class, 'showAccListPage']);
+        Route::get('/get-main-data', [PermitController::class, 'getDatatablesData'])->name('permit.get-main-datatables');
+        Route::post('/update/many-data', [PermitController::class, 'updateManyData'])->name('permit.updateManyData');
+        Route::resource('/', PermitController::class);
+        Route::post('/soft-delete/{id}', [PermitController::class, 'softDestroy'])->name('permit.softDelete');
+    });
 
     Route::get('violation/get-main-data', [ViolationController::class, 'getDatatablesData'])->name('violation.get-main-datatables');
     Route::resource('violation', ViolationController::class);

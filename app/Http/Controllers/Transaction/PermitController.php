@@ -196,6 +196,51 @@ class PermitController extends Controller
         }
     }
 
+    /**
+     * Update data when selected.
+     */
+    public function updateManyData(Request $request)
+    {
+        // array save data
+        $data = [];
+
+        // check request status or not
+        if(!$request->status) return redirect()->back()->with('error', 'Anda tidak mengirimkan sebuah tanggapan, mohon cek ulang')->withInput();
+
+        // check id is array data
+        if(is_array($request->ids)){
+            // foreach array id
+            foreach($request->ids as $id){
+                // check have data permit or not
+                $permit = $this->permitRepository->getOneById($id);
+    
+                // check data has or notfoung
+                if(!$permit) continue;
+                else array_push($id);
+    
+                // get data user
+                $user = Auth::user();
+    
+                //set data update
+                $dataUpdate = [
+                    "status" => $request->status,
+                    "updated_by" => $user->id
+                ];
+    
+                if($request->status == "accepted") $dataUpdate["accepted_by"] = $user->id;
+
+                // update data
+                $permit->update($dataUpdate);
+            }
+            $sukses = count($data);
+            $error = count($request->ids) - $sukses;
+            return redirect()->route('permit.index')->with('success', "Berhasil memberikan tanggapan di surat izin, dengan ". $sukses ." sukses, dan ". $error ." error");
+        }else {
+            // if data id not array
+            return redirect()->back()->with("error","Id yang dikirim harus berupa array")->withInput();
+        }
+    }
+
 
     /**
      * Api For Moble
