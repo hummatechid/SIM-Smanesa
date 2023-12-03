@@ -146,6 +146,12 @@ class BaseRepository implements RepositoryInterface {
         return $this->model->find($id)->update(['deleted_at' => now()]);
     }
 
+    // function for soft delete
+    public function backData(string $id): object | null | bool
+    {
+        return $this->model->find($id)->update(['deleted_at' => null]);
+    }
+
     // function for delete permanent
     public function delete(string $id): object | null | bool
     {
