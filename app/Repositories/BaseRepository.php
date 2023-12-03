@@ -175,9 +175,22 @@ class BaseRepository implements RepositoryInterface {
         return $this->model->where($column, $value)->get();
     }
 
-    public function getWhereNotIn(string $column, array $arrayNotIn) : object|null
+    public function getWhereIn(string $column, array $arrayIn, bool $history = false) : object|null
     {
-        return $this->model->whereNotIn($column, $arrayNotIn)->get();
+        if($history == true){
+            return $this->model->whereNotNull("deleted_at")->whereIn($column, $arrayIn)->get();
+        } else {
+            return $this->model->whereNull("deleted_at")->whereIn($column, $arrayIn)->get();
+        }
+    }
+
+    public function getWhereNotIn(string $column, array $arrayNotIn, bool $history = false) : object|null
+    {
+        if($history == true){
+            return $this->model->whereNotNull("deleted_at")->whereNotIn($column, $arrayNotIn)->get();
+        } else {
+            return $this->model->whereNull("deleted_at")->whereNotIn($column, $arrayNotIn)->get();
+        }
     }
 
     public function oneConditionOneRelation(string $column, string $value, string $relation, string $method = 'get')

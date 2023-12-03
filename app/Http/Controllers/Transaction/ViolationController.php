@@ -4,18 +4,23 @@ namespace App\Http\Controllers\Transaction;
 
 use App\Http\Controllers\Controller;
 use App\Services\ViolationService;
-use App\Repositories\{StudentRepository, ViolationTypeRepository};
+use App\Repositories\{StudentRepository, ViolationRepository, ViolationTypeRepository};
 use Illuminate\Http\Request;
 
 class ViolationController extends Controller
 {
-    private $violationService, $studentRepository, $violationTypeRepository;
+    private $violationService, $studentRepository, $violationTypeRepository, $violationRepository;
 
-    public function __construct(ViolationService $violationService, StudentRepository $studentRepository, ViolationTypeRepository $violationTypeRepository)
+    public function __construct(ViolationService $violationService,
+        StudentRepository $studentRepository,
+        ViolationTypeRepository $violationTypeRepository,
+        ViolationRepository $violationRepository
+    )
     {
         $this->violationService = $violationService;
         $this->studentRepository = $studentRepository;
         $this->violationTypeRepository = $violationTypeRepository;
+        $this->violationRepository = $violationRepository;
     }
     /**
      * Display a listing of the resource.
@@ -47,7 +52,52 @@ class ViolationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // check data student
+        if(!is_array($request->student_id)){
+            return redirect()->back()->with("error","student_id must array data");
+        }
+
+        // check data violation type
+        if(!is_array($request->violation_type_id)){
+            return redirect()->back()->with("error","violation_type_id must array data");
+        }
+
+        // foreach data student
+        foreach($request->student_id as $student_id){
+            // set default score
+            $score = 0;
+
+            // get data student from student_id
+            $student = $this->studentRepository->getOneById($student_id);
+
+          // get data violation_type outside the loop
+            $violationTypes = $this->violationTypeRepository->getWhereIn("id",$request->violation_type_id);
+
+            // foreach data violation_type
+            foreach ($violationTypes as $violation_type) {
+                // set score violation
+                $scoreViolation = $violation_type->score;
+
+                // create data violation
+                $data = [
+                    "student_id" => $student_id,
+                    "violation_type_id" => $violation_type->id,
+                    "score" => $scoreViolation
+                ];
+
+                // save data violation
+                $this->violationRepository->create($data);
+
+                // push score violation to total score
+                $score += $scoreViolation;
+            }
+
+            // update score violation student
+            $student->score += $score;
+            $student->save();
+        }
+
+        return redirect()->route('violation.index')->with("success","Berhasil memberikan poin pelanggaran terhadap siswa");
     }
 
     /**
