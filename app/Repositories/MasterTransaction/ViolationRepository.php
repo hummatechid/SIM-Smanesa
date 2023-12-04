@@ -1,6 +1,6 @@
 <?php 
 
-namespace App\Repositories;
+namespace App\Repositories\MasterTransaction;
 
 use App\Repositories\BaseRepository;
 use App\Models\Violation;
@@ -12,4 +12,6 @@ class ViolationRepository extends BaseRepository {
     {
         $this->model = $violation;    
     }
+
+    
 }

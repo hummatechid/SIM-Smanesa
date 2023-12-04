@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Transaction;
 
 use App\Http\Controllers\Controller;
 use App\Services\ViolationService;
-use App\Repositories\{StudentRepository, ViolationRepository, ViolationTypeRepository};
+use App\Repositories\{StudentRepository, ViolationTypeRepository};
+use App\Repositories\MasterTransaction\ViolationRepository;
 use Illuminate\Http\Request;
 
 class ViolationController extends Controller
@@ -130,5 +131,30 @@ class ViolationController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    /**
+     * Api for list violation
+     * @GET
+     */
+    public function listViolation(Request $request){
+        // set default get data per year
+        if($request->year){
+            $year = $request->year;
+            $data = $this->violationRepository->getDataYears($year, ["student","violationType"]);
+        } else {
+            $data = $this->violationRepository->relationship(["student","violationType"]);
+        }
+        
+        // if data get per month
+        if($request->month){
+            if(!$year) $year = date('Y');
+            $data = $this->violationRepository->getDataMonth($year, $request->month, ["student","violationType"]);
+        }
+
+        return response()->json([
+            "message" => "Berhasil menampilkan data",
+            "data" => $data
+        ], 200);
     }
 }

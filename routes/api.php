@@ -46,4 +46,9 @@ Route::middleware('custom.sanctum')->group(function () {
         Route::get('/many-data', [StudentController::class, 'detailManyStudent'])->name('student.detail.many');
         Route::get('/one-data/{id}', [StudentController::class, 'detailOneStudent'])->name('student.detail.one');
     });
+
+    // violation api
+    Route::prefix('violation')->group(function (){
+        Route::get('/', [ViolationController::class, 'listViolation'])->name('student.list');
+    });
 });
