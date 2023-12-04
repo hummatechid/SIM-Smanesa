@@ -204,8 +204,8 @@
             </div>
             <div class="mb-3 text-danger text-end">* tidak boleh kosong</div>
         </div>
-        <div class="card-footer d-flex justify-content-end gap-2">
-            <a href="{{ $backUrl }}" class="btn btn-secondary">Kembali</a>
+        <div class="card-footer d-flex justify-content-between gap-2">
+            <a href="{{ $backUrl }}" class="btn btn-secondary">&#10094; Kembali</a>
             <button type="submit" class="btn btn-success">{{ $isEdit ? 'Ubah' : 'Tambah'}}</button>
         </div>
     </form>

@@ -20,7 +20,7 @@
                     <div class="d-flex flex-column align-items-center gap-2">
                         <div class="d-flex justify-content-center  gap-2">
                             <a href="{{ $backUrl }}" class="btn btn-secondary">Kembali</a>
-                            <a href="{{ $editUrl }}" class="btn btn-primary @if($dataUser->is_dapodik) disabled @endif">Ubah</a>
+                            <a href="{{ $editUrl }}" class="btn btn-primary">Ubah</a>
                         </div>
                         <a href="{{ $editPasswordUrl }}" class="btn btn-primary">Ubah Password</a>
                     </div>
@@ -30,7 +30,7 @@
         <div class="col-md-8 mb-3">
             <div class="card h-100">
                 @if($dataUser->bio)
-                <div class="card-header bg-primary">
+                <div class="card-header bg-primary text-light">
                     <div class="card-title">Bio :</div>
                     <p class="fw-lighter lh-sm m-0">
                         {{ $dataUser->bio }}
