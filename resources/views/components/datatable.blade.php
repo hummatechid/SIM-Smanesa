@@ -74,6 +74,9 @@
                 @endforeach
             </div>
             <x-session-alert/>
+            @if(isset($deleteOption))
+            <div id="alert-delete"></div>
+            @endif
             <div class="table-responsive datatable-minimal">
                 <table class="table w-100" id="{{ isset($tableId) && $tableId ? $tableId : 'table' }}">
                 </table>
@@ -169,17 +172,18 @@
                         _token: "{{ csrf_token() }}",
                     },
                     success: function(response) {
-                        Swal.fire({
-                            title: `${response.message}`,
-                            icon: 'success',
-                        });
+                        let alert_msg = `<div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+                            ${response.message}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"aria-label="Close"></button>
+                        </div>`
+                        $('#alert-delete').append(alert_msg)
+                        window.setTimeout(function() {
+                            $(".alert").fadeTo(1000, 0).slideUp(300, function(){
+                                $(this).slideUp(300); 
+                            });
+                        }, 5000);
                         $('#'+table_id).DataTable().ajax.reload();
                     }
-                });
-            } else {
-                Swal.fire({
-                    title: 'Data batal dihapus!',
-                    icon: 'info',
                 });
             }
         })
