@@ -220,4 +220,13 @@ class BaseRepository implements RepositoryInterface {
             return $this->model->with($relations)->whereNull("deleted_at")->whereYear("created_at",$year)->whereMonth("created_at",$month)->get(); 
         } 
     }
+
+    public function getDataDate($date, array $relations = [], bool $history = false): object | null
+    {
+        if($history == true){
+            return $this->model->with($relations)->whereNotNull("deleted_at")->whereDate("created_at",$date)->get(); 
+        } else {
+            return $this->model->with($relations)->whereNull("deleted_at")->whereDate("created_at",$date)->get(); 
+        } 
+    }
 }
