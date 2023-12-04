@@ -30,40 +30,42 @@
                 </div>
             </div>
             <div class="card-body">
-                <x-session-alert/>
+                <x-session-alert :is-swal="true"/>
                 <div class="form-group mb-3">
                     <div class="d-flex justify-content-between align-items-end mb-2">
-                        <label>Siswa</label>
-                        <button type="button" class="btn btn-sm btn-secondary" id="btn_add_siswa">+ tambah</button>
+                        <label>Siswa <span class="text-danger">*</span></label>
                     </div>
-                    <div id="siswa_group" class="d-flex flex-column gap-2">
-                        <div class="siswa-input d-flex gap-2 w-100" data-index="0">
-                            <div class="w-100">
-                                <select id="student_id" class="form-select choices" name="student_id[]">
-                                    <option value="" selected>-- pilih siswa --</option>
-                                    @foreach($students as $user)
-                                    <option value="{{ $user->id }}">{{$user->full_name}} ({{ $user->nisn }})</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <button type="button" class="btn btn-sm btn-danger btn-del-siswa" data-index="0">Hapus</button>
+                    <div id="siswa_group" class="d-flex flex-column gap-2 mb-2">
+                        <div class="siswa-input w-100" data-index="0">
+                            <select id="student_id" class="form-select choices" name="student_id[]">
+                                <option value="" selected>-- pilih siswa --</option>
+                                @foreach($students as $user)
+                                <option value="{{ $user->id }}">{{$user->full_name}} | {{ $user->nisn }} | {{ $user->gender }} | {{ $user->nama_rombel }}</option>
+                                @endforeach
+                            </select>
+                            <button data-index="0" class="btn-del-siswa text-danger">&times;</button>
                         </div>
                     </div>
+                    <button type="button" class="bg-transparent border-0 d-flex align-items-center gap-2" id="btn_add_siswa">
+                        <div class="bg-success rounded-circle text-white fw-bold" style="padding: 0px 7px">+</div>
+                        <div class="text-muted">tambah siswa</div>
+                    </button>
                     @error('user_id')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="form-group mb-3">
-                    <label for="reason">Alasan Izin</label>
+                    <label for="reason">Alasan Izin <span class="text-danger">*</span></label>
                     <textarea name="reason" id="reason" class="form-control @error('reason') is-invalid @enderror" placeholder="Alasan izin" required>{{ old('reason') }}</textarea>
                     @error('reason')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
+                <div class="mb-3 text-danger text-end">* tidak boleh kosong</div>
             </div>
-            <div class="card-footer d-flex justify-content-end gap-2">
-                <a href="{{ route('permit.index') }}" class="btn btn-secondary">Kembali</a>
-                <button type="submit" class="btn btn-success">Tambah</button>
+            <div class="card-footer d-flex justify-content-between gap-2">
+                <a href="{{ route('permit.index') }}" class="btn btn-secondary">&#10094; Kembali</a>
+                <button type="submit" class="btn btn-success">Ajukan Izin</button>
             </div>
         </form>
     </section>
@@ -130,6 +132,28 @@
             .choices[data-type*=select-one] .choices__inner {
                 padding-bottom: 2.5px;
             }
+            .choices::after {
+                display: none;
+            }
+            .choices {
+                margin: 0
+            }
+            #siswa_group .siswa-input:only-child .btn-del-siswa {
+                display: none
+            }
+            .btn-del-siswa {
+                background-color: transparent;
+                border: 0;
+                position: absolute;
+                top: 50%;
+                right: 0px;
+                transform: translate(-50%, -50%);
+                font-weight: bold;
+                font-size: 1.5rem;
+            }
+            .siswa-input {
+                position: relative
+            }
         </style>
         <style>
             .parsley-errors-list {
@@ -173,7 +197,7 @@
             const siswas = @json($students);
             var siswa_lists = `<option value="" disabled selected>-- pilih siswa --</option>`;
             siswas.forEach((siswa) => {
-                siswa_lists += `<option value="${siswa.id}">${siswa.full_name} (${siswa.nisn})</option>`;
+                siswa_lists += `<option value="${siswa.id}">${siswa.full_name} | ${siswa.nisn} | ${siswa.gender} | ${siswa.nama_rombel}</option>`;
             })
 
             $(function() {
@@ -182,11 +206,9 @@
                     else var last_index = parseInt($('#siswa_group').children().last().attr('data-index'))
 
                     let new_siswa_input = `
-                        <div class="siswa-input d-flex gap-2 w-100" data-index="${last_index+1}">
-                            <div class="w-100">
-                                <select id="student_id" class="form-select choices${last_index+1}" name="student_id[]">${siswa_lists}</select>
-                            </div>
-                            <button type="button" class="btn btn-sm btn-danger btn-del-siswa" data-index="${last_index+1}">Hapus</button>
+                        <div class="siswa-input w-100" data-index="${last_index+1}">
+                            <select id="student_id" class="form-select choices${last_index+1}" name="student_id[]">${siswa_lists}</select>
+                            <button data-index="${last_index+1}" class="btn-del-siswa text-danger">&times;</button>
                         </div>`
 
                     $('#siswa_group').append(new_siswa_input)
