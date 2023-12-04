@@ -9,6 +9,7 @@ use App\Http\Controllers\Master\{StudentController,
     TeacherController,
     PenggunaController
 };
+use App\Http\Controllers\Transaction\AttendanceController;
 use App\Http\Controllers\Transaction\PermitController;
 use App\Http\Controllers\Transaction\ViolationController;
 /*
@@ -39,5 +40,21 @@ Route::middleware('custom.sanctum')->group(function () {
         Route::post('/', [PermitController::class, 'updateStatus']);
         Route::get('/list-today', [PermitController::class, 'listToday']);
         Route::get('/{id}', [PermitController::class, 'detailList']);
+    });
+
+    // student api
+    Route::prefix('student')->group(function (){
+        Route::get('/many-data', [StudentController::class, 'detailManyStudent'])->name('student.detail.many');
+        Route::get('/one-data/{id}', [StudentController::class, 'detailOneStudent'])->name('student.detail.one');
+    });
+
+    // violation api
+    Route::prefix('violation')->group(function (){
+        Route::get('/', [ViolationController::class, 'listViolation'])->name('violation.list');
+    });
+
+    // attendence api
+    Route::prefix('attendence')->group(function (){
+        Route::get('/', [AttendanceController::class, 'listAttendences'])->name('attendence.list');
     });
 });

@@ -146,6 +146,12 @@ class BaseRepository implements RepositoryInterface {
         return $this->model->find($id)->update(['deleted_at' => now()]);
     }
 
+    // function for soft delete
+    public function backData(string $id): object | null | bool
+    {
+        return $this->model->find($id)->update(['deleted_at' => null]);
+    }
+
     // function for delete permanent
     public function delete(string $id): object | null | bool
     {
@@ -169,9 +175,22 @@ class BaseRepository implements RepositoryInterface {
         return $this->model->where($column, $value)->get();
     }
 
-    public function getWhereNotIn(string $column, array $arrayNotIn) : object|null
+    public function getWhereIn(string $column, array $arrayIn, bool $history = false) : object|null
     {
-        return $this->model->whereNotIn($column, $arrayNotIn)->get();
+        if($history == true){
+            return $this->model->whereNotNull("deleted_at")->whereIn($column, $arrayIn)->get();
+        } else {
+            return $this->model->whereNull("deleted_at")->whereIn($column, $arrayIn)->get();
+        }
+    }
+
+    public function getWhereNotIn(string $column, array $arrayNotIn, bool $history = false) : object|null
+    {
+        if($history == true){
+            return $this->model->whereNotNull("deleted_at")->whereNotIn($column, $arrayNotIn)->get();
+        } else {
+            return $this->model->whereNull("deleted_at")->whereNotIn($column, $arrayNotIn)->get();
+        }
     }
 
     public function oneConditionOneRelation(string $column, string $value, string $relation, string $method = 'get')
@@ -182,5 +201,32 @@ class BaseRepository implements RepositoryInterface {
             default :
                 return $this->model->where($column, $value)->with($relation)->get();
         }
+    }
+
+    public function getDataYears(int $year, array $relations = [], bool $history = false): object | null
+    {
+        if($history == true){
+            return $this->model->with($relations)->whereNotNull("deleted_at")->whereYear("created_at",$year)->get(); 
+        } else {
+            return $this->model->with($relations)->whereNull("deleted_at")->whereYear("created_at",$year)->get(); 
+        }
+    }
+
+    public function getDataMonth(int $year, int $month, array $relations = [], bool $history = false): object | null
+    {
+        if($history == true){
+            return $this->model->with($relations)->whereNotNull("deleted_at")->whereYear("created_at",$year)->whereMonth("created_at",$month)->get(); 
+        } else {
+            return $this->model->with($relations)->whereNull("deleted_at")->whereYear("created_at",$year)->whereMonth("created_at",$month)->get(); 
+        } 
+    }
+
+    public function getDataDate($date, array $relations = [], bool $history = false): object | null
+    {
+        if($history == true){
+            return $this->model->with($relations)->whereNotNull("deleted_at")->whereDate("created_at",$date)->get(); 
+        } else {
+            return $this->model->with($relations)->whereNull("deleted_at")->whereDate("created_at",$date)->get(); 
+        } 
     }
 }

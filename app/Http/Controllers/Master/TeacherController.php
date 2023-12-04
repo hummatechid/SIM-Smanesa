@@ -69,7 +69,6 @@ class TeacherController extends Controller
         $validateDataUser = $userRequest->validated();
         
         try {
-
             DB::beginTransaction();
 
             // set image
@@ -82,8 +81,12 @@ class TeacherController extends Controller
                 $validateDataTeacher["photo"] = $fileData["filePath"].".".$fileData["fileType"];
             }
 
+            // get roles guru
+            $roles = $this->userRepository->getRole("name","guru");
+
             // store data user
-            $validateDataUser["password"] = bcrypt($validateDataUser["password"]);  
+            $validateDataUser["password"] = bcrypt($validateDataUser["password"]); 
+            $validateDataUser["role_id"] = $roles->id; 
             $user = $this->userRepository->create($validateDataUser);
 
             // set user_id

@@ -21,11 +21,11 @@ return new class extends Migration
             $table->string('full_name');
             $table->enum('gender', ['Laki-laki', 'Perempuan']);
             $table->string('phone_number');
-            $table->string('address');
+            $table->string('address')->nullable();
             $table->string('religion', 50);
             $table->text('bio')->nullable();
             $table->string('photo')->nullable();
-            $table->string('jenis_ptk');
+            $table->string('jenis_ptk')->nullable();
             $table->boolean('is_dapodik');
             $table->dateTime('deleted_at')->nullable();
             $table->timestamps();

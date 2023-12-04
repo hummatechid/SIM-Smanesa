@@ -29,11 +29,11 @@ class TeacherRequest extends FormRequest
             "full_name" => "required",
             'gender' => 'required|in:Laki-laki,Perempuan',
             'phone_number' => "required",
-            "address" => "required",
+            "address" => "nullable",
             "religion" => "required",
             "bio" => "nullable",
             "photo" => "nullable|mimes:png,jpg,jpeg",
-            "jenis_ptk" => "required"
+            "jenis_ptk" => "nullable"
         ];
     }
 

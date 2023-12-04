@@ -43,11 +43,18 @@ class UserRequest extends FormRequest
             ];
         } else {
             // create rules
-            return [
-                'email' => 'required|email|unique:users,email',
-                'role_id' => 'required',
-                'password' => 'required|confirmed'
-            ];
+            if($this->route('pengguna')){
+                return [
+                    'email' => 'required|email|unique:users,email',
+                    'role_id' => 'required',
+                    'password' => 'required|confirmed'
+                ];
+            } else {
+                return [
+                    'email' => 'required|email|unique:users,email',
+                    'password' => 'required|confirmed'
+                ];
+            }
         }
     }
 
