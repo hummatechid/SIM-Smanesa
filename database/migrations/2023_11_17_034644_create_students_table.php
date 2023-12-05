@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->string('email');
             $table->string('nik');
             $table->string('nisn');
             $table->string('nipd');
@@ -23,8 +24,28 @@ return new class extends Migration
             $table->string('religion', 50);
             $table->string('nama_rombel');
             $table->integer('violation_score')->default(0);
-            $table->dateTime('deleted_at')->nullable();
             $table->integer('score')->default(0);
+            $table->string('register_type');
+            $table->string('school_origin');
+            $table->string('birth_location');
+            $table->string('birth_date');
+
+            $table->string('father_name');
+            $table->string('father_job');
+            $table->string('mother_name');
+            $table->string('mother_job');
+            $table->string('guardian_name')->nullable();
+            $table->string('guardian_job')->nullable();
+
+            $table->integer('anak_keberapa');
+            $table->integer('height');
+            $table->integer('weight');
+            $table->string('semester');
+            $table->integer('tingkat_pendidikan');
+            $table->string('kurikulum');
+            $table->string('kebutuhan_khusus');
+
+            $table->dateTime('deleted_at')->nullable();
             $table->timestamps();
         });
     }
