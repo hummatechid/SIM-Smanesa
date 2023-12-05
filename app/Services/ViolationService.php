@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Repositories\ViolationRepository;
+use App\Repositories\MasterTransaction\ViolationRepository;
 use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\Facades\DataTables;
 use App\Services\BaseService;
@@ -30,9 +30,9 @@ class ViolationService extends BaseService {
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('name', function($item) {
-                return $item->student->name;
+                return $item->student->full_name;
             })->addColumn('violation', function($item) {
-                return $item->violation_type->name;
+                return $item->violationType->name;
             })->addColumn('phone_number', function($item) {
                 return $item->score;
             })->addColumn('date', function($item) {

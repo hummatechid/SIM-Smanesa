@@ -55,12 +55,12 @@ class ViolationController extends Controller
     {
         // check data student
         if(!is_array($request->student_id)){
-            return redirect()->back()->with("error","student_id must array data");
+            return redirect()->back()->with("error","Siswa tidak boleh kosong");
         }
 
         // check data violation type
-        if(!is_array($request->violation_type_id)){
-            return redirect()->back()->with("error","violation_type_id must array data");
+        if(!isset($request->violation_type_id)){
+            return redirect()->back()->with("error","Tipe pelanggaran tidak boleh kosong");
         }
 
         // foreach data student
@@ -72,26 +72,20 @@ class ViolationController extends Controller
             $student = $this->studentRepository->getOneById($student_id);
 
           // get data violation_type outside the loop
-            $violationTypes = $this->violationTypeRepository->getWhereIn("id",$request->violation_type_id);
+            $violation_type = $this->violationTypeRepository->getOneById($request->violation_type_id);
 
-            // foreach data violation_type
-            foreach ($violationTypes as $violation_type) {
-                // set score violation
-                $scoreViolation = $violation_type->score;
+            // create data violation
+            $data = [
+                "student_id" => $student_id,
+                "violation_type_id" => $violation_type->id,
+                "score" => $violation_type->score
+            ];
 
-                // create data violation
-                $data = [
-                    "student_id" => $student_id,
-                    "violation_type_id" => $violation_type->id,
-                    "score" => $scoreViolation
-                ];
+            // save data violation
+            $this->violationRepository->create($data);
 
-                // save data violation
-                $this->violationRepository->create($data);
-
-                // push score violation to total score
-                $score += $scoreViolation;
-            }
+            // push score violation to total score
+                $score += $violation_type->score;
 
             // update score violation student
             $student->score += $score;

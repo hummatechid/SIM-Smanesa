@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('nama_rombel');
             $table->integer('violation_score')->default(0);
             $table->dateTime('deleted_at')->nullable();
+            $table->integer('score')->default(0);
             $table->timestamps();
         });
     }
