@@ -4,7 +4,6 @@
             <a href="#" class="burger-btn d-xl-none d-block">
                 <i class="bi bi-justify fs-3"></i>
             </a>
-
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -34,9 +33,11 @@
                         </div>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" style="min-width: 11rem;">
-                        <li><a class="dropdown-item" href="#"><i class="icon-mid bi bi-person me-2"></i> My
+                        @if(Auth::user()->teacher || Auth::user()->pengguna)
+                        <li><a class="dropdown-item" href="{{ Auth::user()->hasRole('guru') ? route('teacher.show', Auth::user()->teacher->id) : route('user.show', Auth::user()->pengguna->id) }}"><i class="icon-mid bi bi-person me-2"></i> My
                                 Profile</a></li>
                             <hr class="dropdown-divider">
+                        @endif
                         <li>
                             <form action="{{ url('logout') }}" method="post">
                                 @csrf

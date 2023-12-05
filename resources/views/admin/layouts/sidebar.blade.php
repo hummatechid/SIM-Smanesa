@@ -221,7 +221,7 @@
                 </li>
                 @endhasrole
 
-                <li class="sidebar-title">Pengaturan</li>
+                {{-- <li class="sidebar-title">Pengaturan</li>
 
                 <li
                     class="sidebar-item  ">
@@ -229,8 +229,6 @@
                         <i class="bi bi-life-preserver"></i>
                         <span>Akun</span>
                     </a>
-
-
                 </li>
 
                 <li class="sidebar-item">
@@ -242,7 +240,7 @@
                         <span>Keluar</span>
                     </button>
                     </form>
-                </li>
+                </li> --}}
 
             </ul>
         </div>
