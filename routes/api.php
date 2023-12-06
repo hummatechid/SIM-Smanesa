@@ -51,6 +51,7 @@ Route::middleware('custom.sanctum')->group(function () {
     // violation api
     Route::prefix('violation')->name('violation.')->group(function (){
         Route::get('/', [ViolationController::class, 'listViolation'])->name('list');
+        Route::get('/statistik', [ViolationController::class, 'listViolationStatistik'])->name('violation.statistik');
     });
     
     // attendence api
@@ -58,4 +59,3 @@ Route::middleware('custom.sanctum')->group(function () {
         Route::get('/', [AttendanceController::class, 'listAttendences'])->name('list');
     });
 });
-Route::get('/statistik', [ViolationController::class, 'listViolationStatistik'])->name('violation.statistik');
