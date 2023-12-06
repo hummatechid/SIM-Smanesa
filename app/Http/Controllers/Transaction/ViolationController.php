@@ -138,6 +138,7 @@ class ViolationController extends Controller
             $data = $this->violationRepository->getDataYears($year, ["student","violationType"]);
         } else {
             $data = $this->violationRepository->relationship(["student","violationType"]);
+            $year = null;
         }
         
         // if data get per month
@@ -148,6 +149,35 @@ class ViolationController extends Controller
 
         return response()->json([
             "message" => "Berhasil menampilkan data",
+            "data" => $data
+        ], 200);
+    }
+
+    /**
+     * Api for data statistik violation
+     * @GET
+     */
+    public function listViolationStatistik(Request $request){
+        // set default get data per year
+        if($request->year){
+            $year = $request->year;
+            $data = $this->violationRepository->getDataYears($year, ["student","violationType"]);
+            $data = $this->violationService->getDataStatistikYear($data);
+        } else {
+            $data = $this->violationRepository->relationship(["student","violationType"]);
+            $data = $this->violationService->getDataStatistikYear($data);
+            $year = null;
+        }
+        
+        // if data get per month
+        if($request->month){
+            if(!$year) $year = date('Y');
+            $data = $this->violationRepository->getDataMonth($year, $request->month, ["student","violationType"]);
+            $data = $this->violationService->getDataStatistikMonth($data);
+        }
+
+        return response()->json([
+            "message" => "Berhasil menampilkan data statistik",
             "data" => $data
         ], 200);
     }

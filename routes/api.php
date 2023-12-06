@@ -52,9 +52,10 @@ Route::middleware('custom.sanctum')->group(function () {
     Route::prefix('violation')->group(function (){
         Route::get('/', [ViolationController::class, 'listViolation'])->name('violation.list');
     });
-
+    
     // attendence api
     Route::prefix('attendence')->group(function (){
         Route::get('/', [AttendanceController::class, 'listAttendences'])->name('attendence.list');
     });
 });
+Route::get('/statistik', [ViolationController::class, 'listViolationStatistik'])->name('violation.statistik');
