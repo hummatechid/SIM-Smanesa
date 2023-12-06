@@ -164,21 +164,52 @@ class ViolationController extends Controller
      * @GET
      */
     public function listViolationStatistik(Request $request){
+
+        //student and violation type
+        $student_id = $request->student_id;
+        $violation_type_id = $request->violation_type_id;
+
         // set default get data per year
         if($request->year){
+            // get data per year
             $year = $request->year;
             $data = $this->violationRepository->getDataYears($year, ["student","violationType"]);
+
+            // filter data if student and violation has
+            $data = $data->filter(function ($item) use ($student_id, $violation_type_id){
+                $student = $student_id == null || $item->student_id == $student_id;
+                $violation = $violation_type_id == null || $item->violation_type_id == $violation_type_id;
+
+                return $student && $violation;
+            });
             $data = $this->violationService->getDataStatistikYear($data);
         } else {
             $data = $this->violationRepository->relationship(["student","violationType"]);
+
+            // filter data if student and violation has
+            $data = $data->filter(function ($item) use ($student_id, $violation_type_id){
+                $student = $student_id == null || $item->student_id == $student_id;
+                $violation = $violation_type_id == null || $item->violation_type_id == $violation_type_id;
+
+                return $student && $violation;
+            });
             $data = $this->violationService->getDataStatistikYear($data);
             $year = null;
         }
         
         // if data get per month
         if($request->month){
+            // get data per month
             if(!$year) $year = date('Y');
             $data = $this->violationRepository->getDataMonth($year, $request->month, ["student","violationType"]);
+
+            // filter data if student and violation has
+            $data = $data->filter(function ($item) use ($student_id, $violation_type_id){
+                $student = $student_id == null || $item->student_id == $student_id;
+                $violation = $violation_type_id == null || $item->violation_type_id == $violation_type_id;
+
+                return $student && $violation;
+            });
             $data = $this->violationService->getDataStatistikMonth($data);
         }
 
