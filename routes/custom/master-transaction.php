@@ -16,7 +16,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->group(function () {
     
-    Route::resource('attendance', AttendanceController::class);
+    Route::prefix('attendance')->name('attendance.')->group(function() {
+        Route::get('get-main-data', [AttendanceController::class, 'getDatatablesData'])->name('get-main-datatables');
+        Route::resource('/', AttendanceController::class);
+    });
     
     // get controller from PermitController
     Route::prefix('permit')->name('permit.')->group(function(){
