@@ -112,7 +112,7 @@
                 @endforeach
             }
         },
-        order: [[{{ isset($defaultOrder) ? $defaultOrder : 1 }}, 'asc']],
+        order: [[{{ isset($defaultOrder) ? $defaultOrder : 1 }}, '{{ $arrangeOrder }}']],
         columns: [
             @if(!$withMultipleSelect)
             {

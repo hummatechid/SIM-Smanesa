@@ -43,18 +43,18 @@ Route::middleware('custom.sanctum')->group(function () {
     });
 
     // student api
-    Route::prefix('student')->group(function (){
-        Route::get('/many-data', [StudentController::class, 'detailManyStudent'])->name('student.detail.many');
-        Route::get('/one-data/{id}', [StudentController::class, 'detailOneStudent'])->name('student.detail.one');
+    Route::prefix('student')->name('student.')->group(function (){
+        Route::get('/many-data', [StudentController::class, 'detailManyStudent'])->name('detail.many');
+        Route::get('/one-data/{id}', [StudentController::class, 'detailOneStudent'])->name('detail.one');
     });
 
     // violation api
-    Route::prefix('violation')->group(function (){
-        Route::get('/', [ViolationController::class, 'listViolation'])->name('violation.list');
+    Route::prefix('violation')->name('violation.')->group(function (){
+        Route::get('/', [ViolationController::class, 'listViolation'])->name('list');
     });
 
     // attendence api
-    Route::prefix('attendence')->group(function (){
-        Route::get('/', [AttendanceController::class, 'listAttendences'])->name('attendence.list');
+    Route::prefix('attendance')->name('attendance.')->group(function (){
+        Route::get('/', [AttendanceController::class, 'listAttendences'])->name('list');
     });
 });

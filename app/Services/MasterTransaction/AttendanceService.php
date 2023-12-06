@@ -2,7 +2,7 @@
 
 namespace App\Services\MasterTransaction;
 
-use App\Repositories\AttendanceRepository;
+use App\Repositories\MasterTransaction\AttendanceRepository;
 use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\Facades\DataTables;
 use App\Services\BaseService;
