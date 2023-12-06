@@ -33,39 +33,34 @@ class BaseService {
 
     public function getDataStatistikYear(array|object $data): array | object
     {
+            
         $result = [];
-        $data = collect($data)->map(function ($item) use ($result){
+        $data = collect($data)->map(function ($item) use (&$result) {
             // get date
             $date = explode("T", $item->created_at);
-
+    
             // get month
             $month = (int)explode("-", $date[0])[1];
-            
-            //push data per month
-            for($months = 1; $months <= 12; $months++){
-                if($month == $months){ 
-                    if (!isset($result[$month])) {
-                        $result[$month]["bulan"] = $this->fullMonth($month);
-                        $result[$month]["total"] = 0;
-                        break;
-                    }
-                }
+    
+            // Increment the total value for the month
+            if (!isset($result[$this->fullMonth($month)])) {
+                $result[$this->fullMonth($month)] = 0;
             }
-
-            // plus data
-            if (isset($result[$month])) {
-                $result[$month]["total"] += 1;
-            }
+    
+            $result[$this->fullMonth($month)] += 1;
+    
             return $result;
         });
-        return $data;
+    
+        return $result;
     }
 
     public function getDataStatistikMonth(array|object $data): array | object
     {
         
         $result = [];
-        $data = collect($data)->map(function ($item) use ($result){
+
+        $data = collect($data)->map(function ($item) use (&$result) {
             // get date
             $dates = explode("T", $item->created_at);
 
@@ -73,23 +68,17 @@ class BaseService {
             $date = (int)explode("-", $dates[0])[2];
             $month = (int)explode("-", $dates[0])[1];
             $year = (int)explode("-", $dates[0])[0];
-            
-            //push data per month
-            for($i = 1; $i <= $this->daterPerMonth($month, $year); $i++){
-                if($date == $i){ 
-                    if (!isset($result[$date])) {
-                        $result[$date]["tanggal"] = $date;
-                        $result[$date]["total"] = 0;
-                        break;
-                    }
-                }
+    
+            // Increment the total value for the month
+            if (!isset($result[$date])) {
+                $result[$date] = 0;
             }
-            // plus data
-            if (isset($result[$date])) {
-                $result[$date]["total"] += 1;
-            }
+    
+            $result[$date] += 1;
+    
             return $result;
         });
-        return $data;
+    
+        return $result;
     }
 }
