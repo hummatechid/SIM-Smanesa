@@ -35,15 +35,15 @@
                     <div class="d-flex justify-content-between align-items-end mb-2">
                         <label>Siswa <span class="text-danger">*</span></label>
                     </div>
-                    <div id="siswa_group" class="d-flex flex-column gap-2 mb-2">
-                        <div class="siswa-input w-100" data-index="0">
+                    <div id="siswa_group" class="choices-group d-flex flex-column gap-2 mb-2">
+                        <div class="siswa-input choices-multiple-input w-100" data-index="0">
                             <select id="student_id" class="form-select choices" name="student_id[]">
                                 <option value="" selected>-- pilih siswa --</option>
                                 @foreach($users as $user)
                                 <option value="{{ $user->id }}">{{$user->full_name}} | {{ $user->nisn }} | {{ $user->gender }} | {{ $user->nama_rombel }}</option>
                                 @endforeach
                             </select>
-                            <button data-index="0" class="btn-del-siswa text-danger">&times;</button>
+                            <button data-index="0" class="btn-del-siswa del-choices text-danger">&times;</button>
                         </div>
                     </div>
                     <button type="button" class="bg-transparent border-0 d-flex align-items-center gap-2" id="btn_add_siswa">
@@ -56,12 +56,21 @@
                 </div>
                 <div class="form-group mb-3">
                     <label for="violation_type_id">Pelanggaran <span class="text-danger">*</span></label>
-                    <select id="violation_type_id" class="form-select choices" name="violation_type_id" required>
-                        <option value="" selected>-- pilih pengguna --</option>
-                        @foreach($violation_types as $violation)
-                        <option value="{{ $violation->id }}">{{ $violation->name }} ({{ $violation->score }} poin)</option>
-                        @endforeach
-                    </select>
+                    <div id="violation_group" class="choices-group d-flex flex-column gap-2 mb-2">
+                        <div class="violation_input choices-multiple-input">
+                            <select id="violation_type_id" class="form-select choices" name="violation_type_id[]" required>
+                                <option value="" selected>-- pilih pelanggaran --</option>
+                                @foreach($violation_types as $violation)
+                                <option value="{{ $violation->id }}">{{ $violation->name }} ({{ $violation->score }} poin)</option>
+                                @endforeach
+                            </select>
+                            <button data-index="0" class="btn-del-violation del-choices text-danger">&times;</button>
+                        </div>
+                    </div>
+                    <button type="button" class="bg-transparent border-0 d-flex align-items-center gap-2" id="btn_add_violation">
+                        <div class="bg-success rounded-circle text-white fw-bold" style="padding: 0px 7px">+</div>
+                        <div class="text-muted">tambah pelanggaran</div>
+                    </button>
                     @error('violation_type_id')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
@@ -87,16 +96,16 @@
             .choices[data-type*=select-one] .choices__inner {
                 padding-bottom: 2.5px;
             }
-            .siswa-input {
+            .choices-multiple-input {
                 position: relative
             }
-            #siswa_group .choices::after {
+            .choices-group .choices::after {
                 display: none;
             }
             .choices {
                 margin: 0
             }
-            .btn-del-siswa {
+            .del-choices {
                 background-color: transparent;
                 border: 0;
                 position: absolute;
@@ -106,7 +115,7 @@
                 font-weight: bold;
                 font-size: 1.5rem;
             }
-            #siswa_group .siswa-input:only-child .btn-del-siswa {
+            .choices-group .choices-multiple-input:only-child .del-choices {
                 display: none
             }
         </style>
@@ -140,9 +149,16 @@
         <script>
 
             const siswas = @json($users);
+            const violations = @json($violation_types)
+
             var siswa_lists = `<option value="" disabled selected>-- pilih siswa --</option>`;
             siswas.forEach((siswa) => {
                 siswa_lists += `<option value="${siswa.id}">${siswa.full_name} | ${siswa.nisn} | ${siswa.gender} | ${siswa.nama_rombel}</option>`;
+            })
+
+            var violation_lists = `<option value="" selected>-- pilih pelanggaran --</option>`;
+            violations.forEach((violation) => {
+                violation_lists += `<option value="${ violation.id }">${ violation.name } (${ violation.score } poin)</option>`
             })
 
             $(function() {
@@ -151,19 +167,39 @@
                     var new_index = last_index+1
                     
                     let new_select = `<select class="form-select choices-${new_index}" name="student_id[]">${siswa_lists}</select>`
-                    let new_siswa_input = `<div class="siswa-input w-100" data-index="${new_index}">
+                    let new_siswa_input = `<div class="siswa-input choices-multiple-input w-100" data-index="${new_index}">
                         ${new_select}
-                        <button data-index="${new_index}" class="btn-del-siswa text-danger">&times;</button>
+                        <button data-index="${new_index}" class="del-choices btn-del-siswa text-danger">&times;</button>
                         </div>`
                             
                     $('#siswa_group').append(new_siswa_input)
                     setToChoices('select.choices-'+new_index)
+                })
+
+                $('#btn_add_violation').on('click', function() {
+                    var last_index = parseInt($('#violation_group').children().last().attr('data-index'))
+                    var new_index = last_index+1
+                    
+                    let new_select = `<select class="form-select violation-choices-${new_index}" name="violation_type_id[]">${violation_lists}</select>`
+                    let new_siswa_input = `<div class="violation_input choices-multiple-input" data-index="${new_index}">
+                        ${new_select}
+                        <button data-index="${new_index}" class="del-choices btn-del-violation text-danger">&times;</button>
+                        </div>`
+                            
+                    $('#violation_group').append(new_siswa_input)
+                    setToChoices('select.violation-choices-'+new_index)
                 })
                 
                 $(document).on('click', '.btn-del-siswa', function() {
                     var data_index = $(this).attr('data-index')
 
                     $(`.siswa-input[data-index=${data_index}]`).remove()
+                })
+
+                $(document).on('click', '.btn-del-violation', function() {
+                    var data_index = $(this).attr('data-index')
+
+                    $(`.violation_input[data-index=${data_index}]`).remove()
                 })
             })
         </script>
