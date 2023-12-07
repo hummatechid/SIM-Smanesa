@@ -229,4 +229,9 @@ class BaseRepository implements RepositoryInterface {
             return $this->model->with($relations)->whereNull("deleted_at")->whereDate("created_at",$date)->get(); 
         } 
     }
+
+    public function getYearFirstData()
+    {
+        return $this->model->selectRaw('YEAR(created_at) as year')->orderBy('created_at', 'asc')->first();
+    }
 }

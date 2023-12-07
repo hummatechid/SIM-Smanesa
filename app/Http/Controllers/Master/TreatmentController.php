@@ -23,7 +23,17 @@ class TreatmentController extends Controller
      */
     public function index()
     {
-        $dataPage = $this->treatmentService->getPageData();
+        $f_year = $this->treatmentRepository->getYearFirstData();
+        $years = [];
+
+        for($i = $f_year->year; $i <= date('Y'); $i++) $years[] = $i;
+
+        $date_data = [
+            'years' => $years,
+            'months' => $this->months
+        ];
+
+        $dataPage = $this->treatmentService->getPageData(null, '', $date_data);
 
         return view('admin.pages.master-data.treatment.index', $dataPage);
     }

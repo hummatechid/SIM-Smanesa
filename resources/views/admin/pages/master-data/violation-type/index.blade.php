@@ -57,14 +57,18 @@
                     <div class="form-group">
                         <label for="year">Tahun :</label>
                         <select name="year" id="year" class="form-select choices">
-                            <option value="2023">2023</option>
+                            @foreach ($years as $year)
+                            <option value="{{ $year }}">{{ $year }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="month">Bulan :</label>
                         <select name="month" id="month" class="form-select choices">
                             <option value="" selected>-- Pilih Bulan --</option>
-                            <option value="1">Januari</option>
+                            @foreach($months as $month_num => $month)
+                            <option value="{{ $month_num }}">{{ $month }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
