@@ -47,6 +47,8 @@
                 </h5>
                 @if($dataAddUrl && $dataAddType == "new_page")
                 <a href="{{ $dataAddUrl }}" class="btn btn-primary">+Tambah</a>
+                @elseif($dataAddType == "custom-btn")
+                {!! $dataAddBtn !!}
                 @elseif($dataAddUrl && $dataAddType == "modal")
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-add-new-data">+Tambah</button>
                 @endif
