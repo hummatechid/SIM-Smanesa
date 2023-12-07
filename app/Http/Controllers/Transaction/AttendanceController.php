@@ -35,6 +35,14 @@ class AttendanceController extends Controller
         return view('admin.pages.attendance.index', $data);
     }
 
+    public function presence()
+    {
+        $students = $this->studentRepository->getAll();
+
+        $data = $this->attendanceService->getPageData('attendance-manage', '', ['students' => $students]);
+        return view('admin.pages.attendance.presence', $data);
+    }
+
     public function getDatatablesData()
     {
         $data = $this->attendanceRepository->getTodayAttendance();
@@ -52,6 +60,31 @@ class AttendanceController extends Controller
                 } else {
                     return '<span class="badge bg-danger">Terlambat</span>';
                 } 
+            })
+            ->rawColumns(['status'])
+            ->make(true);
+    }
+    
+    public function getDatatablesPermit()
+    {
+        $data = $this->attendanceRepository->getTodayAbsent();
+
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->addColumn('student', function($item) {
+                return $item->student->full_name;
+            })->addColumn('status', function($item) {
+                if($item->status == "permit") {
+                    return '<span class="badge bg-primary">Izin</span>';
+                } else {
+                    return '<span class="badge bg-danger">Absen</span>';
+                } 
+            })->addColumn('action', function($item) {
+                if($item->status == "permit") {
+                    return view('admin.pages.attendance.datatable-presence', ['item' => $item]);
+                } else {
+                    return "-";
+                }
             })
             ->rawColumns(['status'])
             ->make(true);

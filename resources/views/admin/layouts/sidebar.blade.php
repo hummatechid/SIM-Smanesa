@@ -161,7 +161,7 @@
 
                         </li>
                         <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'attendance-manage' ? 'active' : '' }}">
-                            <a href="{{ url('attendance') }}" class="submenu-link">Manajemen Presensi</a>
+                            <a href="{{ url('attendance/presence') }}" class="submenu-link">Manajemen Presensi</a>
 
                         </li>
 

@@ -39,4 +39,9 @@ class AttendanceRepository extends BaseRepository {
     {
         return $this->model->whereDate('created_at', '=', today())->whereIn('status', ['present', 'late'])->get();
     }
+
+    public function getTodayAbsent(): Object
+    {
+        return $this->model->whereDate('created_at', '=', today())->whereIn('status', ['permit'])->get();
+    }
 }

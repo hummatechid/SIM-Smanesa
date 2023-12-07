@@ -19,49 +19,26 @@
         </div>
     </div>
 
-    <div class="row mb-3">
-        <div class="col-lg-3 col-sm-6 col-12 mb-2">
-            <div class="card bg-success mb-0">
-                <div class="border-white card-header border-bottom m-0 p-2 fw-bold bg-success text-center text-white">Tepat Waktu</div>
-                <div class="card-body m-0 p-3 lead fs-5 text-center text-white">{{ $count_attendance->present }}</div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-sm-6 col-12 mb-2">
-            <div class="card bg-primary mb-0">
-                <div class="border-white card-header border-bottom m-0 p-2 fw-bold bg-primary text-center text-white">Terlambat</div>
-                <div class="card-body m-0 p-3 lead fs-5 text-center text-white">{{ $count_attendance->late }}</div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-sm-6 col-12 mb-2">
-            <div class="card bg-secondary mb-0">
-                <div class="border-white card-header border-bottom m-0 p-2 fw-bold bg-secondary text-center text-white">Izin</div>
-                <div class="card-body m-0 p-3 lead fs-5 text-center text-white">{{ $count_attendance->permit }}</div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-sm-6 col-12 mb-2">
-            <div class="card bg-danger mb-0">
-                <div class="border-white card-header border-bottom m-0 p-2 fw-bold bg-danger text-center text-white">Tanpa Keterangan</div>
-                <div class="card-body m-0 p-3 lead fs-5 text-center text-white">{{ $count_attendance->absent }}</div>
-            </div>
-        </div>
-    </div>
-
     @php
-        $data_column = ["student" => "Siswa", "present_at" => "Waktu Kehadiran", "status" => "Status"];
+        $data_column = ["student" => "Siswa", "status" => "Status", "action" => "Aksi"];
     @endphp
     <x-datatable
-        card-title="Tabel Data Kehadiran"
-        data-url="{{ route('attendance.get-main-datatables') }}"
+        card-title="Tabel Data Izin / Sakit"
+        data-url="{{ route('attendance.get-permit-datatables') }}"
         :table-columns="$data_column"
         default-order="2"
         arrange-order="desc"
+        delete-option="attendance/presence/deleted_id?status=absent"
+        data-add-type="custom-btn"
+        data-add-btn='<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-add-permit">+ Tambah izin</button>'
     />
 
 </div>
 
 <div class="modal modal-lg fade" id="modal-add-permit">
     <div class="modal-dialog">
-        <form action="" class="modal-content">
+        <form action="{{ route('attendance.presence.create-permit') }}" class="modal-content" method="POST">
+            @csrf
             <div class="modal-header">
                 <h4 class="m-0">Tambah Siswa Izin</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
