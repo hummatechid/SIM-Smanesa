@@ -75,7 +75,10 @@ class PermitController extends Controller
 
         try{
             // store data 
-            $this->permitRepository->create($validateData);
+            foreach($request->studnet_id as $student_id){
+                $validateData["student_id"] = $student_id;
+                $this->permitRepository->create($validateData);
+            }
 
             return redirect()->route('permit.index')->with('success', "Berhasil membuat surat izin");
         }catch(\Throwable $th){
