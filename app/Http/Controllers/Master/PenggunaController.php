@@ -11,23 +11,26 @@ use App\Repositories\UserRepository;
 use App\Repositories\RoleRepository;
 use Illuminate\Http\Request;
 use App\Services\MasterData\PenggunaService;
+use App\Services\UserService;
 use Illuminate\Support\Facades\DB;
 
 class PenggunaController extends Controller
 {
     use UploadImage;
 
-    private $penggunaService;
+    private $penggunaService, $userService;
     private $penggunaRepository, $userRepository, $roleRepository;
 
     public function __construct(
         PenggunaService $penggunaService,
+        UserService $userService,
         PenggunaRepository $penggunaRepository,
         UserRepository $userRepository,
         RoleRepository $roleRepository
     )
     {
         $this->penggunaService = $penggunaService;
+        $this->userService = $userService;
         $this->penggunaRepository = $penggunaRepository;
         $this->userRepository = $userRepository;
         $this->roleRepository = $roleRepository;
@@ -208,6 +211,31 @@ class PenggunaController extends Controller
             'data_role' => $data_role
         ]);
         return view('admin.pages.master-data.user.edit-password', $data);
+    }
+
+    /**
+     * Method PATCH for update password.
+     */
+    public function updatePassword(Request $request, string $id)
+    {
+        $teacher = $this->penggunaRepository->getOneById($id);
+
+        $update = $this->userService->changePassword(
+            $teacher->user_id,
+            $request->password,
+            $request->old_password,
+            $request->password_confirmation
+        );
+
+        if($request->type == "api"){
+            return response()->json($update);
+        } else {
+            if($update["success"] == true){
+                return redirect()->route('teacher.show', $id)->with("success", $update["message"]);
+            } else {
+                return redirect()->back()->with("error", $update["message"]);
+            }
+        }
     }
 
     /**

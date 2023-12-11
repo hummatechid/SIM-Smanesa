@@ -43,6 +43,16 @@ Route::middleware('custom.sanctum')->group(function () {
     });
 
     // student api
+    Route::prefix('teacher')->name('teacher.')->group(function (){
+        Route::patch('/{id}/update-password', [TeacherController::class, 'updatePassword'])->name('updatePassword');
+    });
+
+    // pengguna api
+    Route::prefix('user')->name('user.')->group(function (){
+        Route::patch('{id}/update-password', [PenggunaController::class, 'updatePassword'])->name('updatePassword');
+    });
+
+    // student api
     Route::prefix('student')->name('student.')->group(function (){
         Route::get('/many-data', [StudentController::class, 'detailManyStudent'])->name('detail.many');
         Route::get('/one-data/{id}', [StudentController::class, 'detailOneStudent'])->name('detail.one');

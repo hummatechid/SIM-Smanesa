@@ -11,23 +11,26 @@ use App\Repositories\UserRepository;
 use App\Repositories\RoleRepository;
 use Illuminate\Http\Request;
 use App\Services\MasterData\TeacherService;
+use App\Services\UserService;
 use Illuminate\Support\Facades\DB;
 
 class TeacherController extends Controller
 {
     use UploadImage;
 
-    private $teacherService;
+    private $teacherService, $userService;
     private $teacherRepository, $userRepository, $roleRepository;
 
     public function __construct(
         TeacherService $teacherService,
+        UserService $userService,
         TeacherRepository $teacherRepository,
         UserRepository $userRepository,
         RoleRepository $roleRepository
     )
     {
         $this->teacherService = $teacherService;
+        $this->userService = $userService;
         $this->teacherRepository = $teacherRepository;
         $this->userRepository = $userRepository;
         $this->roleRepository = $roleRepository;
@@ -150,15 +153,6 @@ class TeacherController extends Controller
 
         if(!$pengguna) return redirect()->back()->with('error', 'Teacher tidak ditemukan');
 
-        // check if user want change password
-        if($userRequest->password){
-            $userRequest->validate([
-                'password' => 'confirmed' 
-            ],[
-                'password.confirmed' => 'Password konfirmasi tidak sama.'
-            ]);
-        }
-
         try {
             DB::beginTransaction();
 
@@ -177,7 +171,6 @@ class TeacherController extends Controller
             $this->teacherRepository->update($id, $validateDataPengguna);
 
             // store data user
-            if($userRequest->password) $validateDataUser["password"] = bcrypt($userRequest->password); 
             $user = $this->userRepository->update($pengguna->user_id, $validateDataUser);
 
             DB::commit();
@@ -200,6 +193,31 @@ class TeacherController extends Controller
             'data_role' => $data_role
         ]);
         return view('admin.pages.master-data.teacher.edit-password', $data);
+    }
+
+    /**
+     * Method PATCH for update password.
+     */
+    public function updatePassword(Request $request, string $id)
+    {
+        $teacher = $this->teacherRepository->getOneById($id);
+
+        $update = $this->userService->changePassword(
+            $teacher->user_id,
+            $request->password,
+            $request->old_password,
+            $request->password_confirmation
+        );
+
+        if($request->type == "api"){
+            return response()->json($update);
+        } else {
+            if($update["success"] == true){
+                return redirect()->route('teacher.show', $id)->with("success", $update["message"]);
+            } else {
+                return redirect()->back()->with("error", $update["message"]);
+            }
+        }
     }
 
 
