@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="card-body">
-            <x-session-alert/>
+            <x-session-alert :is-swal="true" />
             <div class="form-horizontal">
                 <div class="form-body">
                     <div class="row">

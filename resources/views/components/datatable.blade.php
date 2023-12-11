@@ -74,7 +74,7 @@
             <div id="alert-delete"></div>
             @endif
             <div class="table-responsive datatable-minimal">
-                <table class="table w-100" id="{{ isset($tableId) && $tableId ? $tableId : 'table' }}">
+                <table class="table w-100" id="{{ $tableId }}">
                 </table>
             </div>
         </div>
@@ -91,9 +91,7 @@
 <script src=" https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js "></script>
 
 <script>
-    const table_id = "{{ isset($tableId) && $tableId ? $tableId : 'table' }}"
-
-    let jquery_datatable = $("#"+table_id).DataTable({
+    let {{ $tableId }} = $('#{{ $tableId }}').DataTable({
         processing: true,
         serverSide: true,
         paging: true,
@@ -138,7 +136,7 @@
 
     @foreach($withCustomGroups as $name => $props)
     $("#group_{{ $name }}").on('change', function() {
-        jquery_datatable.ajax.reload()
+        {{ $tableId }}.ajax.reload()
     })
     @endforeach
 </script>
@@ -178,7 +176,7 @@
                                 $(this).slideUp(300); 
                             });
                         }, 5000);
-                        $('#'+table_id).DataTable().ajax.reload();
+                        $('#{{ $tableId }}').DataTable().ajax.reload();
                     }
                 });
             }

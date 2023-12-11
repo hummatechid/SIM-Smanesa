@@ -11,7 +11,7 @@ class Datatable extends Component {
         public string $cardTitle, 
         public string $dataUrl, 
         public array $tableColumns,
-        public string|null $tableId = null,
+        public string $tableId = 'table',
         public int $defaultOrder = 1,
         public string $arrangeOrder = 'asc',
         public string|null $dataAddUrl = null,

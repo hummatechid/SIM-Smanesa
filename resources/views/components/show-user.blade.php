@@ -38,7 +38,7 @@
                 </div>
                 @endif
                 <div class="card-body">
-                    <x-session-alert/>
+                    <x-session-alert :is-swal="true" />
                     <table class="table mb-0 mt-3">
                         @if($formFor != 'guru')
                         <tr>
