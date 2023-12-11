@@ -193,7 +193,7 @@ class BaseRepository implements RepositoryInterface {
         }
     }
 
-    public function oneConditionOneRelation(string $column, string $value, string $relation, string $method = 'get')
+    public function oneConditionOneRelation(string $column, string $value, array $relation, string $method = 'get')
     {
         switch($method) {
             case 'first' :
@@ -233,5 +233,10 @@ class BaseRepository implements RepositoryInterface {
     public function getYearFirstData()
     {
         return $this->model->selectRaw('YEAR(created_at) as year')->orderBy('created_at', 'asc')->first();
+    }
+
+    public function limitOrderBy(string $column, string $sort, int $limit, array $relation = [])
+    {
+        return $this->model->with($relation)->orderBy($column, $sort)->limit($limit);
     }
 }

@@ -172,4 +172,26 @@ class AttendanceController extends Controller
             "data" => $data
         ]);
     }
+
+    /**
+     * Api get list new presence
+     * METHOD @GET
+     */
+    public function newAttendences(Request $request)
+    {
+        if($request->limit) $limit = $request->limit;
+        else $limit = 10;
+
+        if($request->status){
+            $data = $this->attendanceRepository->oneConditionOneRelation('status',$request->status,["student"]);   
+            $data = collect($data)->sortByDesc("present_at")->take($limit); 
+        } else {
+            $data = $this->attendanceRepository->limitOrderBy('present_at',"desc",$limit,["student"]);   
+        }
+
+        return response()->json([
+            "message" => "Berhasil menmapilkan data",
+            "data" => $data
+        ]);
+    }
 }

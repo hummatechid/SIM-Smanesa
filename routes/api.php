@@ -68,6 +68,7 @@ Route::middleware('custom.sanctum')->group(function () {
     // attendence api
     Route::prefix('attendance')->name('attendance.')->group(function (){
         Route::get('/', [AttendanceController::class, 'listAttendences'])->name('list');
+        Route::get('/new-attendance', [AttendanceController::class, 'newAttendences'])->name('new-list');
     });
 });
 
