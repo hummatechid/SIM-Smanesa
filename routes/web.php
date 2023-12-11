@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth'])->group(function () {
     Route::get('/', function () {
         return view('admin.pages.blank.index');
-    });
+    })->name('dashboard');
 });
 
 Route::get('landing', function() {
