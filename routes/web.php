@@ -21,6 +21,10 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
+Route::get('landing', function() {
+    return view('admin.pages.blank.landing-page');
+});
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
