@@ -3,16 +3,17 @@
 namespace App\Http\Controllers\Transaction;
 
 use App\Http\Controllers\Controller;
-use App\Services\ViolationService;
 use App\Repositories\{StudentRepository, ViolationTypeRepository};
 use App\Repositories\MasterTransaction\ViolationRepository;
+use App\Services\MasterTransaction\ViolationService;
 use Illuminate\Http\Request;
 
 class ViolationController extends Controller
 {
     private $violationService, $studentRepository, $violationTypeRepository, $violationRepository;
 
-    public function __construct(ViolationService $violationService,
+    public function __construct(
+        ViolationService $violationService,
         StudentRepository $studentRepository,
         ViolationTypeRepository $violationTypeRepository,
         ViolationRepository $violationRepository
@@ -216,6 +217,25 @@ class ViolationController extends Controller
         return response()->json([
             "message" => "Berhasil menampilkan data statistik",
             "data" => $data
+        ], 200);
+    }
+
+    /**
+     * Api get data student much violation
+     * METHOD: GET
+     */
+    public function listMustStudent(Request $request)
+    {
+        $data = $this->violationRepository->relationship(["student"]);
+
+        if($request->limit) $limit = intval($request->limit);
+        else $limit = 0;
+
+        $result = $this->violationService->getDataGroupStudent($data, "desc", $limit);
+        
+        return response()->json([
+            "message" => "Berhasil mengambil data",
+            "data" => $result
         ], 200);
     }
 }
