@@ -40,7 +40,7 @@ trait CallMonth {
         return $month;
     }
 
-    public function daterPerMonth(int $month, int $year): int
+    public function datePerMonth(int $month, int $year): int
     {
         return cal_days_in_month(CAL_GREGORIAN, $month, $year);
     }

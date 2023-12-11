@@ -210,7 +210,7 @@ class ViolationController extends Controller
 
                 return $student && $violation;
             });
-            $data = $this->violationService->getDataStatistikMonth($data);
+            $data = $this->violationService->getDataStatistikMonth($data, (int)$request->month, $year);
         }
 
         return response()->json([

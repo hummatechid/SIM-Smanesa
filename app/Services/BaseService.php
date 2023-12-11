@@ -33,32 +33,38 @@ class BaseService {
 
     public function getDataStatistikYear(array|object $data): array | object
     {
-            
         $result = [];
+            
+        // Initialize $result array with counts for all 12 months
+        foreach (range(1, 12) as $month) {
+            $result[$this->fullMonth($month)] = 0;
+        }
+
         $data = collect($data)->map(function ($item) use (&$result) {
             // get date
             $date = explode("T", $item->created_at);
-    
+
             // get month
             $month = (int)explode("-", $date[0])[1];
-    
+
             // Increment the total value for the month
-            if (!isset($result[$this->fullMonth($month)])) {
-                $result[$this->fullMonth($month)] = 0;
-            }
-    
             $result[$this->fullMonth($month)] += 1;
-    
+
             return $result;
         });
-    
+
         return $result;
     }
 
-    public function getDataStatistikMonth(array|object $data): array | object
+    public function getDataStatistikMonth(array|object $data, int $month, int $year): array | object
     {
         
         $result = [];
+
+        // Initialize $result array with counts for all date in months
+        foreach (range(1, $this->datePerMonth($month, $year)) as $date) {
+            $result[$date] = 0;
+        }
 
         $data = collect($data)->map(function ($item) use (&$result) {
             // get date
