@@ -194,4 +194,37 @@ class AttendanceController extends Controller
             "data" => $data
         ]);
     }
+
+    /**
+     * Api get list new presence
+     * METHOD @GET
+     */
+    public function studentLateAttendances(Request $request)
+    {
+        // if limit
+        if($request->limit) $limit = $request->limit;
+        else $limit = 0;
+        
+        // if have status validation
+        if($request->status) $status = $request->status;
+        else $status = "masuk";
+        
+        // if have status validation
+        if($request->time) $time = $request->time;
+        else $time = "07:00";
+
+        // date now
+        $now = date('Y-m-d');
+
+        // get data
+        $data = $this->attendanceRepository->getDataDate($now, ["student"]);
+
+        // filter data
+        $result = $this->attendanceService->studentLate($data, $limit, $status, $time);
+
+        return response()->json([
+            "message" => "Berhasil menmapilkan data",
+            "data" => $result
+        ]);
+    }
 }
