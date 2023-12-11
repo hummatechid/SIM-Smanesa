@@ -60,4 +60,63 @@
     />
 
 </div>
+
+<div class="modal fade" id="modal-edit-data" tabindex="-1">
+    <div class="modal-dialog">
+        <form action="" class="modal-content" id="form-edit" method="POST">
+            @csrf
+            @method('put')
+            <div class="modal-header">
+                <h5 class="modal-title">Ubah Data</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group mb-3">
+                    <label for="category" class="form-label">Kategori<span class="text-danger">*</span></label>
+                    <select name="category" id="category" class="form-select" required>
+                        <option value="Pelanggaran ringan">Pelanggaran Ringan</option>
+                        <option value="Pelanggaran sedang">Pelanggaran Sedang</option>
+                        <option value="Pelanggaran berat">Pelanggaran Berat</option>
+                    </select>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="min_score" class="form-label">Skor Minimum <span class="text-danger">*</span></label>
+                    <input type="number" name="min_score" id="min_score" min="1" max="999" class="form-control" placeholder="Skor Minimum" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="max_score" class="form-label">Skor Maksimum <span class="text-danger">*</span></label>
+                    <input type="number" name="max_score" id="max_score" min="1" max="999" class="form-control" placeholder="Skor Maximum" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="action" class="form-label">Tindakan <span class="text-danger">*</span></label>
+                    <input type="text" name="action" id="action" class="form-control" placeholder="Pelanggaran" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                <button type="submit" class="btn btn-primary">Ubah</button>
+            </div>
+        </form>
+    </div>
+</div>
 @endsection
+
+@push('custom-script')
+<script>
+    $(document).on('click', '.edit-data', function() {
+        var data = $(this).data('data')
+        var base_edit_url = "{{ route('treatment.update', 'violation_id') }}"
+        var real_url = base_edit_url.replace('violation_id', data.id)
+
+        $('#form-edit').attr('action', real_url)
+        $('#form-edit #min_score').val(data.min_score)
+        $('#form-edit #max_score').val(data.max_score)
+        $('#form-edit #action').val(data.action)
+
+        $('#form-edit #category option').each((index, el) => {
+            if(data.category == el.value) el.setAttribute('selected', true)
+            else el.removeAttribute('selected')
+        })
+    })
+</script>
+@endpush

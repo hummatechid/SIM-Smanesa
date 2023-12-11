@@ -12,27 +12,21 @@
                 <div class="modal-body">
                     @if(isset($dataAddSettings))
                     @foreach($dataAddSettings as $key => $data)
-                    @if($data['type'] == "select")
                     <div class="form-group mb-3">
-                        <label for="{{ $key }}">{{ $data['title'] }}</label>
+                        <label for="{{ $key }}">{{ $data['title'] }} @if(in_array('required', $data['attr'])) <span class="text-danger">*</span>@endif</label>
+                        @if($data['type'] == "select")
                         <select name="{{ $key }}" id="{{ $key }}" class="form-select"  @foreach($data['attr'] as $attr => $value) {{ $attr.'='.$value }} @endforeach>
                             @if(isset($data['first_option'])) <option value="" selected disabled>{{ $data['first_option'] }}</option> @endif
                             @foreach($data['options'] as $value => $title)
                             <option value="{{ $value }}">{{ $title }}</option>
                             @endforeach
                         </select>
-                    </div>
-                    @elseif($data['type'] == "textarea")
-                    <div class="form-group mb-3">
-                        <label for="{{ $key }}">{{ $data['title'] }}</label>
+                        @elseif($data['type'] == "textarea")
                         <textarea name="{{ $key }}" id="{{ $key }}" class="form-control" placeholder="{{ $data['title'] }}" @foreach($data['attr'] as $attr => $value) {{ $attr.'='.$value }} @endforeach></textarea>
-                    </div>
-                    @else
-                    <div class="form-group mb-3">
-                        <label for="{{ $key }}">{{ $data['title'] }}</label>
+                        @else
                         <input type="{{ $data['type'] }}" class="form-control" name="{{ $key }}" placeholder="{{ $data['title'] }}" @foreach($data['attr'] as $attr => $value) {{ $attr.'='.$value }} @endforeach>
+                        @endif
                     </div>
-                    @endif
                     @endforeach
                     @endif
                 </div>
@@ -53,6 +47,8 @@
                 </h5>
                 @if($dataAddUrl && $dataAddType == "new_page")
                 <a href="{{ $dataAddUrl }}" class="btn btn-primary">+Tambah</a>
+                @elseif($dataAddType == "custom-btn")
+                {!! $dataAddBtn !!}
                 @elseif($dataAddUrl && $dataAddType == "modal")
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-add-new-data">+Tambah</button>
                 @endif

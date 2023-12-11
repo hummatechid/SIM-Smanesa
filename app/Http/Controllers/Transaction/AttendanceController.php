@@ -4,17 +4,20 @@ namespace App\Http\Controllers\Transaction;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\MasterTransaction\AttendanceRepository;
+use App\Repositories\StudentRepository;
 use Illuminate\Http\Request;
 use App\Services\MasterTransaction\AttendanceService;
+use Yajra\DataTables\Facades\DataTables;
 
 class AttendanceController extends Controller
 {
-    private $attendanceRepository, $attendanceService;
+    private $attendanceRepository, $attendanceService, $studentRepository;
 
-    public function __construct(AttendanceService $attendanceService, AttendanceRepository $attendanceRepository)
+    public function __construct(AttendanceService $attendanceService, AttendanceRepository $attendanceRepository, StudentRepository $studentRepository)
     {
         $this->attendanceService = $attendanceService;
         $this->attendanceRepository = $attendanceRepository;
+        $this->studentRepository = $studentRepository;
     }
 
     /**
@@ -22,8 +25,69 @@ class AttendanceController extends Controller
      */
     public function index()
     {
-        $data = $this->attendanceService->getPageData('attendance-overview', '');
+        $today_attendance = $this->attendanceRepository->getTodayCountAttendance();
+        $students = $this->studentRepository->getAll();
+
+        $data = $this->attendanceService->getPageData('attendance-overview', '', [
+            'count_attendance' => $today_attendance,
+            'students' => $students
+        ]);
         return view('admin.pages.attendance.index', $data);
+    }
+
+    public function presence()
+    {
+        $students = $this->studentRepository->getAll();
+
+        $data = $this->attendanceService->getPageData('attendance-manage', '', ['students' => $students]);
+        return view('admin.pages.attendance.presence', $data);
+    }
+
+    public function getDatatablesData()
+    {
+        $data = $this->attendanceRepository->getTodayAttendance();
+
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->addColumn('student', function($item) {
+                return $item->student->full_name;
+            })->addColumn('present_at', function($item) {
+                return $item->present_at->format('h:i');
+            })->addColumn('status', function($item) {
+                // return $item->status;
+                if($item->status == "present") {
+                    return '<span class="badge bg-success">Tepat Waktu</span>';
+                } else {
+                    return '<span class="badge bg-danger">Terlambat</span>';
+                } 
+            })
+            ->rawColumns(['status'])
+            ->make(true);
+    }
+    
+    public function getDatatablesPermit()
+    {
+        $data = $this->attendanceRepository->getTodayAbsent();
+
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->addColumn('student', function($item) {
+                return $item->student->full_name;
+            })->addColumn('status', function($item) {
+                if($item->status == "permit") {
+                    return '<span class="badge bg-primary">Izin</span>';
+                } else {
+                    return '<span class="badge bg-danger">Absen</span>';
+                } 
+            })->addColumn('action', function($item) {
+                if($item->status == "permit") {
+                    return view('admin.pages.attendance.datatable-presence', ['item' => $item]);
+                } else {
+                    return "-";
+                }
+            })
+            ->rawColumns(['status'])
+            ->make(true);
     }
 
     /**

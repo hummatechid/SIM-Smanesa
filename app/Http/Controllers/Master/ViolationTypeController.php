@@ -24,7 +24,14 @@ class ViolationTypeController extends Controller
      */
     public function index()
     {
-        $dataPage = $this->violationTypeService->getPageData();
+        $f_year = $this->violationTypeModel->getYearFirstData();
+        $years = [];
+        for($i = $f_year->year; $i <= date('Y'); $i++) $years[] = $i;
+
+        $dataPage = $this->violationTypeService->getPageData(null, "", [
+            'years' => $years,
+            'months' => $this->months
+        ]);
 
         return view('admin.pages.master-data.violation-type.index', $dataPage);
     }
