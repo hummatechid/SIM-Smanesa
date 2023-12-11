@@ -69,6 +69,7 @@ Route::middleware('custom.sanctum')->group(function () {
     Route::prefix('attendance')->name('attendance.')->group(function (){
         Route::get('/', [AttendanceController::class, 'listAttendences'])->name('list');
         Route::get('/new-attendance', [AttendanceController::class, 'newAttendences'])->name('new-list');
+        Route::get('/late-attendance', [AttendanceController::class, 'studentLateAttendances'])->name('late-list');
     });
 });
 
