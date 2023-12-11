@@ -75,7 +75,7 @@ class PermitController extends Controller
 
         try{
             // store data 
-            foreach($request->studnet_id as $student_id){
+            foreach($request->student_id as $student_id){
                 $validateData["student_id"] = $student_id;
                 $this->permitRepository->create($validateData);
             }
