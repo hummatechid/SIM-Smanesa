@@ -75,7 +75,10 @@ class PermitController extends Controller
 
         try{
             // store data 
-            $this->permitRepository->create($validateData);
+            foreach($request->student_id as $student_id){
+                $validateData["student_id"] = $student_id;
+                $this->permitRepository->create($validateData);
+            }
 
             return redirect()->route('permit.index')->with('success', "Berhasil membuat surat izin");
         }catch(\Throwable $th){
@@ -315,6 +318,45 @@ class PermitController extends Controller
                 "status" => "success",
                 "messages" => "Berhasil memuat data surat izin",
                 "data" => $permit
+            ], 200);
+        }catch(\Throwable $th){
+            return response()->json([
+                "status" => "error",
+                "messages" => $th->getMessage(),
+                "data" => null
+            ], 500);
+        }
+    }
+
+    /**
+     * Api For Mobile
+     * Student detail list permit
+     *  
+     * */
+    public function studentList(Request $request)
+    { 
+        // get data student
+        $student = $this->studentRepository->getOneById($request->student_id);
+        if(!$student) {
+            return response()->json([
+                "status" => "error",
+                "messages" => "Siswa tidak ditemukan",
+                "data" => null
+            ], 404);
+        }
+
+        try{
+            
+            //set relationship get data permit
+            $relation = [];
+            $permit = $this->permitRepository->oneConditionOneRelation("student_id",$request->student_id, $relation, "get");
+            
+            $student->permit = $permit;
+
+            return response()->json([
+                "status" => "success",
+                "messages" => "Berhasil memuat data surat izin",
+                "data" => $student
             ], 200);
         }catch(\Throwable $th){
             return response()->json([

@@ -39,6 +39,7 @@ Route::middleware('custom.sanctum')->group(function () {
     Route::prefix('permit')->group(function (){
         Route::post('/', [PermitController::class, 'updateStatus']);
         Route::get('/list-today', [PermitController::class, 'listToday']);
+        Route::get('/list-student', [PermitController::class, 'studentList']);
         Route::get('/{id}', [PermitController::class, 'detailList']);
     });
 
