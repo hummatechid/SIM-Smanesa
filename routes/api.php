@@ -71,7 +71,7 @@ Route::middleware('custom.sanctum')->group(function () {
         Route::get('/', [AttendanceController::class, 'listAttendences'])->name('list');
         Route::get('/new-attendance', [AttendanceController::class, 'newAttendences'])->name('new-list');
         Route::get('/late-attendance', [AttendanceController::class, 'studentLateAttendances'])->name('late-list');
-        Route::get('/count-must-late', [AttendanceController::class, 'studentMustLateAttendances'])->name('must-late');
+        Route::get('/count-must-late', [AttendanceController::class, 'studentMustLate'])->name('must-late');
     });
 });
 
