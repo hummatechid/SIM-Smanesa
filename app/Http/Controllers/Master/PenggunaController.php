@@ -103,7 +103,7 @@ class PenggunaController extends Controller
             $user->assignRole($role->name);
 
             DB::commit();
-            return redirect()->route('pengguna.index')->with('success', "Data pengguna berhasil dibuat");
+            return redirect()->route('user.index')->with('success', "Data user berhasil dibuat");
         } catch(\Throwable $th){
             DB::rollBack();
             return redirect()->back()->with('error',$th->getMessage())->withInput();
@@ -151,21 +151,12 @@ class PenggunaController extends Controller
         // check has data or not
         $pengguna = $this->penggunaRepository->getOneById($id);
 
-        if(!$pengguna) return redirect()->back()->with('error', 'Pengguna tidak ditemukan')->withInput();
+        if(!$pengguna) return redirect()->back()->with('error', 'User tidak ditemukan')->withInput();
         
         // check role has been has or not
         $role = $this->userRepository->getRole('id',$userRequest->role_id);
 
         if(!$role) return redirect()->back()->with('error', 'Role tidak ditemukan')->withInput();
-
-        // check if user want change password
-        if($userRequest->password){
-            $userRequest->validate([
-                'password' => 'confirmed' 
-            ],[
-                'password.confirmed' => 'Password konfirmasi tidak sama.'
-            ]);
-        }
 
         try {
             DB::beginTransaction();
@@ -185,14 +176,13 @@ class PenggunaController extends Controller
             $this->penggunaRepository->update($id, $validateDataPengguna);
 
             // store data user
-            if($userRequest->password) $validateDataUser["password"] = bcrypt($userRequest->password); 
             $user = $this->userRepository->update($pengguna->user_id, $validateDataUser);
 
             // asign role user
             $user->assignRole($role->name);
 
             DB::commit();
-            return redirect()->route('pengguna.index')->with('success', "Data pengguna berhasil di rubah");
+            return redirect()->route('user.index')->with('success', "Data user berhasil di rubah");
         } catch(\Throwable $th){
             DB::rollBack();
             return redirect()->back()->with('error',$th->getMessage())->withInput();
@@ -249,7 +239,7 @@ class PenggunaController extends Controller
         if(!$pengguna) {
             return response()->json([
                 "success" => false,
-                "message" => "Data pengguna tidak ditemukan"
+                "message" => "Data user tidak ditemukan"
             ], 404);
         }
 
@@ -270,7 +260,7 @@ class PenggunaController extends Controller
             $this->userRepository->softDelete($user->id);
             return response()->json([
                 "success" => true,
-                "message" => "Pengguna berhasil di hapus"
+                "message" => "User berhasil di hapus"
             ], 201);
         } catch(\Throwable $th){
             return response()->json([
@@ -292,7 +282,7 @@ class PenggunaController extends Controller
         if(!$pengguna) {
             return response()->json([
                 "success" => false,
-                "message" => "Data pengguna tidak ditemukan"
+                "message" => "Data user tidak ditemukan"
             ], 404);
         }
 
@@ -315,7 +305,7 @@ class PenggunaController extends Controller
             $this->userRepository->delete($user->id);
             return response()->json([
                 "success" => true,
-                "message" => "Pengguna berhasil di hapus Permanent"
+                "message" => "User berhasil di hapus Permanent"
             ], 201);
         } catch(\Throwable $th){
             return response()->json([

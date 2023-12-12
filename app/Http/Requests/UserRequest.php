@@ -7,6 +7,7 @@ use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rule;
 
 class UserRequest extends FormRequest
@@ -43,7 +44,8 @@ class UserRequest extends FormRequest
             ];
         } else {
             // create rules
-            if($this->route('pengguna')){
+            $route = Route::current()->uri();
+            if($route == "user"){
                 return [
                     'email' => 'required|email|unique:users,email',
                     'role_id' => 'required',
