@@ -175,7 +175,12 @@ class BaseRepository implements RepositoryInterface {
         return $this->model->where($column, $value)->get();
     }
 
-    public function getWhereIn(string $column, array $arrayIn, bool $history = false) : object|null
+    public function getWhereIn(string $column, array $arrayIn) : object|null
+    {
+        return $this->model->whereNotNull("deleted_at")->whereIn($column, $arrayIn)->get();
+    }
+
+    public function getWhereInHistory(string $column, array $arrayIn, bool $history = false) : object|null
     {
         if($history == true){
             return $this->model->whereNotNull("deleted_at")->whereIn($column, $arrayIn)->get();
@@ -184,7 +189,12 @@ class BaseRepository implements RepositoryInterface {
         }
     }
 
-    public function getWhereNotIn(string $column, array $arrayNotIn, bool $history = false) : object|null
+    public function getWhereNotIn(string $column, array $arrayNotIn) : object|null
+    {
+        return $this->model->whereNotIn($column, $arrayNotIn)->get();
+    }
+
+    public function getWhereNotInHistory(string $column, array $arrayNotIn, bool $history = false) : object|null
     {
         if($history == true){
             return $this->model->whereNotNull("deleted_at")->whereNotIn($column, $arrayNotIn)->get();
