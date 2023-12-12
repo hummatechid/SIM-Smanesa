@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\Facades\DataTables;
 use App\Services\BaseService;
 use Carbon\Carbon;
+use stdClass;
 
 class ViolationService extends BaseService {
 
@@ -115,6 +116,23 @@ class ViolationService extends BaseService {
                 }
                 break;
         }
-        return $data;
+
+        // set result
+        $item_result = [];
+        foreach($data as $item){
+            $name = $item[0]->student->full_name;
+            $kelas = $item[0]->student->nama_rombel;
+            $poin = $item[0]->student->score;
+            $total = count($item);
+
+            $data = new stdClass();
+            $data->name = $name;
+            $data->kelas = $kelas;
+            $data->poin = $poin;
+            $data->total = $total;
+            $item_result[] = $data;
+        }
+        
+        return $item_result;
     }
 }

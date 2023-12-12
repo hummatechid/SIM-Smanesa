@@ -7,6 +7,8 @@ use App\Repositories\MasterTransaction\AttendanceRepository;
 use App\Repositories\StudentRepository;
 use Illuminate\Http\Request;
 use App\Services\MasterTransaction\AttendanceService;
+use Carbon\Carbon;
+use stdClass;
 use Yajra\DataTables\Facades\DataTables;
 
 class AttendanceController extends Controller
@@ -184,14 +186,28 @@ class AttendanceController extends Controller
 
         if($request->status){
             $data = $this->attendanceRepository->oneConditionOneRelation('status',$request->status,["student"]);   
-            $data = collect($data)->sortByDesc("present_at")->take($limit); 
+            $data = $data->sortByDesc("present_at")->take($limit); 
         } else {
             $data = $this->attendanceRepository->limitOrderBy('present_at',"desc",$limit,["student"]);   
         }
 
+        $result = [];
+        foreach($data as $item){
+            $name = $item->student->full_name;
+            $kelas = $item->student->nama_rombel;
+            $present = Carbon::parse($item->present_at)->format('H:m:s');
+            
+            // set response data
+            $item = new stdClass();
+            $item->name = $name;
+            $item->date = $present;
+            $item->kelas = $kelas;
+            $result[] = $item;
+        }
+
         return response()->json([
             "message" => "Berhasil menmapilkan data",
-            "data" => $data
+            "data" => $result
         ]);
     }
 
@@ -245,12 +261,12 @@ class AttendanceController extends Controller
         // if have status validation
         if($request->time) $time = $request->time;
         else $time = "07:00";
-        
-        // get data
-        $data = $this->attendanceRepository->relationship(["student"]);
 
+        // get data
+        $data = $this->attendanceRepository->oneNotNullConditionOneRelation("present_at",["student"]);
+        
         // filter data
-        $result = $this->attendanceService->studentLate($data, $limit, $status, $time);
+        $result = $this->attendanceService->studentMustLate($data, $limit, $status, $time);
 
         return response()->json([
             "message" => "Berhasil menmapilkan data",

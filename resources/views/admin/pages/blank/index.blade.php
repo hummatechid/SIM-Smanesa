@@ -48,7 +48,7 @@
         <div class="col-md-6 col-12">
             <x-datatable
                 card-title="Siswa Sering Terlambat"
-                data-url="{{ route('attendance.late-list') }}"
+                data-url="{{ route('attendance.must-late',).'?status=masuk' }}"
                 :table-columns="$data_late"
                 default-order="2"
                 arrange-order="desc"
@@ -58,7 +58,7 @@
         <div class="col-12">
             <x-datatable
                 card-title="Kehadiran Terbaru"
-                data-url="{{ route('attendance.new-list') }}"
+                data-url="{{ route('attendance.new-list',).'?status=masuk' }}"
                 :table-columns="$data_presence"
                 default-order="2"
                 arrange-order="desc"

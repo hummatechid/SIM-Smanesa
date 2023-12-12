@@ -213,6 +213,26 @@ class BaseRepository implements RepositoryInterface {
         }
     }
 
+    public function oneNullConditionOneRelation(string $column, array $relation, string $method = 'get')
+    {
+        switch($method) {
+            case 'first' :
+                return $this->model->whereNull($column)->with($relation)->first();
+            default :
+                return $this->model->whereNull($column)->with($relation)->get();
+        }
+    }
+
+    public function oneNotNullConditionOneRelation(string $column, array $relation, string $method = 'get')
+    {
+        switch($method) {
+            case 'first' :
+                return $this->model->whereNotNull($column)->with($relation)->first();
+            default :
+                return $this->model->whereNotNull($column)->with($relation)->get();
+        }
+    }
+
     public function getDataYears(int $year, array $relations = [], bool $history = false): object | null
     {
         if($history == true){

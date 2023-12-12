@@ -23,9 +23,9 @@ class HomeController extends Controller
     {
         $data = $this->homeService->getPageData("dashboard", "Dashboard", [
             "data" => $this->homeService->countCard(),
-            "data_violation" => ["Nama","Jumlah Poin","Jumlah Pelanggaran"],
-            "data_late" => ["Nama","Jumlah terlambat"],
-            "data_presence" => ["Nama","Jam Kehadiran"],
+            "data_violation" => ["name"=>"Nama","kelas" => "Kelas","poin" => "Total Point" ,"total"=>"Jumlah Pelanggaran"],
+            "data_late" => ["name"=>"Nama","kelas" => "Kelas","total"=>"Jumlah Keterlambatan"],
+            "data_presence" => ["name"=>"Nama","kelas" => "Kelas","date"=>"Jam Kehadiran"],
         ]);
 
         return view('admin.pages.blank.index', $data);

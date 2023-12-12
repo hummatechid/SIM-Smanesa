@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\Facades\DataTables;
 use App\Services\BaseService;
 use DateTime;
+use stdClass;
 
 class AttendanceService extends BaseService {
 
@@ -65,11 +66,11 @@ class AttendanceService extends BaseService {
                         // check present_at not null
                         if($item->present_at){
                             // Combine the date with the present time
-                            $presentDateTime = new DateTime($item->present_at);
+                            $presentDateTime = date('H:i',strtotime($item->present_at));
         
                             // Create a DateTime object for the target time
-                            $targetDateTime = DateTime::createFromFormat('H:i', $time);
-                            
+                            $targetDateTime = date('H:i', strtotime($time));
+
                             // check present_at greather than time
                             if($presentDateTime > $targetDateTime){
                                 return $item->status == $status;
@@ -82,11 +83,12 @@ class AttendanceService extends BaseService {
                     $result = collect($data)->filter(function($item) use ($status, $time){
                         // check present_at not null
                         if($item->present_at){
-                             // Combine the date with the present time
-                            $presentDateTime = new DateTime($item->present_at);
+                              // Combine the date with the present time
+                            $presentDateTime = date('H:i',strtotime($item->present_at));
         
                             // Create a DateTime object for the target time
-                            $targetDateTime = DateTime::createFromFormat('H:i', $time);
+                            $targetDateTime = date('H:i', strtotime($time));
+
                             // check present_at greather than time
                             if($presentDateTime > $targetDateTime){
                                 return $item->status == $status;
@@ -101,12 +103,12 @@ class AttendanceService extends BaseService {
                     $result = collect($data)->filter(function($item) use ($status, $time){
                         // check present_at not null
                         if($item->present_at){
-                            // Combine the date with the present time
-                            $presentDateTime = new DateTime($item->present_at);
+                             // Combine the date with the present time
+                            $presentDateTime = date('H:i',strtotime($item->present_at));
         
                             // Create a DateTime object for the target time
-                            $targetDateTime = DateTime::createFromFormat('H:i', $time);
-                            
+                            $targetDateTime = date('H:i', strtotime($time));
+
                             // check present_at greather than time
                             if($presentDateTime > $targetDateTime){
                                 return $item->status == $status;
@@ -119,11 +121,12 @@ class AttendanceService extends BaseService {
                     $result = collect($data)->filter(function($item) use ($status, $time){
                         // check present_at not null
                         if($item->present_at){
-                             // Combine the date with the present time
-                            $presentDateTime = new DateTime($item->present_at);
+                              // Combine the date with the present time
+                            $presentDateTime = date('H:i',strtotime($item->present_at));
         
                             // Create a DateTime object for the target time
-                            $targetDateTime = DateTime::createFromFormat('H:i', $time);
+                            $targetDateTime = date('H:i', strtotime($time));
+
                             // check present_at greather than time
                             if($presentDateTime > $targetDateTime){
                                 return $item->status == $status;
@@ -138,12 +141,12 @@ class AttendanceService extends BaseService {
                     $result = collect($data)->filter(function($item) use ($status, $time){
                         // check present_at not null
                         if($item->present_at){
-                            // Combine the date with the present time
-                            $presentDateTime = new DateTime($item->present_at);
+                             // Combine the date with the present time
+                            $presentDateTime = date('H:i',strtotime($item->present_at));
         
                             // Create a DateTime object for the target time
-                            $targetDateTime = DateTime::createFromFormat('H:i', $time);
-                            
+                            $targetDateTime = date('H:i', strtotime($time));
+
                             // check present_at greather than time
                             if($presentDateTime > $targetDateTime){
                                 return $item->status == $status;
@@ -156,11 +159,12 @@ class AttendanceService extends BaseService {
                     $result = collect($data)->filter(function($item) use ($status, $time){
                         // check present_at not null
                         if($item->present_at){
-                             // Combine the date with the present time
-                            $presentDateTime = new DateTime($item->present_at);
+                              // Combine the date with the present time
+                            $presentDateTime = date('H:i',strtotime($item->present_at));
         
                             // Create a DateTime object for the target time
-                            $targetDateTime = DateTime::createFromFormat('H:i', $time);
+                            $targetDateTime = date('H:i', strtotime($time));
+
                             // check present_at greather than time
                             if($presentDateTime > $targetDateTime){
                                 return $item->status == $status;
@@ -172,6 +176,20 @@ class AttendanceService extends BaseService {
                 }
         }
 
-        return $result;
+        // set result
+        $item_result = [];
+        foreach($result as $item){
+            $name = $item[0]->student->full_name;
+            $kelas = $item[0]->student->nama_rombel;
+            $total = count($item);
+
+            $result = new stdClass();
+            $result->name = $name;
+            $result->kelas = $kelas;
+            $result->total = $total;
+            $item_result[] = $result;
+        }
+
+        return $item_result;
     }
 }
