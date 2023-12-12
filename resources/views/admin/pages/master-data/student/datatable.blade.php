@@ -1,4 +1,3 @@
-<button class="btn btn-primary btn-detail" data-bs-toggle="modal"
-        data-bs-target="#exampleModalCenter" data-data="{{ $item }}">Detail</button>
+<a href="{{ route('student.show', $item->id) }}" class="btn btn-sm btn-primary">Detail</a>
 
 

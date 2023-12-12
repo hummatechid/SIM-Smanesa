@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('full_name');
             $table->enum('gender', ['Laki-laki', 'Perempuan']);
             $table->string('phone_number');
+            $table->string('home_phone_number')->nullable();
+            $table->string('image')->nullable();
             $table->string('address');
             $table->string('religion', 50);
             $table->string('nama_rombel');

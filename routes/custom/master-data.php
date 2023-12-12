@@ -48,6 +48,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('students')->name('student.')->group(function () {
         Route::get('get-main-data', [StudentController::class, 'getDatatablesData'])->name('get-main-datatables');
         Route::get('/', [StudentController::class, 'index'])->name('index');
+        Route::get('/{id}', [StudentController::class, 'show'])->name('show');
         Route::get('sync-students', [StudentController::class, 'syncStudents'])->name('sync');
     });
 });
