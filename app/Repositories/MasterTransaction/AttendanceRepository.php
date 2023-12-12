@@ -27,21 +27,21 @@ class AttendanceRepository extends BaseRepository {
     public function getTodayCountAttendance(): Object
     {
         $data = new stdClass();
-        $data->absent = $this->countByStatusToday('absent');
-        $data->present = $this->countByStatusToday('present');
-        $data->late = $this->countByStatusToday('late');
-        $data->permit= $this->countByStatusToday('permit');
+        $data->absent = $this->countByStatusToday('alpha');
+        $data->present = $this->countByStatusToday('masuk');
+        $data->sick = $this->countByStatusToday('sakit');
+        $data->permit= $this->countByStatusToday('izin');
 
         return $data;
     }
 
     public function getTodayAttendance(): Object
     {
-        return $this->model->whereDate('created_at', '=', today())->whereIn('status', ['present', 'late'])->get();
+        return $this->model->whereDate('created_at', '=', today())->whereIn('status', ['present'])->get();
     }
 
     public function getTodayAbsent(): Object
     {
-        return $this->model->whereDate('created_at', '=', today())->whereIn('status', ['permit'])->get();
+        return $this->model->whereDate('created_at', '=', today())->whereIn('status', ['izin', 'sakit', 'alpha'])->get();
     }
 }
