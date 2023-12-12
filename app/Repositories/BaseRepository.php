@@ -249,4 +249,21 @@ class BaseRepository implements RepositoryInterface {
     {
         return $this->model->with($relation)->orderBy($column, $sort)->limit($limit);
     }
+
+    // function for summary data
+    public function randomData(string $method, string $column = "id"): mixed
+    {
+        switch ($method) {
+            case 'first':
+                return $this->model->whereNull('deleted_at')->first();
+            case 'count':
+                return $this->model->whereNull('deleted_at')->count();
+            case 'summary':
+                return $this->model->whereNull('deleted_at')->sum($column);
+            case 'average':
+                return $this->model->whereNull('deleted_at')->avg($column);
+            default:
+                return $this->model->whereNull('deleted_at')->get();
+        }
+    }
 }

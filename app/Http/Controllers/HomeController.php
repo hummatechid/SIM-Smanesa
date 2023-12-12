@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\HomeService;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
-{
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+{   
+    private $homeService;
+
+    public function __construct(HomeService $homeService)
     {
-        $this->middleware('auth');
+        $this->homeService = $homeService;
     }
 
     /**
@@ -23,6 +21,13 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $data = $this->homeService->getPageData("dashboard", "Dashboard", [
+            "data" => $this->homeService->countCard(),
+            "data_violation" => ["Nama","Jumlah Poin","Jumlah Pelanggaran"],
+            "data_late" => ["Nama","Jumlah terlambat"],
+            "data_presence" => ["Nama","Jam Kehadiran"],
+        ]);
+
+        return view('admin.pages.blank.index', $data);
     }
 }
