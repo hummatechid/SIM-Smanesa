@@ -55,4 +55,123 @@ class AttendanceService extends BaseService {
 
         return $result;
     }
+
+    public function studentMustLate(array|object $data, int $limit = 0, string $status = "masuk", $time = "07:00", string $sort = "desc"): array|object
+    {
+        switch($sort){
+            case 'desc':
+                if($limit == 0){
+                    $result = collect($data)->filter(function($item) use ($status, $time){
+                        // check present_at not null
+                        if($item->present_at){
+                            // Combine the date with the present time
+                            $presentDateTime = new DateTime($item->present_at);
+        
+                            // Create a DateTime object for the target time
+                            $targetDateTime = DateTime::createFromFormat('H:i', $time);
+                            
+                            // check present_at greather than time
+                            if($presentDateTime > $targetDateTime){
+                                return $item->status == $status;
+                            }
+                        }
+                    })->groupBy("student_id")->sortByDesc(function ($item){
+                        return count($item);
+                    });
+                } else {
+                    $result = collect($data)->filter(function($item) use ($status, $time){
+                        // check present_at not null
+                        if($item->present_at){
+                             // Combine the date with the present time
+                            $presentDateTime = new DateTime($item->present_at);
+        
+                            // Create a DateTime object for the target time
+                            $targetDateTime = DateTime::createFromFormat('H:i', $time);
+                            // check present_at greather than time
+                            if($presentDateTime > $targetDateTime){
+                                return $item->status == $status;
+                            }
+                        }
+                    })->groupBy("student_id")->sortByDesc(function ($item){
+                        return count($item);
+                    })->take($limit);
+                }
+            case 'asc':
+                if($limit == 0){
+                    $result = collect($data)->filter(function($item) use ($status, $time){
+                        // check present_at not null
+                        if($item->present_at){
+                            // Combine the date with the present time
+                            $presentDateTime = new DateTime($item->present_at);
+        
+                            // Create a DateTime object for the target time
+                            $targetDateTime = DateTime::createFromFormat('H:i', $time);
+                            
+                            // check present_at greather than time
+                            if($presentDateTime > $targetDateTime){
+                                return $item->status == $status;
+                            }
+                        }
+                    })->groupBy("student_id")->sortBy(function ($item){
+                        return count($item);
+                    });
+                } else {
+                    $result = collect($data)->filter(function($item) use ($status, $time){
+                        // check present_at not null
+                        if($item->present_at){
+                             // Combine the date with the present time
+                            $presentDateTime = new DateTime($item->present_at);
+        
+                            // Create a DateTime object for the target time
+                            $targetDateTime = DateTime::createFromFormat('H:i', $time);
+                            // check present_at greather than time
+                            if($presentDateTime > $targetDateTime){
+                                return $item->status == $status;
+                            }
+                        }
+                    })->groupBy("student_id")->sortBy(function ($item){
+                        return count($item);
+                    })->take($limit);
+                }
+            default:
+                if($limit == 0){
+                    $result = collect($data)->filter(function($item) use ($status, $time){
+                        // check present_at not null
+                        if($item->present_at){
+                            // Combine the date with the present time
+                            $presentDateTime = new DateTime($item->present_at);
+        
+                            // Create a DateTime object for the target time
+                            $targetDateTime = DateTime::createFromFormat('H:i', $time);
+                            
+                            // check present_at greather than time
+                            if($presentDateTime > $targetDateTime){
+                                return $item->status == $status;
+                            }
+                        }
+                    })->groupBy("student_id")->sortByDesc(function ($item){
+                        return count($item);
+                    });
+                } else {
+                    $result = collect($data)->filter(function($item) use ($status, $time){
+                        // check present_at not null
+                        if($item->present_at){
+                             // Combine the date with the present time
+                            $presentDateTime = new DateTime($item->present_at);
+        
+                            // Create a DateTime object for the target time
+                            $targetDateTime = DateTime::createFromFormat('H:i', $time);
+                            // check present_at greather than time
+                            if($presentDateTime > $targetDateTime){
+                                return $item->status == $status;
+                            }
+                        }
+                    })->groupBy("student_id")->sortByDesc(function ($item){
+                        return count($item);
+                    })->take($limit);
+                }
+        }
+
+        return $result;
+    }
 }
