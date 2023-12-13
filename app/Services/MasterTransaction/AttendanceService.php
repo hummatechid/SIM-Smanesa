@@ -178,12 +178,16 @@ class AttendanceService extends BaseService {
 
         // set result
         $item_result = [];
-        foreach($result as $item){
+        $i = 1;
+        foreach($result as $item)
+        {
+            $index = $i++;
             $name = $item[0]->student->full_name;
             $kelas = $item[0]->student->nama_rombel;
             $total = count($item);
 
             $result = new stdClass();
+            $result->DT_RowIndex = $index;
             $result->name = $name;
             $result->kelas = $kelas;
             $result->total = $total;

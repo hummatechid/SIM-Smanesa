@@ -119,13 +119,16 @@ class ViolationService extends BaseService {
 
         // set result
         $item_result = [];
+        $i = 1;
         foreach($data as $item){
+            $index = $i++;
             $name = $item[0]->student->full_name;
             $kelas = $item[0]->student->nama_rombel;
             $poin = $item[0]->student->score;
             $total = count($item);
 
             $data = new stdClass();
+            $data->DT_RowIndex = $index;
             $data->name = $name;
             $data->kelas = $kelas;
             $data->poin = $poin;
