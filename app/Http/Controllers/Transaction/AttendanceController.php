@@ -57,7 +57,7 @@ class AttendanceController extends Controller
                 return $item->present_at->format('h:i');
             })->addColumn('status', function($item) {
                 // return $item->status;
-                if($item->status == "present") {
+                if($item->status == "masuk") {
                     return '<span class="badge bg-success">Tepat Waktu</span>';
                 } else {
                     return '<span class="badge bg-danger">Terlambat</span>';
@@ -76,8 +76,10 @@ class AttendanceController extends Controller
             ->addColumn('student', function($item) {
                 return $item->student->full_name;
             })->addColumn('status', function($item) {
-                if($item->status == "permit") {
+                if($item->status == "izin") {
                     return '<span class="badge bg-primary">Izin</span>';
+                } elseif($item->status == "Sakit") {
+                    return '<span class="badge bg-warning">Sakit</span>';
                 } else {
                     return '<span class="badge bg-danger">Absen</span>';
                 } 
