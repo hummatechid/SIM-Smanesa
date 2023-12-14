@@ -12,6 +12,16 @@
     <link rel="stylesheet" href="{{ asset('assets/compiled/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/compiled/css/app-dark.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/extensions/sweetalert2/sweetalert2.min.css') }}">
+    <style>
+        .btn-password {
+            position: absolute;
+            transform: translateY(-50%);
+            top: 20px;
+            right: 25px;
+            background: transparent;
+            border: 0;
+        }
+    </style>
     @stack("custom-style")
 </head>
 

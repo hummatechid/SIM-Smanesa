@@ -17,8 +17,11 @@
                         <div class="col-md-3">
                             <label for="old_password">Password Lama <span class="text-danger">*</span></label>
                         </div>
-                        <div class="form-group col-md-9">
+                        <div class="form-group col-md-9 position-relative">
                             <input type="password" name="old_password" id="old_password" class="form-control @error('old_password') is-invalid @enderror" placeholder="Password Lama" required/>
+                            <button type="button" class="btn-password">
+                                <i class="bi bi-eye-fill text-muted"></i>
+                            </button>
                             @error('old_password')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -28,8 +31,11 @@
                         <div class="col-md-3">
                             <label for="password">Password Baru <span class="text-danger">*</span></label>
                         </div>
-                        <div class="form-group col-md-9">
+                        <div class="form-group col-md-9 position-relative">
                             <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password Baru" required/>
+                            <button type="button" class="btn-password">
+                                <i class="bi bi-eye-fill text-muted"></i>
+                            </button>
                             @error('password')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -39,8 +45,11 @@
                         <div class="col-md-3">
                             <label for="password_confirmation">Konfirmasi Password Baru <span class="text-danger">*</span></label>
                         </div>
-                        <div class="form-group col-md-9">
+                        <div class="form-group col-md-9 position-relative">
                             <input type="password" name="password_confirmation" id="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" placeholder="Konfirmasi Password Baru" required/>
+                            <button type="button" class="btn-password">
+                                <i class="bi bi-eye-fill text-muted"></i>
+                            </button>
                             @error('password')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -69,8 +78,30 @@
 @endpush
 @push('custom-script')
     <script src="{{ asset('assets/extensions/parsleyjs/parsley.min.js') }}"></script>
+    <script src="{{ asset('assets/extensions/parsleyjs/i18n/id.js') }}"></script>
+    <script src="{{ asset('assets/extensions/parsleyjs/i18n/id.extra.js') }}"></script>
+    <script>
+        $(document).on('click', '.btn-password', (e) => {
+            const input = e.currentTarget.parentNode.querySelector('input')
+            const icon = e.currentTarget.querySelector('i')
+            if(input.getAttribute('type') == 'password') {
+                input.setAttribute('type', 'text')
+                icon.classList.remove('bi-eye-fill')
+                icon.classList.add('bi-eye-slash-fill')
+            } else {
+                input.setAttribute('type', 'password')
+                icon.classList.remove('bi-eye-slash-fill')
+                icon.classList.add('bi-eye-fill')
+            }
+        })
+    </script>
     <script>
         let form_id = '{{ isset($formId) && $formId ? $formId : "form" }}'
         $('#'+form_id).parsley()
+
+        $(document).on('input change', 'input', (e) => {
+            let id = e.target.getAttribute('id')
+            if(id) $('#'+id).parsley().validate()
+        })
     </script>
 @endpush

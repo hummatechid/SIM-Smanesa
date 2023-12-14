@@ -54,8 +54,11 @@
                         <div class="col-md-3">
                             <label for="password">Password <span class="text-danger">*</span></label>
                         </div>
-                        <div class="form-group col-md-9">
+                        <div class="form-group col-md-9 position-relative">
                             <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password" required/>
+                            <button type="button" class="btn-password">
+                                <i class="bi bi-eye-fill text-muted"></i>
+                            </button>
                             @error('password')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -65,8 +68,11 @@
                         <div class="col-md-3">
                             <label for="password_confirmation">Konfirmasi Password <span class="text-danger">*</span></label>
                         </div>
-                        <div class="form-group col-md-9">
+                        <div class="form-group col-md-9 position-relative">
                             <input type="password" name="password_confirmation" id="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" placeholder="Konfirmasi Password" required/>
+                            <button type="button" class="btn-password">
+                                <i class="bi bi-eye-fill text-muted"></i>
+                            </button>
                             @error('password')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -146,7 +152,7 @@
                         <div class="form-group col-md-9">
                             <Select name="gender" id="gender" class="form-select @error('gender') is-invalid @enderror" required @if(isset($dataUser->is_dapodik) && $dataUser->is_dapodik ) readonly @endif>
                                 @if(!$isEdit)
-                                <option value="" {{ !old('gender') ? 'selected' : '' }}>-- pilih jenis kelamin --</option>
+                                <option value="" {{ !old('gender') ? 'selected' : '' }} disabled>-- pilih jenis kelamin --</option>
                                 @endif
                                 <option value="Laki-laki" {{ old('gender', ($dataUser ? $dataUser->gender : '')) == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
                                 <option value="Perempuan" {{ old('gender', ($dataUser ? $dataUser->gender : '')) == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
@@ -178,12 +184,22 @@
                             @enderror
                         </div>
                     </div>
+                    @php
+                        $agamas = ['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha', 'Konghucu'];
+                    @endphp
                     <div class="row">
                         <div class="col-md-3">
                             <label for="religion">Agama <span class="text-danger">*</span></label>
                         </div>
                         <div class="form-group col-md-9">
-                            <input type="text" name="religion" id="religion" class="form-control @error('religion') is-invalid @enderror" placeholder="Agama" value="{{ old('religion', ($dataUser ? $dataUser->religion : '')) }}" required @if(isset($dataUser->is_dapodik) && $dataUser->is_dapodik ) readonly @endif />
+                            <select name="religion" id="religion" class="form-select @error('religion') is-invalid @enderror" required @if(isset($dataUser->is_dapodik) && $dataUser->is_dapodik ) readonly @endif>
+                                @if(!$isEdit)
+                                <option value="" {{ !old('religion') ? 'selected' : '' }} disabled>-- pilih agama --</option>
+                                @endif
+                                @foreach ($agamas as $agama)
+                                <option value="{{ $agama }}" {{ old('religion', ($dataUser ? $dataUser->religion : '')) == $agama ? 'selected' : '' }}>{{ $agama }}</option>
+                                @endforeach
+                            </select>
                             @error('religion')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -225,6 +241,8 @@
 @endpush
 @push('custom-script')
     <script src="{{ asset('assets/extensions/parsleyjs/parsley.min.js') }}"></script>
+    <script src="{{ asset('assets/extensions/parsleyjs/i18n/id.js') }}"></script>
+    <script src="{{ asset('assets/extensions/parsleyjs/i18n/id.extra.js') }}"></script>
     <script src="{{ asset('assets/extensions/filepond/filepond.js') }}"></script>
     <script src="{{ asset('assets/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.js') }}"></script>
     <script src="{{ asset('assets/extensions/filepond-plugin-file-validate-type/filepond-plugin-file-validate-type.min.js') }}"></script>
@@ -257,7 +275,27 @@
         })
     </script>
     <script>
+        $(document).on('click', '.btn-password', (e) => {
+            const input = e.currentTarget.parentNode.querySelector('input')
+            const icon = e.currentTarget.querySelector('i')
+            if(input.getAttribute('type') == 'password') {
+                input.setAttribute('type', 'text')
+                icon.classList.remove('bi-eye-fill')
+                icon.classList.add('bi-eye-slash-fill')
+            } else {
+                input.setAttribute('type', 'password')
+                icon.classList.remove('bi-eye-slash-fill')
+                icon.classList.add('bi-eye-fill')
+            }
+        })
+    </script>
+    <script>
         let form_id = '{{ isset($formId) && $formId ? $formId : "form" }}'
         $('#'+form_id).parsley()
+        
+        $(document).on('input change', 'input', (e) => {
+            let id = e.target.getAttribute('id')
+            if(id) $('#'+id).parsley().validate()
+        })
     </script>
 @endpush
