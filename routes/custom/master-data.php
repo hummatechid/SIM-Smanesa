@@ -37,11 +37,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('teacher/soft-delete/{id}', [TeacherController::class, 'softDestroy'])->name('teacher.softDestroy');
     
     // get controller from PenggunaController
+    Route::resource('user', PenggunaController::class);
     Route::prefix('user')->name('user.')->group(function () {
         Route::get('/get-main-data', [PenggunaController::class, 'getDatatablesData'])->name('get-main-datatables');
         Route::get('/{id}/edit-password', [PenggunaController::class, 'editPassword'])->name('editPassword');
         Route::patch('/{id}/update-password', [PenggunaController::class, 'updatePassword'])->name('updatePassword');
-        Route::resource('/', PenggunaController::class);
         Route::post('/soft-delete/{id}', [PenggunaController::class, 'softDestroy'])->name('softDelete');
     });
 

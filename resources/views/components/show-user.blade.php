@@ -43,7 +43,7 @@
                         @if($formFor != 'guru')
                         <tr>
                             <th>Role</th>
-                            <td>{{ $dataUser->user->roles[0]->role }}</td>
+                            <td>{{ $dataUser->user->roles[0]->name }}</td>
                         </tr>
                         @endif
                         <tr>
