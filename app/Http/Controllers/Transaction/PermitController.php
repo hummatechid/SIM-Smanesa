@@ -394,11 +394,11 @@ class PermitController extends Controller
         }
 
         // check status has or not
-        if(in_array($request->status, $status)) {
+        if(!in_array($request->status, $status)) {
             return response()->json([
                 "status" => "error",
                 "messages" => "Status tidak terdaftar, silahkan cek ulang",
-                "data" => null
+                "data" =>  $request->status
             ], 400);
         }
 

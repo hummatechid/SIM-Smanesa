@@ -194,13 +194,16 @@ class AttendanceController extends Controller
         }
 
         $result = [];
+        $i = 1;
         foreach($data as $item){
+            $index = $i++;
             $name = $item->student->full_name;
             $kelas = $item->student->nama_rombel;
             $present = Carbon::parse($item->present_at)->format('H:m:s');
             
             // set response data
             $item = new stdClass();
+            $item->DT_RowIndex = $index;
             $item->name = $name;
             $item->date = $present;
             $item->kelas = $kelas;

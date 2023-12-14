@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('dashboard');
+    Route::prefix('dashboard')->group(function (){
+    
+    });
 });
 
 Route::get('landing', function() {
