@@ -130,6 +130,8 @@
     @endpush
     @push('custom-script')
         <script src="{{ asset('assets/extensions/parsleyjs/parsley.min.js') }}"></script>
+        <script src="{{ asset('assets/extensions/parsleyjs/i18n/id.js') }}"></script>
+        <script src="{{ asset('assets/extensions/parsleyjs/i18n/id.extra.js') }}"></script>
         <script src="{{ asset('assets/extensions/choices.js/public/assets/scripts/choices.js') }}"></script>
         <script>
             function setToChoices(class_name) {
@@ -144,6 +146,10 @@
         
         <script>
             $('#form').parsley()
+            $(document).on('input change', 'input', (e) => {
+                let id = e.target.getAttribute('id')
+                if(id) $('#'+id).parsley().validate()
+            })
         </script>
 
         <script>

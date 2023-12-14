@@ -170,6 +170,8 @@
         $('#form-edit').attr('action', real_url)
         $('#form-edit #name').val(data.name)
         $('#form-edit #score').val(data.score)
+
+        $('#form-edit').parsley().validate()
     })
 </script>
 @endpush

@@ -117,6 +117,8 @@
             if(data.category == el.value) el.setAttribute('selected', true)
             else el.removeAttribute('selected')
         })
+        
+        $('#form-edit').parsley().validate()
     })
 </script>
 @endpush

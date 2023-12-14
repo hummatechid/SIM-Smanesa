@@ -84,11 +84,30 @@
 
 @push("custom-style")
     <link href="https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.css" rel="stylesheet">
+    <style>
+        .parsley-errors-list {
+            color: var(--bs-danger)
+        }
+        .parsley-error {
+            border-color: var(--bs-danger)!important
+        }
+    </style>
 @endpush
 
 @push('custom-script')
 <script src="https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.js"></script>
 <script src=" https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js "></script>
+<script src="{{ asset('assets/extensions/parsleyjs/parsley.min.js') }}"></script>
+<script src="{{ asset('assets/extensions/parsleyjs/i18n/id.js') }}"></script>
+<script src="{{ asset('assets/extensions/parsleyjs/i18n/id.extra.js') }}"></script>
+<script>
+    $('form').parsley()
+    
+    $(document).on('input change', 'input', (e) => {
+        let id = e.target.getAttribute('id')
+        if(id) $('#'+id).parsley().validate()
+    })
+</script>
 
 <script>
     let {{ $tableId }} = $('#{{ $tableId }}').DataTable({
