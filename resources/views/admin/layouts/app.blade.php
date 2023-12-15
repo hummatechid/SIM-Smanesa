@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>SIM | Smanesa</title>
+    <title>SIM Smanesa | {{ isset($sub_title) && $sub_title ? $sub_title : $page_title }}</title>
     <link rel="shortcut icon" href="{{ asset('assets/compiled/logos/favicon.ico') }}" type="image/x-icon">
 
     <link rel="stylesheet" href="{{ asset('assets/compiled/css/app.css') }}">
