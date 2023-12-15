@@ -53,7 +53,7 @@
                             <div class="form-control-icon">
                                 <i class="bi bi-shield-lock"></i>
                             </div>
-                            <button type="button" class="btn-password position-absolute translate-middle-y top-50 end-0 px-3 bg-transparent border-0">
+                            <button type="button" class="btn-password position-absolute end-0 px-3 bg-transparent border-0" style="top:9px">
                                 <i class="bi bi-eye-fill fs-3 text-muted"></i>
                             </button>
                         </div>

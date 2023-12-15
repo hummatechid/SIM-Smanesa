@@ -55,7 +55,7 @@
                             <label for="password">Password <span class="text-danger">*</span></label>
                         </div>
                         <div class="form-group col-md-9 position-relative">
-                            <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password" required/>
+                            <input type="password" name="password" id="password" pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{3,}$" minlength="8" data-parsley-pattern-message="password harus mengandung huruf besar, huruf kecil, dan angka" class="form-control @error('password') is-invalid @enderror" placeholder="Password" required/>
                             <button type="button" class="btn-password">
                                 <i class="bi bi-eye-fill text-muted"></i>
                             </button>
@@ -69,7 +69,7 @@
                             <label for="password_confirmation">Konfirmasi Password <span class="text-danger">*</span></label>
                         </div>
                         <div class="form-group col-md-9 position-relative">
-                            <input type="password" name="password_confirmation" id="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" placeholder="Konfirmasi Password" required/>
+                            <input type="password" name="password_confirmation" id="password_confirmation" pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{3,}$" minlength="8" data-parsley-pattern-message="password harus mengandung huruf besar, huruf kecil, dan angka" data-parsley-equalto="#password" data-parsley-equalto-message="nilai tidak sama dengan password" class="form-control @error('password_confirmation') is-invalid @enderror" placeholder="Konfirmasi Password" required/>
                             <button type="button" class="btn-password">
                                 <i class="bi bi-eye-fill text-muted"></i>
                             </button>
@@ -113,10 +113,10 @@
                     @if(isset($formFor) && $formFor == 'guru')
                     <div class="row">
                         <div class="col-md-3">
-                            <label for="nip">NIP <span class="text-danger">*</span></label>
+                            <label for="nip">NIP</label>
                         </div>
                         <div class="form-group col-md-9">
-                            <input type="text" name="nip" id="nip" class="form-control @error('nip') is-invalid @enderror only-number" placeholder="NIP" value="{{ old('nip', ($dataUser ? $dataUser->nip : '')) }}" required @if(isset($dataUser->is_dapodik) && $dataUser->is_dapodik ) readonly @endif />
+                            <input type="text" name="nip" id="nip" class="form-control @error('nip') is-invalid @enderror only-number" placeholder="NIP" value="{{ old('nip', ($dataUser ? $dataUser->nip : '')) }}" @if(isset($dataUser->is_dapodik) && $dataUser->is_dapodik ) readonly @endif />
                             @error('nip')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -124,10 +124,10 @@
                     </div>
                     <div class="row">
                         <div class="col-md-3">
-                            <label for="nuptk">NUPTK <span class="text-danger">*</span></label>
+                            <label for="nuptk">NUPTK</label>
                         </div>
                         <div class="form-group col-md-9">
-                            <input type="text" name="nuptk" id="nuptk" class="form-control @error('nuptk') is-invalid @enderror only-number" placeholder="NUPTK" value="{{ old('nuptk', ($dataUser ? $dataUser->nuptk : '')) }}" required @if(isset($dataUser->is_dapodik) && $dataUser->is_dapodik ) readonly @endif />
+                            <input type="text" name="nuptk" id="nuptk" class="form-control @error('nuptk') is-invalid @enderror only-number" placeholder="NUPTK" value="{{ old('nuptk', ($dataUser ? $dataUser->nuptk : '')) }}" @if(isset($dataUser->is_dapodik) && $dataUser->is_dapodik ) readonly @endif />
                             @error('nuptk')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -293,7 +293,11 @@
         let form_id = '{{ isset($formId) && $formId ? $formId : "form" }}'
         $('#'+form_id).parsley()
         
-        $(document).on('input change', 'input', (e) => {
+        $(document).on('input change mouseenter mouseleave focus', 'input', (e) => {
+            let id = e.target.getAttribute('id')
+            if(id) $('#'+id).parsley().validate()
+        })
+        $(document).on('input change mouseenter mouseleave focus', 'select', (e) => {
             let id = e.target.getAttribute('id')
             if(id) $('#'+id).parsley().validate()
         })
