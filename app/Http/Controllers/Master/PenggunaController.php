@@ -208,10 +208,15 @@ class PenggunaController extends Controller
      */
     public function updatePassword(Request $request, string $id)
     {
-        $teacher = $this->penggunaRepository->getOneById($id);
+        // set data for one data
+        $pengguna = $this->penggunaRepository->getOneById($id);
+        if(!$pengguna){
+            $pengguna = $this->userRepository->getOneById($id);
+            $pengguna->user_id = $id;
+        }
 
         $update = $this->userService->changePassword(
-            $teacher->user_id,
+            $pengguna->user_id,
             $request->password,
             $request->old_password,
             $request->password_confirmation
