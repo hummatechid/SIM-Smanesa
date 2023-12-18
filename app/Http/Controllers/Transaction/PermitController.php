@@ -259,6 +259,7 @@ class PermitController extends Controller
                 $list = $this->permitRepository->listToday();
             }
     
+            if($request->sort) $list = $list->sortByDesc($request->sort);
             if($request->limit) $list = $list->take($request->limit);
     
             return response()->json([
