@@ -21,6 +21,9 @@
             background: transparent;
             border: 0;
         }
+        .sidebar-wrapper .menu .submenu .submenu-item a:hover {
+            margin-left: 0!important;
+        }
     </style>
     @stack("custom-style")
 </head>
