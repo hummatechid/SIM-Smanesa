@@ -41,9 +41,9 @@ class PermitController extends Controller
         return view('admin.pages.permit.index', $data);
     }
 
-    public function getDatatablesData()
+    public function getDatatablesData(Request $request)
     {
-        return $this->permitService->getDataDatatable();
+        return $this->permitService->getDataDatatable($request);
     }
 
     /**

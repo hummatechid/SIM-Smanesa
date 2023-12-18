@@ -22,6 +22,7 @@
     @php
         $data_column = [
             "selection" => "",
+            "date" => "Waktu",
             "student" => "Siswa",
             "reason" => "Alasan",
             "status" => "Status",
@@ -48,6 +49,7 @@
         data-add-url="{{ url('permit/create') }}"
         :with-multiple-select="true"
         :with-custom-groups="$custom_group"
+        arrange-order="desc"
     />
 
     <div class="card">

@@ -6,6 +6,8 @@ use App\Repositories\MasterTransaction\PermitRepository;
 use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\Facades\DataTables;
 use App\Services\BaseService;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class PermitService extends BaseService {
 
@@ -22,9 +24,10 @@ class PermitService extends BaseService {
      *
      * @return DataTables
      */
-    public function getDataDatatable() :JsonResponse
+    public function getDataDatatable(Request $request) :JsonResponse
     {
-        $data = $this->repository->getAll();
+        if(!isset($request->status) || !$request->status) $data = $this->repository->getAll();
+        else $data = $this->repository->whereOneCondition('status', 'pending');
 
         return Datatables::of($data)
             ->addIndexColumn()
@@ -35,6 +38,8 @@ class PermitService extends BaseService {
                 return $item->student->full_name;
             })->addColumn('reason', function($item) {
                 return $item->reason;
+            })->addColumn('date', function($item) {
+                return Carbon::parse($item->created_at)->isoFormat('DD/MM/YYYY - HH:mm');
             })->addColumn('status', function($item) {
                 // return $item->status;
                 if($item->status == "pending") {
