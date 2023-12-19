@@ -17,6 +17,7 @@ class PermitService extends BaseService {
         $this->pageTitle = "Izin";
         $this->mainUrl = "permit";
         $this->mainMenu = "permit";
+        $this->breadCrumbs = ['Izin' => route('permit.index')];
     }
 
     /**

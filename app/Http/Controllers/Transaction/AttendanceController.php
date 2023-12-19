@@ -33,7 +33,7 @@ class AttendanceController extends Controller
         $data = $this->attendanceService->getPageData('attendance-overview', '', [
             'count_attendance' => $today_attendance,
             'students' => $students
-        ]);
+        ], null, "Presensi");
         return view('admin.pages.attendance.index', $data);
     }
 
@@ -41,7 +41,7 @@ class AttendanceController extends Controller
     {
         $students = $this->studentRepository->getAll();
 
-        $data = $this->attendanceService->getPageData('attendance-manage', '', ['students' => $students]);
+        $data = $this->attendanceService->getPageData('attendance-manage', '', ['students' => $students], [], "Manajemen Presensi");
         return view('admin.pages.attendance.presence', $data);
     }
 

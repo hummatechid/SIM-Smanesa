@@ -40,7 +40,7 @@ class PenggunaController extends Controller
      */
     public function index()
     {
-        $data = $this->penggunaService->getPageData("user-list", "List Pengguna");
+        $data = $this->penggunaService->getPageData("user-list", "", [], null, "Pengguna");
 
         return view("admin.pages.master-data.user.index", $data);
     }
@@ -55,7 +55,7 @@ class PenggunaController extends Controller
     public function create()
     {
         $data_role = $this->roleRepository->getWhereNotIn('name', ['guru']);
-        $data = $this->penggunaService->getPageData('user-add', 'Tambah Pengguna', ['data_role' => $data_role]);
+        $data = $this->penggunaService->getPageData('user-add', '', ['data_role' => $data_role], [], "Tambah Pengguna");
 
         return view('admin.pages.master-data.user.create', $data);
     }
@@ -118,8 +118,7 @@ class PenggunaController extends Controller
         $user = $this->penggunaRepository->getOneById($id);
         $data = $this->penggunaService->getPageData('user-list', '', [
             'user' => $user,
-
-        ]);
+        ], [], "Detail");
         return view('admin.pages.master-data.user.show', $data);
     }
 
@@ -133,7 +132,7 @@ class PenggunaController extends Controller
         $data = $this->penggunaService->getPageData('user-list', '', [
             'user' => $user,
             'data_role' => $data_role
-        ]);
+        ], [ "Detail" => route('user.show', $id)], "Ubah");
         return view('admin.pages.master-data.user.edit', $data);
     }
 
@@ -199,7 +198,7 @@ class PenggunaController extends Controller
         $data = $this->penggunaService->getPageData('user-list', '', [
             'user' => $user,
             'data_role' => $data_role
-        ]);
+        ], ["Detail" => route('user.show', $id)], "Ubah Password");
         return view('admin.pages.master-data.user.edit-password', $data);
     }
 

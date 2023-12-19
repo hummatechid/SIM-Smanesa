@@ -40,7 +40,7 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        $data = $this->teacherService->getPageData('teacher-list');
+        $data = $this->teacherService->getPageData('teacher-list', "", [], null, "Guru");
         return view('admin.pages.master-data.teacher.index', $data);
     }
 
@@ -55,7 +55,7 @@ class TeacherController extends Controller
     public function create()
     {
         $data_role = $this->roleRepository->getCustomColumnValue('name', 'guru');
-        $data = $this->teacherService->getPageData('teacher-add', '', ['data_role' => $data_role]);
+        $data = $this->teacherService->getPageData('teacher-add', '', ['data_role' => $data_role], [], 'Tambah Guru');
 
         return view('admin.pages.master-data.teacher.create', $data);
     }
@@ -118,8 +118,7 @@ class TeacherController extends Controller
         $teacher = $this->teacherRepository->getOneById($id);
         $data = $this->teacherService->getPageData('teacher-list', '', [
             'teacher' => $teacher,
-
-        ]);
+        ], [], "Detail");
         return view('admin.pages.master-data.teacher.show', $data);
     }
 
@@ -133,7 +132,9 @@ class TeacherController extends Controller
         $data = $this->teacherService->getPageData('teacher-list', '', [
             'teacher' => $teacher,
             'data_role' => $data_role
-        ]);
+        ], [
+            "Detail" => route('teacher.show', $id)
+        ], "Ubah Data");
         return view('admin.pages.master-data.teacher.edit', $data);
     }
 
@@ -191,7 +192,9 @@ class TeacherController extends Controller
         $data = $this->teacherService->getPageData('teacher-list', '', [
             'teacher' => $teacher,
             'data_role' => $data_role
-        ]);
+        ], [
+            "Detail" => route('teacher.show', $id),
+        ], "Ubah Password");
         return view('admin.pages.master-data.teacher.edit-password', $data);
     }
 

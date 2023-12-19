@@ -15,6 +15,7 @@ class PenggunaService extends BaseService {
         $this->pageTitle = "Pengguna";
         $this->mainUrl = "user";
         $this->mainMenu = "user";
+        $this->breadCrumbs = ["Pengguna" => route('user.index')];
     }
 
     /**

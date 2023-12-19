@@ -14,9 +14,10 @@ class AttendanceService extends BaseService {
     public function __construct(AttendanceRepository $attendanceRepository)
     {
         $this->repository = $attendanceRepository;
-        $this->pageTitle = "Kehadiran";
+        $this->pageTitle = "Presensi";
         $this->mainUrl = "attendance";
         $this->mainMenu = "attendance";
+        $this->breadCrumbs = ["Presensi" => route('attendance.index')];
     }
 
     public function studentLate(array|object $data, int $limit = 0, string $status = "masuk", $time = "07:00"): array|object

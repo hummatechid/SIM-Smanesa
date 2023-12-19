@@ -33,7 +33,7 @@ class TreatmentController extends Controller
             'months' => $this->months
         ];
 
-        $dataPage = $this->treatmentService->getPageData(null, '', $date_data);
+        $dataPage = $this->treatmentService->getPageData(null, '', $date_data, null, 'Tindak Lanjut');
 
         return view('admin.pages.master-data.treatment.index', $dataPage);
     }
