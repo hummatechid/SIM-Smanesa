@@ -21,7 +21,7 @@
             height: 100dvh;
             border: 0;
             outline: 0;
-            color: black;
+            color: transparent;
             cursor: pointer;
         }
 

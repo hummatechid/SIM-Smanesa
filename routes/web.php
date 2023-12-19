@@ -17,13 +17,13 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('dashboard');
+    Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard');
     Route::prefix('dashboard')->group(function (){
     
     });
 });
 
-Route::get('landing', function() {
+Route::get('/', function() {
     return view('admin.pages.blank.landing-page');
 });
 
@@ -31,4 +31,4 @@ Auth::routes();
 
 Route::get('scan-attendance', function() {
     return view('admin.pages.scanner.index');
-});
+})->name('scan.index');

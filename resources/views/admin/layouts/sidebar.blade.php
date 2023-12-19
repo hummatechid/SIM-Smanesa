@@ -3,7 +3,7 @@
         <div class="sidebar-header position-relative">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo mt-2">
-                    <a href="{{ url('/') }}" class="d-flex gap-1 justify-content-center align-items-center">
+                    <a href="{{ route('dashboard') }}" class="d-flex gap-1 justify-content-center align-items-center">
                         <img src="{{ asset('assets/compiled/logos/logo-sm.png') }}" alt="SMAN 1 Purwosari" width="50" style="height: auto">
                         {{-- <span class="fs-6">SMANESA</span> --}}
                     </a>
@@ -47,7 +47,7 @@
 
                 <li
                     class="sidebar-item {{ isset($main_menu) && $main_menu == 'dashboard' ? 'active' : '' }}">
-                    <a href="{{ url('/') }}" class='sidebar-link'>
+                    <a href="{{ route('dashboard') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Dashboard</span>
                     </a>

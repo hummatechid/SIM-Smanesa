@@ -32,7 +32,7 @@
         arrange-order="desc"
         delete-option="attendance/presence/deleted_id?status=absent"
         data-add-type="custom-btn"
-        data-add-btn='<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-add-permit">+ Tambah izin</button>'
+        data-add-btn='<div class="d-flex gap-3"><a href="{{ route("scan.index") }}" class="btn btn-primary">Scan Kehadiran</a><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-add-permit">+ Tambah izin</button></div>'
     />
 
 </div>
