@@ -7,6 +7,7 @@ use App\Repositories\{StudentRepository, ViolationTypeRepository};
 use App\Repositories\MasterTransaction\ViolationRepository;
 use App\Services\MasterTransaction\ViolationService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ViolationController extends Controller
 {
@@ -56,47 +57,61 @@ class ViolationController extends Controller
     {
         // check data student
         if(!isset($request->student_id) || !is_array($request->student_id)){
-            return redirect()->back()->with("error","student_id must array data");
+            return redirect()->back()->with("error","Data siswa tidak boleh ada yang kosong");
         }
-
+        foreach($request->student_id as $key => $value){
+            if(!$value) return redirect()->back()->with("error","Data siswa tidak boleh ada yang kosong");
+        }
+        
         // check data violation type
-        if(!isset($request->student_id) || !is_array($request->violation_type_id)){
-            return redirect()->back()->with("error","violation_type_id must array data");
+        if(!isset($request->violation_type_id) || !is_array($request->violation_type_id)){
+            return redirect()->back()->with("error","Data pelanggaran tidak boleh ada yang kosong");
+        }
+        foreach($request->violation_type_id as $key => $value){
+            if(!$value) return redirect()->back()->with("error","Data pelanggaran tidak boleh ada yang kosong");
         }
 
-        // foreach data student
-        foreach($request->student_id as $student_id){
-            // set default score
-            $score = 0;
-
-            // get data student from student_id
-            $student = $this->studentRepository->getOneById($student_id);
-
-          // get data violation_type outside the loop
-            $violationTypes = $this->violationTypeRepository->getWhereIn("id",$request->violation_type_id);
-
-            // foreach data violation_type
-            foreach ($violationTypes as $violation_type) {
-                // set score violation
-                $scoreViolation = $violation_type->score;
-
-                // create data violation
-                $data = [
-                    "student_id" => $student_id,
-                    "violation_type_id" => $violation_type->id,
-                    "score" => $scoreViolation
-                ];
-
-                // save data violation
-                $this->violationRepository->create($data);
-
-                // push score violation to total score
-                $score += $scoreViolation;
+        DB::beginTransaction();
+        try{
+            // foreach data student
+            foreach($request->student_id as $student_id){
+                // set default score
+                $score = 0;
+    
+                // get data student from student_id
+                $student = $this->studentRepository->getOneById($student_id);
+    
+              // get data violation_type outside the loop
+                $violationTypes = $this->violationTypeRepository->getWhereIn("id",$request->violation_type_id);
+    
+                // foreach data violation_type
+                foreach ($violationTypes as $violation_type) {
+                    // set score violation
+                    $scoreViolation = $violation_type->score;
+    
+                    // create data violation
+                    $data = [
+                        "student_id" => $student_id,
+                        "violation_type_id" => $violation_type->id,
+                        "score" => $scoreViolation
+                    ];
+    
+                    // save data violation
+                    $this->violationRepository->create($data);
+    
+                    // push score violation to total score
+                    $score += $scoreViolation;
+                }
+    
+                // update score violation student
+                $student->score += $score;
+                $student->save();
             }
 
-            // update score violation student
-            $student->score += $score;
-            $student->save();
+            DB::commit();
+        } catch(\Throwable $th){
+            DB::rollBack();
+            return redirect()->back()->with("error",$th->getMessage())->withInput();
         }
 
         return redirect()->route('violation.index')->with("success","Berhasil memberikan poin pelanggaran terhadap siswa");
