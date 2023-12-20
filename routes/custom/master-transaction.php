@@ -21,6 +21,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('get-permit-data', [AttendanceController::class, 'getDatatablesPermit'])->name('get-permit-datatables');
         Route::get('presence', [AttendanceController::class, 'presence'])->name('presence');
         Route::post('presence', [AttendanceController::class, 'createPermit'])->name('presence.create-permit');
+        Route::get('/late-attendance', [AttendanceController::class, 'studentLateAttendances'])->name('late-list');
+        Route::get('/count-must-late', [AttendanceController::class, 'studentMustLate'])->name('must-late');
         Route::resource('/', AttendanceController::class);
     });
     
@@ -33,7 +35,10 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/soft-delete/{id}', [PermitController::class, 'softDestroy'])->name('softDelete');
     });
 
-    Route::get('violation/get-main-data', [ViolationController::class, 'getDatatablesData'])->name('violation.get-main-datatables');
-    Route::resource('violation', ViolationController::class);
+    Route::prefix('violation')->name('violation.')->group(function(){
+        Route::get('/get-main-data', [ViolationController::class, 'getDatatablesData'])->name('get-main-datatables');
+        Route::resource('/', ViolationController::class);
+        Route::get('/count-must-student', [ViolationController::class, 'listMustStudent'])->name('count-student');
+    });
     
 });

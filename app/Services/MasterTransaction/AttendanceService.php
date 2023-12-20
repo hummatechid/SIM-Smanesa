@@ -204,8 +204,7 @@ class AttendanceService extends BaseService {
     public function storeAttendanceApi(string $nipd){
         if(!$nipd){
             return response()->json([
-                "success" => false,
-                "error" => true,
+                "status" => "error",
                 "message" => "nipd tidak boleh kosong"
             ], 400);
         }
@@ -214,8 +213,7 @@ class AttendanceService extends BaseService {
         $student = $this->studentRepository->getOneByOther("nipd",$nipd);
         if(!$student){
             return response()->json([
-                "success" => false,
-                "error" => true,
+                "status" => "error",
                 "message" => "Data siswa tidak ditemukan"
             ], 404);
         }
@@ -224,8 +222,7 @@ class AttendanceService extends BaseService {
         $attendance = $this->studentRepository->getDataDateWithCondition($now, [], "student_id",$student->id, "first");
         if(!$attendance){
             return response()->json([
-                "success" => false,
-                "error" => true,
+                "status" => "error",
                 "message" => "Data asbsensi siswa tidak ditemukan"
             ], 404);
         }
@@ -236,7 +233,7 @@ class AttendanceService extends BaseService {
         ]);
 
         return response()->json([
-            "success" => true,
+            "status" => "success",
             "message" => "Siswa berhasil absensi"
         ], 200);
     }
