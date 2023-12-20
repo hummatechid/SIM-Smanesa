@@ -17,6 +17,7 @@ class TreatmentService extends BaseService {
         $this->mainUrl = "treatment";
         $this->mainMenu = "violation-master";
         $this->subMenu = "treatment";
+        $this->breadCrumbs = ["Tindak Lanjut" => route('treatment.index')];
     }
 
     /**

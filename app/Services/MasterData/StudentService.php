@@ -15,6 +15,7 @@ class StudentService extends BaseService
         $this->pageTitle = "Siswa";
         $this->mainUrl = "student";
         $this->mainMenu = "student";
+        $this->breadCrumbs = ["Siswa" => route('student.index')];
     }
 
     /**

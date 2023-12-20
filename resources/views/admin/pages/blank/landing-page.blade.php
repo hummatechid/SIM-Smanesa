@@ -14,12 +14,17 @@
 </head>
 
 <body>
-    <header class="sticky-top bg-white">
+    <header class="sticky-top top-0 bg-body">
         <nav class="navbar py-3 border-bottom shadow">
             <div class="container-fluid">
                 <img src="{{ asset('assets/compiled/logos/logo-sm.png') }}" alt="Smanesa" height="50">
                 <div class="d-flex gap-2">
-                    <a href="login" class="btn btn-primary">Login</a>
+                    @if(Auth::check())
+                    <a href="{{ route('scan.index') }}" class="btn btn-primary">Scan Kehadiran</a>
+                    <a href="{{ route('dashboard') }}" class="btn btn-primary">Dashboard</a>
+                    @else
+                    <a href="{{ route('login') }}" class="btn btn-primary">Login</a>
+                    @endif
                 </div>
             </div>
         </nav>
@@ -28,17 +33,17 @@
     <main>
         <div class="d-flex flex-column gap-3">
             <section id="about" class="bg-primary">
-                <div class="container col-xxl-8 px-4 py-5">
-                    <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+                <div class="container px-4 py-5">
+                    <div class="row flex-lg-row-reverse align-items-center justify-content-center justify-content-lg-start g-5 py-5">
                         <div class="col-10 col-sm-8 col-lg-6">
-                            <img src="https://getbootstrap.com/docs/5.3/examples/heroes/bootstrap-themes.png"
-                                class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="700"
+                            <img src="{{ asset('images/illustration/illustration-2.jpg') }}"
+                                class="d-block mx-lg-auto img-fluid rounded-4" alt="Bootstrap Themes" width="700"
                                 height="500" loading="lazy">
                         </div>
                         <div class="col-lg-6">
-                            <h1 class="display-5 fw-bold lh-1 mb-3 text-white">SMANESA</h1>
-                            <p class="lead text-light">Berimtaq, Unggul, dan Berbudaya</p>
-                            <p class="lead text-light">
+                            <h1 class="display-5 fw-bold lh-1 mb-3 text-white text-center text-lg-start">SMANESA</h1>
+                            <p class="lead text-light text-center text-lg-start">Berimtaq, Unggul, dan Berbudaya</p>
+                            <p class="lead text-light text-center text-lg-start">
                                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis corporis molestiae
                                 adipisci dolorum nemo consequuntur deserunt ipsa quisquam officia sunt!
                             </p>
@@ -46,11 +51,37 @@
                     </div>
                 </div>
             </section>
-            <section id="list">
-
-            </section>
-            <footer id="footer">
+            <section id="list" class="my-5">
                 <div class="container">
+                    <div class="text-center mb-3 pb-0 mb-lg-5 pb-lg-3">
+                        <h2 class="mb-0">Judul Section Ini</h2>
+                        <div class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. In, officiis.</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-4 mb-3 mb-lg-0 text-center">
+                            <div class="bg-primary-subtle border border-primary rounded-4">
+                                <div class="fs-1 fw-bold">1000</div>
+                                <div class="lead">Siswa Aktif</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 mb-3 mb-lg-0 text-center">
+                            <div class="bg-primary-subtle border border-primary rounded-4">
+                                <div class="fs-1 fw-bold">1000</div>
+                                <div class="lead">Pengajar</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 mb-3 mb-lg-0 text-center">
+                            <div class="bg-primary-subtle border border-primary rounded-4">
+                                <div class="fs-1 fw-bold">1000</div>
+                                <div class="lead">Staf Lain</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <footer id="footer" class="bg-body-secondary">
+                <div class="container mt-3">
                     <div class="row">
                         <div class="col-6 col-md-4 mb-3">
                             <h5>Tentang</h5>
@@ -64,7 +95,7 @@
                             <ul class="nav flex-column">
                                 <li class="nav-item mb-2"><span class="nav-link p-0 text-body-secondary">Manajemen Kehadiran</span></li>
                                 <li class="nav-item mb-2"><span class="nav-link p-0 text-body-secondary">Manajemen Pelanggaran</span></li>
-                                <li class="nav-item mb-2"><span class="nav-link p-0 text-body-secondary">Manajemen Keluar Masuk</span></li>
+                                <li class="nav-item mb-2"><span class="nav-link p-0 text-body-secondary">Manajemen Perizinan</span></li>
                             </ul>
                         </div>
 
@@ -81,7 +112,7 @@
                     </div>
 
                     <div class="d-flex flex-column flex-sm-row justify-content-between pt-4 mt-4 border-top">
-                        <p>© 2023 Company, Inc. All rights reserved.</p>
+                        <p>{{ date('Y') }} © SMAN 1 Purwosari</p>
                         <ul class="list-unstyled d-flex">
                             <li class="ms-3">
                                 <a href="http://www.sman1purwosari.sch.id" target="_blank" class="link-body-emphasis" href="#"><i class="bi bi-globe"></i></a>

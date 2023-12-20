@@ -31,7 +31,7 @@ class ViolationTypeController extends Controller
         $dataPage = $this->violationTypeService->getPageData(null, "", [
             'years' => $years,
             'months' => $this->months
-        ]);
+        ], null, "Jenis Pelanggaran");
 
         return view('admin.pages.master-data.violation-type.index', $dataPage);
     }

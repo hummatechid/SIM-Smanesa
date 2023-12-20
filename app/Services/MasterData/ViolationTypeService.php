@@ -16,6 +16,7 @@ class ViolationTypeService extends BaseService {
         $this->mainUrl = "violation-type";
         $this->mainMenu = "violation-master";
         $this->subMenu = "violation-type";
+        $this->breadCrumbs = ["Jenis Pelanggaran" => route('violation-type.index')];
     }
 
     /**

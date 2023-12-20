@@ -16,6 +16,7 @@ class TeacherService extends BaseService {
         $this->pageTitle = "Guru";
         $this->mainUrl = "teacher";
         $this->mainMenu = "teacher";
+        $this->breadCrumbs = ["Guru" => route('teacher.index')];
     }
 
     /**

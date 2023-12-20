@@ -31,8 +31,8 @@
                     @endif
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                     <button type="submit" class="btn btn-success">Tambah</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 </div>
             </form>
         </div>
@@ -110,6 +110,17 @@
 </script>
 
 <script>
+    var customGroups = {}
+    @foreach($withCustomGroups as $name => $props)
+    customGroups["{{ $name }}"] = $('#group_{{ $name }}').val() ? $('#group_{{ $name }}').val() : null;
+    @endforeach
+
+    var params = "";
+    Object.keys(customGroups).forEach((key) => {
+        params += (`${key}=${customGroups[key]},`)
+    })
+    
+
     let {{ $tableId }} = $('#{{ $tableId }}').DataTable({
         processing: true,
         serverSide: true,
@@ -119,12 +130,9 @@
         orderClasses: false,
         deferRender: true,
         ajax: {
-            url: "{{ url($dataUrl) }}",
+            url: "{{ url($dataUrl) }}?"+params,
             data: {
                 _token: "{{ csrf_token() }}",
-                @foreach($withCustomGroups as $name => $props)
-                {{ $name }}: $("#group_{{ $name }}").val(),
-                @endforeach
             }
         },
         order: [[{{ isset($defaultOrder) ? $defaultOrder : 1 }}, '{{ $arrangeOrder }}']],
@@ -155,11 +163,18 @@
         ],
     });
 
-    @foreach($withCustomGroups as $name => $props)
-    $("#group_{{ $name }}").on('change', function() {
+    @foreach ($withCustomGroups as $name => $props)
+    $('#group_{{ $name }}').on('input change', () => {
+        customGroups['{{ $name }}'] = $('#group_{{ $name }}').val()
+        params = "";
+        Object.keys(customGroups).forEach((key) => {
+            params += (`${key}=${customGroups[key]},`)
+        })
+
         {{ $tableId }}.ajax.reload()
     })
     @endforeach
+
 </script>
 
 @if(isset($deleteOption))

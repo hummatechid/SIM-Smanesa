@@ -8,7 +8,8 @@ class BaseService {
     use CallMonth;
 
     public $repository;
-    public string $pageTitle, $mainUrl, $mainMenu, $subMenu;
+    public string $pageTitle, $mainUrl, $mainMenu, $subMenu, $nowPage = "";
+    public array $breadCrumbs = [];
 
     /**
      * Get data to showing in the page data
@@ -17,16 +18,21 @@ class BaseService {
      * @param array $optionalData
      * @return array
      */
-    public function getPageData(string|null $subMenu = null, string $subTitle = "" ,array $optionalData = []) :array
+    public function getPageData(string|null $subMenu = null, string $subTitle = "" ,array $optionalData = [], array|null $breadCrumbs = [], string $nowPage = "") :array
     {
+        $this->nowPage = $nowPage;
         if($subMenu) $this->subMenu = $subMenu;
+        if($breadCrumbs === null) $this->breadCrumbs = [];
+        elseif($breadCrumbs) $this->breadCrumbs = array_merge($this->breadCrumbs, $breadCrumbs);
         
         $data = array_merge([
             "page_title" => $this->pageTitle,
             "main_url" => $this->mainUrl,
             "sub_title" => $subTitle,
             "main_menu" => $this->mainMenu,
-            "sub_menu" => $this->subMenu
+            "sub_menu" => $this->subMenu,
+            "bread_crumbs" => $this->breadCrumbs,
+            "now_page" => $this->nowPage,
         ], $optionalData);
         return $data;
     }

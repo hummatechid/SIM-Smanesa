@@ -11,8 +11,10 @@
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">{{ $page_title }}</li>
+                        @foreach($bread_crumbs as $title => $url)
+                        <li class="breadcrumb-item"><a href="{{ $url }}">{{ $title }}</a></li>
+                        @endforeach
+                        <li class="breadcrumb-item active" aria-current="page">{{ $now_page}}</li>
                     </ol>
                 </nav>
             </div>
@@ -69,56 +71,6 @@
             </div>
         </form>
     </section>
-    
-    @push('custom-style')
-        <link rel="stylesheet" href="{{ asset('assets/extensions/filepond/filepond.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.css') }}">
-        <style>
-            .parsley-errors-list {
-                color: var(--bs-danger)
-            }
-            .parsley-error {
-                border-color: var(--bs-danger)!important
-            }
-        </style>
-    @endpush
-    @push('custom-script')
-        <script src="{{ asset('assets/extensions/parsleyjs/parsley.min.js') }}"></script>
-        <script src="{{ asset('assets/extensions/filepond/filepond.js') }}"></script>
-        <script src="{{ asset('assets/extensions/filepond-plugin-image-preview/filepond-plugin-image-preview.js') }}"></script>
-        <script src="{{ asset('assets/extensions/filepond-plugin-file-validate-type/filepond-plugin-file-validate-type.min.js') }}"></script>
-        <script src="{{ asset('assets/extensions/filepond-plugin-file-validate-size/filepond-plugin-file-validate-size.min.js') }}"></script>
-        <script src="{{ asset('assets/extensions/filepond-plugin-image-crop/filepond-plugin-image-crop.min.js') }}"></script>
-        <script src="{{ asset('assets/extensions/filepond-plugin-image-exif-orientation/filepond-plugin-image-exif-orientation.min.js') }}"></script>
-        <script src="{{ asset('assets/extensions/filepond-plugin-image-filter/filepond-plugin-image-filter.min.js') }}"></script>
-        <script src="{{ asset('assets/extensions/filepond-plugin-image-resize/filepond-plugin-image-resize.min.js') }}"></script>
-        <script src="{{ asset('assets/static/js/pages/filepond.js') }}"></script>
-        <script>
-            FilePond.registerPlugin(
-                FilePondPluginImagePreview,
-                FilePondPluginFileValidateSize,
-                FilePondPluginFileValidateType,
-            )
-            // Filepond: Image Preview
-            FilePond.create(document.getElementById("upload-image"), {
-                credits: null,
-                allowImagePreview: true,
-                allowImageFilter: false,
-                allowImageExifOrientation: false,
-                allowImageCrop: false,
-                acceptedFileTypes: ["image/png", "image/jpg", "image/jpeg"],
-                fileValidateTypeDetectType: (source, type) =>
-                    new Promise((resolve, reject) => {
-                    // Do custom type detection here and return with promise
-                    resolve(type)
-                    }),
-                storeAsFile: true,
-            })
-        </script>
-        <script>
-            $('#form').parsley()
-        </script>
-    @endpush
 
     @push('custom-style')
         <link rel="stylesheet" href="{{ asset('assets/extensions/choices.js/public/assets/styles/choices.css') }}" />
@@ -192,7 +144,7 @@
         
         <script>
             $('#form').parsley()
-            $(document).on('input change', 'input', (e) => {
+            $(document).on('input change', 'textarea', (e) => {
                 let id = e.target.getAttribute('id')
                 if(id) $('#'+id).parsley().validate()
             })

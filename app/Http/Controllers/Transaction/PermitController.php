@@ -40,13 +40,13 @@ class PermitController extends Controller
      */
     public function index()
     {
-        $data = $this->permitService->getPageData('permit-list');
+        $data = $this->permitService->getPageData('permit-list', '', [], null, 'Izin');
         return view('admin.pages.permit.index', $data);
     }
 
-    public function getDatatablesData()
+    public function getDatatablesData(Request $request)
     {
-        return $this->permitService->getDataDatatable();
+        return $this->permitService->getDataDatatable($request);
     }
 
     /**
@@ -56,7 +56,7 @@ class PermitController extends Controller
     {
         $data = $this->permitService->getPageData('permit-add', '', [
             'students' => $this->studentRepository->getAll()
-        ]);
+        ], [], "Tambah Izin");
 
         return view('admin.pages.permit.create', $data);
     }

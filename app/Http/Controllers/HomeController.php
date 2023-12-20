@@ -26,7 +26,7 @@ class HomeController extends Controller
             "data_violation" => ["name"=>"Nama","kelas" => "Kelas","poin" => "Total Point" ,"total"=>"Jumlah Pelanggaran"],
             "data_late" => ["name"=>"Nama","kelas" => "Kelas","total"=>"Jumlah Keterlambatan"],
             "data_presence" => ["name"=>"Nama","kelas" => "Kelas","date"=>"Jam Kehadiran"],
-        ]);
+        ], null, "Dashboard");
 
         return view('admin.pages.blank.index', $data);
     }

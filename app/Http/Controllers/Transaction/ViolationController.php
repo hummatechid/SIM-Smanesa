@@ -30,7 +30,7 @@ class ViolationController extends Controller
      */
     public function index()
     {
-        $data = $this->violationService->getPageData('violation');
+        $data = $this->violationService->getPageData('violation', '', [], null, "Pelanggaran");
         return view('admin.pages.violation.index', $data);
     }
 
@@ -46,7 +46,7 @@ class ViolationController extends Controller
     {
         $user = $this->studentRepository->getAll();
         $violation_types = $this->violationTypeRepository->getAll();
-        $data = $this->violationService->getPageData('violation', '', ['users' => $user, 'violation_types' =>$violation_types]);
+        $data = $this->violationService->getPageData('violation', '', ['users' => $user, 'violation_types' =>$violation_types], [], 'Tambah Pelanggaran');
         return view('admin.pages.violation.create', $data);
     }
 
