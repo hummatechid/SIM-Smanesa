@@ -260,6 +260,33 @@ class BaseRepository implements RepositoryInterface {
         } 
     }
 
+    public function getDataDateWithCondition($date, array $relations = [], string $column, mixed $data ,string $type = "get", bool $history = false): object | null
+    {
+        switch($type){
+            case "get":
+                if($history == true){
+                    return $this->model->with($relations)->whereNotNull("deleted_at")->whereDate("created_at",$date)->where($column, $data)->get(); 
+                } else {
+                    return $this->model->with($relations)->whereNull("deleted_at")->whereDate("created_at",$date)->where($column, $data)->get(); 
+                } 
+                break;
+            case "first":
+                if($history == true){
+                    return $this->model->with($relations)->whereNotNull("deleted_at")->whereDate("created_at",$date)->where($column, $data)->first(); 
+                } else {
+                    return $this->model->with($relations)->whereNull("deleted_at")->whereDate("created_at",$date)->where($column, $data)->first(); 
+                } 
+                break;
+            default:
+                if($history == true){
+                    return $this->model->with($relations)->whereNotNull("deleted_at")->whereDate("created_at",$date)->where($column, $data)->get(); 
+                } else {
+                    return $this->model->with($relations)->whereNull("deleted_at")->whereDate("created_at",$date)->where($column, $data)->get(); 
+                } 
+                break;
+        }
+    }
+
     public function getYearFirstData()
     {
         return $this->model->selectRaw('YEAR(created_at) as year')->orderBy('created_at', 'asc')->first();

@@ -107,7 +107,14 @@ class AttendanceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        switch ($request->type){
+            case "api": 
+                $absensi = $this->attendanceService->storeAttendanceApi($request->nipd);
+                return $absensi;
+            default: 
+                $absensi = $this->attendanceService->storeAttendance($request->nipd, $request->status);
+                return $absensi;
+        }
     }
 
     /**

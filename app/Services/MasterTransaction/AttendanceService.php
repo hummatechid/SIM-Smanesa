@@ -3,6 +3,7 @@
 namespace App\Services\MasterTransaction;
 
 use App\Repositories\MasterTransaction\AttendanceRepository;
+use App\Repositories\StudentRepository;
 use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\Facades\DataTables;
 use App\Services\BaseService;
@@ -10,10 +11,12 @@ use DateTime;
 use stdClass;
 
 class AttendanceService extends BaseService {
+    private $studentRepository;
 
-    public function __construct(AttendanceRepository $attendanceRepository)
+    public function __construct(AttendanceRepository $attendanceRepository, StudentRepository $studentRepository)
     {
         $this->repository = $attendanceRepository;
+        $this->studentRepository = $studentRepository;
         $this->pageTitle = "Kehadiran";
         $this->mainUrl = "attendance";
         $this->mainMenu = "attendance";
@@ -195,5 +198,76 @@ class AttendanceService extends BaseService {
         }
 
         return $item_result;
+    }
+
+    public function storeAttendanceApi(string $nipd){
+        if(!$nipd){
+            return response()->json([
+                "success" => false,
+                "error" => true,
+                "message" => "nipd tidak boleh kosong"
+            ], 400);
+        }
+
+        // get data student
+        $student = $this->studentRepository->getOneByOther("nipd",$nipd);
+        if(!$student){
+            return response()->json([
+                "success" => false,
+                "error" => true,
+                "message" => "Data siswa tidak ditemukan"
+            ], 404);
+        }
+
+        $now = now();
+        $attendance = $this->studentRepository->getDataDateWithCondition($now, [], "student_id",$student->id, "first");
+        if(!$attendance){
+            return response()->json([
+                "success" => false,
+                "error" => true,
+                "message" => "Data asbsensi siswa tidak ditemukan"
+            ], 404);
+        }
+
+        $attendance->update([
+            "status" => "masuk",
+            "present_at" => now()
+        ]);
+
+        return response()->json([
+            "success" => true,
+            "message" => "Siswa berhasil absensi"
+        ], 200);
+    }
+
+    public function storeAttendance(string $nipd, string $status){
+        // check nipd
+        if(!$nipd){
+            return redirect()->back()->with("error","nipd tidak boleh kosong");
+        }
+
+        // check status
+        if(!$status){
+            $status = "masuk";
+        }
+
+        // get data student
+        $student = $this->studentRepository->getOneByOther("nipd",$nipd);
+        if(!$student){
+            return redirect()->back()->with("error","Data siswa tidak ditemukan");
+        }
+
+        $now = now();
+        $attendance = $this->studentRepository->getDataDateWithCondition($now, [], "student_id",$student->id, "first");
+        if(!$attendance){
+            return redirect()->back()->with("error","Data absensi siswa tidak ditemukan");
+        }
+
+        $attendance->update([
+            "status" => $status,
+            "present_at" => now()
+        ]);
+
+        return redirect()->route('attendance.index')->with("success","Siswa berhasil absensi");
     }
 }
