@@ -39,30 +39,39 @@
         <div class="col-md-6 col-12">
             <x-datatable
                 card-title="Siswa Sering Melanggar"
-                data-url="{{ route('violation.count-student') }}"
+                data-url="{{ route('violation.count-student').'?limit=6' }}"
                 :table-columns="$data_violation"
                 default-order="2"
                 arrange-order="desc"
+                pagging-table=false
+                searchable-table=false
+                table-name="tr"
             />
         </div>
         <div class="col-md-6 col-12">
             <x-datatable
                 card-title="Siswa Sering Terlambat"
-                data-url="{{ route('attendance.must-late',).'?status=masuk' }}"
+                data-url="{{ route('attendance.must-late',).'?status=masuk&limit=6' }}"
                 :table-columns="$data_late"
                 default-order="2"
                 arrange-order="desc"
                 table-id="table1"
+                pagging-table=false
+                searchable-table=false
+                table-name="tr"
             />
         </div>
         <div class="col-12">
             <x-datatable
                 card-title="Kehadiran Terbaru"
-                data-url="{{ route('attendance.new-list',).'?status=masuk' }}"
+                data-url="{{ route('attendance.new-list',).'?status=masuk&limit=6' }}"
                 :table-columns="$data_presence"
                 default-order="2"
                 arrange-order="desc"
                 table-id="table2"
+                pagging-table=false
+                searchable-table=false
+                table-name="tr"
             />
         </div>
     </div>

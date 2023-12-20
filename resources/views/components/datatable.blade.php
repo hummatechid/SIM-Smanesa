@@ -114,6 +114,8 @@
         processing: true,
         serverSide: true,
         paging: true,
+        searching: true,
+        sDom: "{{$tableName}}",
         orderClasses: false,
         deferRender: true,
         ajax: {

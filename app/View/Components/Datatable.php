@@ -12,6 +12,7 @@ class Datatable extends Component {
         public string $dataUrl, 
         public array $tableColumns,
         public string $tableId = 'table',
+        public string $tableName = 'lfrtip',
         public int $defaultOrder = 1,
         public string $arrangeOrder = 'asc',
         public string|null $dataAddUrl = null,
@@ -21,6 +22,8 @@ class Datatable extends Component {
         public array $dataAddSettings = [],
         public string $dataAddBtn = '',
         public bool $withMultipleSelect = false,
+        public bool $paggingTable = true,
+        public bool $searchableTable = true,
         public array $withCustomGroups = []
     ) { }
 
