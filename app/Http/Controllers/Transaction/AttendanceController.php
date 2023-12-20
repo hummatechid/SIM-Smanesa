@@ -66,6 +66,27 @@ class AttendanceController extends Controller
             ->rawColumns(['status'])
             ->make(true);
     }
+    public function getDatatablesLimit()
+    {
+        $data = $this->attendanceRepository->getTodayAttendance(10);
+
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->addColumn('student', function($item) {
+                return $item->student->full_name;
+            })->addColumn('present_at', function($item) {
+                return $item->present_at->format('h:i');
+            })->addColumn('status', function($item) {
+                // return $item->status;
+                if($item->status == "masuk") {
+                    return '<span class="badge bg-success">Tepat Waktu</span>';
+                } else {
+                    return '<span class="badge bg-danger">Terlambat</span>';
+                } 
+            })
+            ->rawColumns(['status'])
+            ->make(true);
+    }
     
     public function getDatatablesPermit()
     {
