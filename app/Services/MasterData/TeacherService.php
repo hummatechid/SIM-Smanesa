@@ -6,6 +6,7 @@ use App\Repositories\TeacherRepository;
 use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\Facades\DataTables;
 use App\Services\BaseService;
+use Illuminate\Support\Facades\Http;
 
 class TeacherService extends BaseService {
 
@@ -42,5 +43,46 @@ class TeacherService extends BaseService {
                 </div>';
             })->rawColumns(['action'])
             ->make(true);
+    }
+
+    /**
+     * fetch all teacher from dapodik API
+     * @return mixed
+     */
+    public function fetchTeacherFromDapodik(String $npsn, String $key): mixed
+    {
+        // Specify the URL
+        $url = 'http://dapo.smanesa.id:5774/WebService/getPesertaDidik?npsn=' . $npsn;
+
+        // Set the authorization header
+        $authorizationToken = 'Bearer ' . $key;
+
+        $response = Http::withHeaders([
+            'Authorization' => $authorizationToken,
+        ])->timeout(1200)->get($url);
+
+        // Check if the request was successful (status code 2xx)
+        if ($response->successful()) {
+            // Get the response body as an array or JSON object
+            $data = $response->json();
+            return $data;
+        } else {
+            // Handle the error
+            echo 'Error: ' . $response->status();
+            return $response->status();
         }
     }
+
+     /**
+     * handle sync student from dapodik
+     *
+     * @param array $students
+     * @return void
+     */
+    public function handleSyncTeacher(array $teachers): void
+    {
+        foreach ($teachers as $teacher) {
+            $this->repository->updateOrCreateTeacher($teacher);
+        }
+    }
+}

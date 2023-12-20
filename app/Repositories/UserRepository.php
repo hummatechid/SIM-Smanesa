@@ -21,4 +21,26 @@ class UserRepository extends BaseRepository {
     {
         return $this->role->where($column, $data)->first();
     }
+
+    public function getAllUserInOneRole(string $role, string $type = null)
+    {
+        if($type){
+            return $this->model->with(["roles" => function ($q) use ($role){
+                $q->where("name",$role);
+            }])
+            ->whereHas("roles", function ($q) use ($role){
+                $q->where("name",$role);
+            })
+            ->whereNotNull("device_token")
+            ->get();
+        } else {
+            return $this->model->with(["roles" => function ($q) use ($role){
+                $q->where("name",$role);
+            }])
+            ->whereHas("roles", function ($q) use ($role){
+                $q->where("name",$role);
+            })
+            ->get();
+        }
+    }
 }

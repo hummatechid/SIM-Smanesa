@@ -118,8 +118,8 @@ class PenggunaController extends Controller
         $user = $this->penggunaRepository->getOneById($id);
         $data = $this->penggunaService->getPageData('user-list', '', [
             'user' => $user,
-
         ]);
+        
         return view('admin.pages.master-data.user.show', $data);
     }
 

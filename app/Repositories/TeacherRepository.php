@@ -19,4 +19,31 @@ class TeacherRepository extends BaseRepository {
             $q->with('roles');
         }])->where('id', $id)->firstOrFail();
     }
+
+    /**
+     * update or create teacher to database
+     * @param array $teacher
+     */
+    public function updateOrCreateTeacher(array $teacher): void
+    {
+        $this->model->query()
+        ->updateOrCreate(
+            [
+                'nik' => $teacher['nip'],
+                'nisn' => $teacher['nisn'],
+            ],
+            [
+            'nik' => $teacher['nip'],
+            'nisn' => $teacher['nisn'],
+            'nipd' => $teacher['nuptk'],
+            'full_name' => $teacher['nama'],
+            'gender' => ($teacher['jenis_kelamin'] == 'L') ? 'Laki-laki' : 'Perempuan',
+            'phone_number' => $teacher['nomor_telepon_seluler'],
+            'address' => $teacher['alamat_jalan'],
+            'religion' => $teacher['agama_id_str'],
+            'jenis_ptk' => $teacher['jenis_ptk'],
+            'is_dapodik' => 1,
+            
+        ]);
+    }
 }

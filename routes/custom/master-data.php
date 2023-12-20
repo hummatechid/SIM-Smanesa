@@ -30,16 +30,19 @@ Route::middleware(['auth'])->group(function () {
     Route::post('treatment/soft-delete/{id}', [TreatmentController::class, 'softDestroy'])->name('treatment.softDelete');
     
     // get controller from TeacherController
-    Route::get('teacher/get-main-data', [TeacherController::class, 'getDatatablesData'])->name('teacher.get-main-datatables');
-    Route::get('teacher/{id}/edit-password', [TeacherController::class, 'editPassword'])->name('teacher.editPassword');
-    Route::patch('teacher/{id}/update-password', [TeacherController::class, 'updatePassword'])->name('teacher.updatePassword');
-    Route::resource('teacher', TeacherController::class);
-    Route::post('teacher/soft-delete/{id}', [TeacherController::class, 'softDestroy'])->name('teacher.softDestroy');
+    Route::prefix('teacher')->name('teacher.')->group(function(){
+        Route::get('/get-main-data', [TeacherController::class, 'getDatatablesData'])->name('get-main-datatables');
+        Route::get('/{id}/edit-password', [TeacherController::class, 'editPassword'])->name('editPassword');
+        Route::patch('/{id}/update-password', [TeacherController::class, 'updatePassword'])->name('updatePassword');
+        Route::resource('', TeacherController::class);
+        Route::post('/soft-delete/{id}', [TeacherController::class, 'softDestroy'])->name('softDestroy');
+        Route::get('sync-teachers', [TeacherController::class, 'syncTeacher'])->name('sync');
+    });
     
     // get controller from PenggunaController
-    Route::resource('user', PenggunaController::class);
     Route::prefix('user')->name('user.')->group(function () {
         Route::get('/get-main-data', [PenggunaController::class, 'getDatatablesData'])->name('get-main-datatables');
+        Route::resource('', PenggunaController::class);
         Route::get('/{id}/edit-password', [PenggunaController::class, 'editPassword'])->name('editPassword');
         Route::patch('/{id}/update-password', [PenggunaController::class, 'updatePassword'])->name('updatePassword');
         Route::post('/soft-delete/{id}', [PenggunaController::class, 'softDestroy'])->name('softDelete');

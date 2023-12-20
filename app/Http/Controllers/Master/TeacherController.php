@@ -12,6 +12,7 @@ use App\Repositories\RoleRepository;
 use Illuminate\Http\Request;
 use App\Services\MasterData\TeacherService;
 use App\Services\UserService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
 class TeacherController extends Controller
@@ -304,5 +305,29 @@ class TeacherController extends Controller
                 "message" => $th->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * sync student from dapodik
+     *
+     * @return JsonResponse
+     */
+    public function syncTeacher(): JsonResponse
+    {
+        $npsn = config('app.web_service_npsn');
+        $key = config('app.web_service_key');
+        $teachers = $this->teacherService->fetchTeacherFromDapodik($npsn, $key);
+
+        if($teachers == null) {
+            return response()->json([
+                'message' => $teachers
+            ]);
+        }
+
+        $this->teacherService->handleSyncTeacher($teachers['rows']);
+
+        return response()->json([
+            'message' => 'success'
+        ]);
     }
 }
