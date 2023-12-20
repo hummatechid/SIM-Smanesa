@@ -22,6 +22,19 @@
     </div>
 
     @php
+        $data_column = ["student" => "Siswa", "present_at" => "Waktu Kehadiran", "status" => "Status"];
+    @endphp
+    <x-datatable
+        card-title="Tabel Data Kehadiran"
+        data-url="{{ route('attendance.get-main-datatables') }}"
+        :table-columns="$data_column"
+        default-order="2"
+        arrange-order="desc"
+        data-add-type="custom-btn"
+        data-add-btn='<div class="d-flex gap-3"><a href="{{ route("scan.index") }}" class="btn btn-primary">Scan Kehadiran</a><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-add-permit">+ Tambah izin</button></div>'
+    />
+{{-- 
+    @php
         $data_column = ["student" => "Siswa", "status" => "Status", "action" => "Aksi"];
     @endphp
     <x-datatable
@@ -31,9 +44,7 @@
         default-order="2"
         arrange-order="desc"
         delete-option="attendance/presence/deleted_id?status=absent"
-        data-add-type="custom-btn"
-        data-add-btn='<div class="d-flex gap-3"><a href="{{ route("scan.index") }}" class="btn btn-primary">Scan Kehadiran</a><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-add-permit">+ Tambah izin</button></div>'
-    />
+    /> --}}
 
 </div>
 

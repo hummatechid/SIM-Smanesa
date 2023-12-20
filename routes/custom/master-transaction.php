@@ -18,6 +18,7 @@ Route::middleware(['auth'])->group(function () {
     
     Route::prefix('attendance')->name('attendance.')->group(function() {
         Route::get('get-main-data', [AttendanceController::class, 'getDatatablesData'])->name('get-main-datatables');
+        Route::get('get-limited-data', [AttendanceController::class, 'getDatatablesLimit'])->name('get-limit-datatables');
         Route::get('get-permit-data', [AttendanceController::class, 'getDatatablesPermit'])->name('get-permit-datatables');
         Route::get('presence', [AttendanceController::class, 'presence'])->name('presence');
         Route::post('presence', [AttendanceController::class, 'createPermit'])->name('presence.create-permit');
