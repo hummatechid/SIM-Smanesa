@@ -70,8 +70,8 @@ Route::middleware('custom.sanctum')->group(function () {
     Route::prefix('attendance')->name('attendance.')->group(function (){
         Route::get('/', [AttendanceController::class, 'listAttendences'])->name('list');
         Route::post('/', [AttendanceController::class, 'store'])->name('api.store');
-        Route::get('/new-attendance', [AttendanceController::class, 'newAttendences'])->name('new-list');
-        Route::get('/late-attendance', [AttendanceController::class, 'studentLateAttendances'])->name('api.late-list');
+        Route::get('/new-attendance', [AttendanceController::class, 'newAttendences'])->name('api.new-list');
+        Route::get('/late-attendance', [AttendanceController::class, 'studentLateAttendances'])->name('late-list');
         Route::get('/count-must-late', [AttendanceController::class, 'studentMustLate'])->name('api.must-late');
     });
 });

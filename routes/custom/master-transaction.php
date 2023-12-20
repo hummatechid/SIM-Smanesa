@@ -21,7 +21,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('get-permit-data', [AttendanceController::class, 'getDatatablesPermit'])->name('get-permit-datatables');
         Route::get('presence', [AttendanceController::class, 'presence'])->name('presence');
         Route::post('presence', [AttendanceController::class, 'createPermit'])->name('presence.create-permit');
-        Route::get('/late-attendance', [AttendanceController::class, 'studentLateAttendances'])->name('late-list');
+        Route::get('/new-attendance', [AttendanceController::class, 'newAttendences'])->name('new-list');
         Route::get('/count-must-late', [AttendanceController::class, 'studentMustLate'])->name('must-late');
         Route::resource('/', AttendanceController::class);
     });
