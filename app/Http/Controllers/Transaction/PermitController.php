@@ -8,28 +8,31 @@ use App\Repositories\MasterTransaction\PermitRepository;
 use App\Repositories\PenggunaRepository;
 use App\Repositories\TeacherRepository;
 use App\Repositories\StudentRepository;
+use App\Repositories\UserRepository;
 use App\Services\MasterTransaction\PermitService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PermitController extends Controller
 {
-    private $penggunaRepository, $teacherRepository, $permitRepository, $studentRepository;
+    private $penggunaRepository, $teacherRepository, $permitRepository, $studentRepository, $userRepository;
     private $permitService;
 
     public function __construct(
+        PermitService $permitService,
         PermitRepository $permitRepository,
         PenggunaRepository $penggunaRepository,
         TeacherRepository $teacherRepository,
         StudentRepository $studentRepository,
-        PermitService $permitService,
+        UserRepository $userRepository,
     )
     {
+        $this->permitService = $permitService;
         $this->permitRepository = $permitRepository;
         $this->penggunaRepository = $penggunaRepository;
         $this->teacherRepository = $teacherRepository;
         $this->studentRepository = $studentRepository;
-        $this->permitService = $permitService;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -63,6 +66,12 @@ class PermitController extends Controller
      */
     public function store(PermitRequest $request)
     {
+        // check validaiton 
+        if(!is_array($request->student_id)) return redirect()->back()->with("error","Data siswa tidak boleh kosong")->withInput();
+        foreach($request->student_id as $key => $value){
+            if(!$value) return redirect()->back()->with("error","Data siswa tidak boleh kosong")->withInput();
+        }
+
         // validation data for request
         $validateData = $request->validated();
 
@@ -73,11 +82,27 @@ class PermitController extends Controller
         $validateData["created_by"] = $user->id;
         $validateData["status"] = "pending";
 
+        $pimpinan = $this->userRepository->getAllUserInOneRole("pimpinan", "mobile");
+
         try{
+            // set message notification
+            $title = "Pengajuan Izin Keluar";
+            $message = "Siswa / siswi anda mengajukan permintaan untuk keluar dari lingkungan sekolah !";
+            $type = "basic";
+
             // store data 
             foreach($request->student_id as $student_id){
                 $validateData["student_id"] = $student_id;
                 $this->permitRepository->create($validateData);
+            }
+
+            // send message
+            foreach($pimpinan as $pimpin){
+                while (count($request->student_id)){
+                    $notification_id = $pimpin->device_token;
+                    $id = $pimpin->id;
+                    send_notification_FCM($notification_id, $title, $message, $id,$type);
+                }
             }
 
             return redirect()->route('permit.index')->with('success', "Berhasil membuat surat izin");

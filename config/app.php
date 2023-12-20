@@ -32,6 +32,8 @@ return [
     'env' => env('APP_ENV', 'production'),
     'web_service_npsn' => env('WEB_SERVICE_NPSN', ''),
     'web_service_key' => env('WEB_SERVICE_KEY', ''),
+    'fcm_token' => env('FCM_SERVER_KEY', ''),
+    'url_fcm_send' => env('URL_FCM_SEND', ''),
 
     /*
     |--------------------------------------------------------------------------

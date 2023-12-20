@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pengguna;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,6 +36,15 @@ class AuthController extends Controller
             ], 400);
         }
 
+        $check_roles = Role::where("id",$user->role_id)->where("name","pimpinan")->first();
+        if(!$check_roles){
+            return response()->json([
+                'message' => 'Akun ini tidak terautentikasi, silahkan login dengan akun yang sesuai'
+            ], 401);
+        }
+
+        if(!$user->device_token) $user->device_token = $request->device_token;
+
         // get detail data user
         $pengguna = Pengguna::where("user_id",$user->id)->first();
         $user->pengguna = $pengguna;
@@ -60,6 +70,8 @@ class AuthController extends Controller
         $id = Auth::guard("sanctum")->id();
         $user = User::find($id);
         $user->tokens()->delete();
+        // $user->update(['device_token' => null]);
+
         return response()->json([
             'message' => 'logout success'
         ], 200);
