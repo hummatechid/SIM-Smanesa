@@ -201,7 +201,7 @@ class AttendanceService extends BaseService {
         return $item_result;
     }
 
-    public function storeAttendanceApi(string $nipd){
+    public function storeAttendanceApi(string|null $nipd){
         if(!$nipd){
             return response()->json([
                 "status" => "error",
@@ -238,7 +238,7 @@ class AttendanceService extends BaseService {
         ], 200);
     }
 
-    public function storeAttendance(string $nipd, string $status){
+    public function storeAttendance(string|null $nipd, string|null $status = "masuk"){
         // check nipd
         if(!$nipd){
             return redirect()->back()->with("error","nipd tidak boleh kosong");

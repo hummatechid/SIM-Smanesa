@@ -253,12 +253,15 @@
                             method: "post",
                             data: {
                                 nipd: nipd,
-                                value: 'api',
+                                type: 'api',
                                 _token: "{{ csrf_token() }}"
                             },
                             success: (data) => {
                                 // toast('success', 'Berhasil melakukan absensi');
                                 toast(data.status, data.message)
+                            },
+                            error: (data) => {
+                                toast(data.responseJSON.status, data.responseJSON.message)
                             }
                         })
                     }, time_before_send);
