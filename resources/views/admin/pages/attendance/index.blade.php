@@ -29,14 +29,14 @@
             </div>
         </div>
         <div class="col-lg-3 col-sm-6 col-12 mb-2">
-            <div class="card bg-warning mb-0">
-                <div class="border-white card-header border-bottom m-0 p-2 fw-bold bg-warning text-center text-white">Sakit</div>
-                <div class="card-body m-0 p-3 lead fs-5 text-center text-white">{{ $count_attendance->sick }}</div>
+            <div class="card bg-secondary mb-0">
+                <div class="border-white card-header border-bottom m-0 p-2 fw-bold bg-secondary text-center text-white">Terlambat</div>
+                <div class="card-body m-0 p-3 lead fs-5 text-center text-white">{{ $count_attendance->late }}</div>
             </div>
         </div>
         <div class="col-lg-3 col-sm-6 col-12 mb-2">
-            <div class="card bg-secondary mb-0">
-                <div class="border-white card-header border-bottom m-0 p-2 fw-bold bg-secondary text-center text-white">Izin</div>
+            <div class="card bg-warning mb-0">
+                <div class="border-white card-header border-bottom m-0 p-2 fw-bold bg-warning text-center text-white">Sakit / Izin</div>
                 <div class="card-body m-0 p-3 lead fs-5 text-center text-white">{{ $count_attendance->permit }}</div>
             </div>
         </div>

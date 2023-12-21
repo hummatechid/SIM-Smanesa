@@ -54,26 +54,26 @@
             <section id="list" class="my-5">
                 <div class="container">
                     <div class="text-center mb-3 pb-0 mb-lg-5 pb-lg-3">
-                        <h2 class="mb-0">Judul Section Ini</h2>
+                        <h2 class="mb-0">SMAN 1 Purwosari</h2>
                         <div class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. In, officiis.</div>
                     </div>
 
                     <div class="row">
                         <div class="col-lg-4 mb-3 mb-lg-0 text-center">
                             <div class="bg-primary-subtle border border-primary rounded-4">
-                                <div class="fs-1 fw-bold">1000</div>
+                                <div class="fs-1 fw-bold">{{ $count_student }}</div>
                                 <div class="lead">Siswa Aktif</div>
                             </div>
                         </div>
                         <div class="col-lg-4 mb-3 mb-lg-0 text-center">
                             <div class="bg-primary-subtle border border-primary rounded-4">
-                                <div class="fs-1 fw-bold">1000</div>
+                                <div class="fs-1 fw-bold">{{ $count_teacher }}</div>
                                 <div class="lead">Pengajar</div>
                             </div>
                         </div>
                         <div class="col-lg-4 mb-3 mb-lg-0 text-center">
                             <div class="bg-primary-subtle border border-primary rounded-4">
-                                <div class="fs-1 fw-bold">1000</div>
+                                <div class="fs-1 fw-bold">{{ $count_admin }}</div>
                                 <div class="lead">Staf Lain</div>
                             </div>
                         </div>

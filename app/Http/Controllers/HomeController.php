@@ -30,4 +30,14 @@ class HomeController extends Controller
 
         return view('admin.pages.blank.index', $data);
     }
+
+    public function landingPage()
+    {
+        $data = [
+            "count_student" => 123,
+            "count_teacher" => 123,
+            "count_admin" => 123,
+        ];
+        return view('admin.pages.blank.landing-page', $data);
+    }
 }

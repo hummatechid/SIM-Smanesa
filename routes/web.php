@@ -23,8 +23,6 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
-Route::get('/', function() {
-    return view('admin.pages.blank.landing-page');
-});
+Route::get('/', [HomeController::class, 'landingPage'])->name('landing-page');
 
 Auth::routes();

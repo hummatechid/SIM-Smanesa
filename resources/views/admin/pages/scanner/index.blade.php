@@ -20,25 +20,24 @@
                 </div>
             </div>
         </div>
-    </div>
-    {{-- <a href="{{ route('dashboard') }}"id="btn-back" class="btn btn-secondary">&#10094; Kembali</a> --}}
-    <div id="wrapper-scan" class="mb-4">
-        <input type="text" autofocus class="form-control" id="nisn">
-        <div id="background-scan"></div>
-        <div id="msg" class="text-center lead fs-4 fw-bold">Siap Melakukan Scan</div>
+        <div id="wrapper-scan" class="mb-4">
+            <input type="text" autofocus class="form-control" id="nisn">
+            <div id="background-scan"></div>
+            <div id="msg" class="text-center lead fs-4 fw-bold">Siap Melakukan Scan</div>
+        </div>
+        @php
+            $data_column = ["student" => "Siswa", "present_at" => "Waktu Kehadiran", "status" => "Status"];
+        @endphp
+        <x-datatable
+            card-title="Data Kehadiran Terbaru"
+            data-url="{{ route('attendance.get-main-datatables') }}"
+            :table-columns="$data_column"
+            default-order="2"
+            arrange-order="desc"
+            :searchable-table="false"
+        />
     </div>
 
-    @php
-        $data_column = ["student" => "Siswa", "present_at" => "Waktu Kehadiran", "status" => "Status"];
-    @endphp
-    <x-datatable
-        card-title="Data Kehadiran Terbaru"
-        data-url="{{ route('attendance.get-main-datatables') }}"
-        :table-columns="$data_column"
-        default-order="2"
-        arrange-order="desc"
-        :searchable-table="false"
-    />
 
 @endsection
 
@@ -89,7 +88,7 @@
         background-color: var(--bs-danger);
     }
     #nisn:focus ~ #background-scan {
-        background-color: var(--bs-teal);
+        background-color: var(--bs-success);
     }
     #nisn:not(:focus) ~ #msg::before {
         content: "Belum ";
