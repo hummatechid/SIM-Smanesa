@@ -46,9 +46,8 @@
                 :table-columns="$data_violation"
                 default-order="2"
                 arrange-order="desc"
-                pagging-table=false
-                searchable-table=false
-                table-name="tr"
+                :pagging-table="false"
+                :searchable-table="false"
             />
         </div>
         <div class="col-md-6 col-12">
@@ -59,9 +58,8 @@
                 default-order="2"
                 arrange-order="desc"
                 table-id="table1"
-                pagging-table=false
-                searchable-table=false
-                table-name="tr"
+                :pagging-table="false"
+                :searchable-table="false"
             />
         </div>
         <div class="col-12">
@@ -72,9 +70,8 @@
                 default-order="2"
                 arrange-order="desc"
                 table-id="table2"
-                pagging-table=false
-                searchable-table=false
-                table-name="tr"
+                :pagging-table="false"
+                :searchable-table="false"
             />
         </div>
     </div>

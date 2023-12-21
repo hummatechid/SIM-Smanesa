@@ -12,7 +12,6 @@ class Datatable extends Component {
         public string $dataUrl, 
         public array $tableColumns,
         public string $tableId = 'table',
-        public string $tableName = 'lfrtip',
         public int $defaultOrder = 1,
         public string $arrangeOrder = 'asc',
         public string|null $dataAddUrl = null,

@@ -57,9 +57,8 @@
         :table-columns="$data_column"
         default-order="2"
         arrange-order="desc"
-        pagging-table=false
-        searchable-table=false
-        table-name="tr"
+        :pagging-table="false"
+        :searchable-table="false"
     />
 
 </div>

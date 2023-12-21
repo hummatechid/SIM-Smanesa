@@ -124,9 +124,8 @@
     let {{ $tableId }} = $('#{{ $tableId }}').DataTable({
         processing: true,
         serverSide: true,
-        paging: true,
-        searching: true,
-        sDom: "{{$tableName}}",
+        paging: "{{ $paggingTable }}",
+        searching: "{{ $searchableTable }}",
         orderClasses: false,
         deferRender: true,
         ajax: {
