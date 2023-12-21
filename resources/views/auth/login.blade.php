@@ -59,9 +59,9 @@
                         </div>
                         <button class="btn btn-primary btn-block btn-lg shadow-lg mt-5">Masuk</button>
                     </form>
-                    {{-- <div class="text-center mt-5 text-lg fs-4">
-                        <p><a class="font-bold" href="auth-forgot-password.html">Lupa password?</a>.</p>
-                    </div> --}}
+                    <div class="text-center mt-3 fs-5">
+                        <a class="font-bold" href="{{ route('password.request') }}">Lupa password?</a>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-7 d-none d-lg-block">
