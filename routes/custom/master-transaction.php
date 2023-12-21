@@ -16,16 +16,18 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->group(function () {
     
-    Route::prefix('attendance')->name('attendance.')->group(function() {
-        Route::get('get-main-data', [AttendanceController::class, 'getDatatablesData'])->name('get-main-datatables');
-        Route::get('get-limited-data', [AttendanceController::class, 'getDatatablesLimit'])->name('get-limit-datatables');
-        Route::get('get-permit-data', [AttendanceController::class, 'getDatatablesPermit'])->name('get-permit-datatables');
-        Route::get('presence', [AttendanceController::class, 'presence'])->name('presence');
-        Route::post('presence', [AttendanceController::class, 'createPermit'])->name('presence.create-permit');
-        Route::get('/new-attendance', [AttendanceController::class, 'newAttendences'])->name('new-list');
-        Route::get('/count-must-late', [AttendanceController::class, 'studentMustLate'])->name('must-late');
-        Route::resource('/', AttendanceController::class);
+    Route::prefix('attendance')->name('attendance.')->controller(AttendanceController::class)->group(function() {
+        Route::get('get-main-data','getDatatablesData')->name('get-main-datatables');
+        Route::get('get-limited-data','getDatatablesLimit')->name('get-limit-datatables');
+        Route::get('get-permit-data','getDatatablesPermit')->name('get-permit-datatables');
+        Route::get('presence','presence')->name('presence');
+        Route::get('report','report')->name('report');
+        Route::post('presence','createPermit')->name('presence.create-permit');
+        Route::get('/new-attendance','newAttendences')->name('new-list');
+        Route::get('/count-must-late','studentMustLate')->name('must-late');
     });
+    Route::get('scan-attendance', [AttendanceController::class, 'scanAttendance'])->name('scan.index');
+    Route::resource('attendance', AttendanceController::class);
     
     // get controller from PermitController
     Route::prefix('permit')->name('permit.')->group(function(){

@@ -45,6 +45,20 @@ class AttendanceController extends Controller
         return view('admin.pages.attendance.presence', $data);
     }
 
+    public function scanAttendance()
+    {
+        $data = $this->attendanceService->getPageData('attendance-scan', 'Scan Kehadiran', [], [], 'Scan Kehadiran');
+        return view('admin.pages.scanner.index', $data);
+    }
+
+    public function report()
+    {
+        $students = $this->studentRepository->getAll();
+
+        $data = $this->attendanceService->getPageData('attendance-report', 'Laporan Presensi', ['students' => $students], [], "Laporan Presensi");
+        return view('admin.pages.attendance.report', $data);
+    }
+
     public function getDatatablesData()
     {
         $data = $this->attendanceRepository->getTodayAttendance();

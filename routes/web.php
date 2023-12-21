@@ -28,7 +28,3 @@ Route::get('/', function() {
 });
 
 Auth::routes();
-
-Route::get('scan-attendance', function() {
-    return view('admin.pages.scanner.index');
-})->name('scan.index');
