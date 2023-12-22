@@ -50,11 +50,25 @@
         delete-option="permit/soft-delete/deleted_id"
         data-add-url="{{ url('permit/create') }}"
         :with-multiple-select="true"
+        multiple-select-all='<div class="d-flex justify-content-between align-items-center gap-3 mb-3">
+            <div class="">
+                <input type="checkbox" name="select-all" id="select-all" class="me-2">
+                <label for="select-all">pilih semua data pending</label>
+            </div>
+            <div class="">
+                <select name="select-action" id="select-action" class="form-select">
+                    <option value="">Pilih Aksi</option>
+                    <option value="accepted">Setujui</option>
+                    <option value="rejected">Tolak</option>
+                </select>
+            </div>
+
+        </div>'
         :with-custom-groups="$custom_group"
         arrange-order="desc"
     />
 
-    <div class="card">
+    {{-- <div class="card">
         <div class="card-body d-flex justify-content-start align-items-center gap-3">
             <div class="input-group">
                 <input type="checkbox" name="select-all" id="select-all" class="me-2">
@@ -69,7 +83,7 @@
             </div>
 
         </div>
-    </div>
+    </div> --}}
 
 </div>
 @endsection

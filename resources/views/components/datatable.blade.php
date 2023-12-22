@@ -55,6 +55,7 @@
             </div>
         </div>
         <div class="card-body">
+            <x-session-alert/>
             <div class="d-flex justify-content-start gap-3">
                 @foreach ($withCustomGroups as $name => $props)
                 <div class="form-group gap-1 d-flex justify-content-center align-items-center mb-3">
@@ -69,7 +70,7 @@
                 </div>
                 @endforeach
             </div>
-            <x-session-alert/>
+            {!! $multipleSelectAll !!}
             @if(isset($deleteOption))
             <div id="alert-delete"></div>
             @endif
@@ -123,7 +124,7 @@
 
     let {{ $tableId }} = $('#{{ $tableId }}').DataTable({
         processing: true,
-        serverSide: true,
+        serverSide: "{{ $serverSide }}",
         paging: "{{ $paggingTable }}",
         searching: "{{ $searchableTable }}",
         orderClasses: false,

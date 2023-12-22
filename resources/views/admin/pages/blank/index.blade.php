@@ -48,6 +48,7 @@
                 arrange-order="desc"
                 :pagging-table="false"
                 :searchable-table="false"
+                :server-side="false"
             />
         </div>
         <div class="col-md-6 col-12">
@@ -60,6 +61,7 @@
                 table-id="table1"
                 :pagging-table="false"
                 :searchable-table="false"
+                :server-side="false"
             />
         </div>
         <div class="col-12">
@@ -72,6 +74,7 @@
                 table-id="table2"
                 :pagging-table="false"
                 :searchable-table="false"
+                :server-side="false"
             />
         </div>
     </div>
