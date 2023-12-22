@@ -1,5 +1,5 @@
 {{-- S:Datatable --}}
-<section class="section">
+<section class="section h-100">
     @if($dataAddUrl && $dataAddType == "modal")
     <div class="modal fade" id="modal-add-new-data" tabindex="-1">
         <div class="modal-dialog">
@@ -39,7 +39,7 @@
     </div>
     @endif
 
-    <div class="card">
+    <div class="card h-100">
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <h5 class="card-title">

@@ -35,11 +35,8 @@
         </div>
     </div>
 
-    @php
-        $data_column = ["student" => "Siswa", "present_at" => "Waktu Kehadiran", "status" => "Status"];
-    @endphp
     <div class="row">
-        <div class="col-md-6 col-12">
+        <div class="col-md-6 col-12 mb-4">
             <x-datatable
                 card-title="Siswa Sering Melanggar"
                 data-url="{{ route('violation.count-student').'?limit=6' }}"
@@ -51,7 +48,7 @@
                 :server-side="false"
             />
         </div>
-        <div class="col-md-6 col-12">
+        <div class="col-md-6 col-12 mb-4">
             <x-datatable
                 card-title="Siswa Sering Terlambat"
                 data-url="{{ route('attendance.must-late',).'?status=masuk&limit=6' }}"
@@ -64,7 +61,7 @@
                 :server-side="false"
             />
         </div>
-        <div class="col-12">
+        <div class="col-12 mb-4">
             <x-datatable
                 card-title="Kehadiran Terbaru"
                 data-url="{{ route('attendance.new-list',).'?status=masuk&limit=6' }}"
