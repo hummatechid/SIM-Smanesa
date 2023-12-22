@@ -14,7 +14,8 @@ class Attendance extends Model
     protected $keyType = 'uuid';
     protected $guarded = [];
 
-    public function student() {
+    public function student()
+    {
         return $this->belongsTo(Student::class, 'student_id', 'id');
     }
 }

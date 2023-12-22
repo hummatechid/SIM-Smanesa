@@ -36,68 +36,6 @@ class StudentRepository extends BaseRepository
         // Set the authorization header
         $authorizationToken = 'Bearer ' . $key;
 
-//        try {
-//            $response = file_get_contents($url, false, stream_context_create([
-//                'http' => [
-//                    'method' => 'GET',
-//                    'header' => [
-//                        'Authorization: ' . $authorizationToken,
-//                    ],
-//                ],
-//            ]));
-//
-//// Cek jika request berhasil
-//            if ($response === false) {
-//                die('Error occurred while fetching data');
-//            }
-//
-//            try{
-//                // Membagi respons menjadi header dan body
-//                list($header, $body) = explode("\r\n\r\n", $response, 2);
-//
-//            // Cetak header untuk referensi (jika diperlukan)
-//            //            echo "Header:\n$header\n\n";
-//
-//                // Ubah body JSON menjadi objek PHP
-//                $responseObject = json_decode($body);
-//
-//                // Periksa jika dekoding JSON berhasil
-//                if (json_last_error() === JSON_ERROR_NONE) {
-//                    // Lakukan sesuatu dengan objek
-//                    dd($responseObject);
-//                } else {
-//                    // Tangani kesalahan JSON, jika ada
-//                    echo "Gagal mendekode JSON. Kesalahan: " . json_last_error_msg();
-//                }
-//            }catch (\Exception $e){
-////                dd(json_decode($response)->rows);
-//                return json_decode($response);
-//            }
-//
-//
-//
-//            // Make a GET request with the authorization header
-////            $response = Http::withHeaders([
-////                'Authorization' => $authorizationToken,
-////            ])->get($url);
-////
-////            // Periksa status code
-////            if ($response->status() == 200) {
-////                dd($response);
-////                // Lakukan sesuatu jika status code adalah 200
-////                // Misalnya, mengambil data dari response
-////                $data = $response->json();
-////                // Lakukan sesuatu dengan $data
-////            } else {
-////                // Lempar pengecualian jika status code tidak 200
-////                throw new \Exception('HTTP request failed with status code: ' . $response->status());
-////            }
-////
-////            return $response->json();
-//        }catch (\Exception $e) {
-//            dd($e->getMessage());
-//            return $e->getMessage();
-//        }
 
         $response = Http::withHeaders([
             'Authorization' => $authorizationToken,
@@ -107,10 +45,10 @@ class StudentRepository extends BaseRepository
         if ($response->successful()) {
             // Get the response body as an array or JSON object
             $data = $response->json();
-//            dd($data);
+            //            dd($data);
             return $data;
             // Output the data
-//            print_r($data);
+            //            print_r($data);
         } else {
             // Handle the error
             echo 'Error: ' . $response->status();
@@ -137,22 +75,42 @@ class StudentRepository extends BaseRepository
     public function updateOrCreateStudent(array $student): void
     {
         $this->model->query()
-        ->updateOrCreate(
-            [
-                'nik' => $student['nik'],
-                'nisn' => $student['nisn'],
-            ],
-            [
-            'nik' => $student['nik'],
-            'nisn' => $student['nisn'],
-            'nipd' => $student['nipd'],
-            'full_name' => $student['nama'],
-            'gender' => ($student['jenis_kelamin'] == 'L') ? 'Laki-laki' : 'Perempuan',
-            'phone_number' => $student['nomor_telepon_seluler'],
-            'address' => $student['alamat_jalan'],
-            'religion' => $student['agama_id_str'],
-            'nama_rombel' => $student['nama_rombel'],
-            'violation_score' => 0,
-        ]);
+            ->updateOrCreate(
+                [
+                    'nik' => $student['nik'],
+                    'nisn' => $student['nisn'],
+                ],
+                [
+                    'email' => $student['email'],
+                    'nik' => $student['nik'],
+                    'nisn' => $student['nisn'],
+                    'nipd' => $student['nipd'],
+                    'full_name' => $student['nama'],
+                    'gender' => ($student['jenis_kelamin'] == 'L') ? 'Laki-laki' : 'Perempuan',
+                    'phone_number' => $student['nomor_telepon_seluler'],
+                    'home_phone_number' => $student['nomor_telepon_rumah'],
+                    'address' => $student['alamat_jalan'],
+                    'religion' => $student['agama_id_str'],
+                    'nama_rombel' => $student['nama_rombel'],
+                    'violation_score' => 0,
+                    'register_type' => $student['jenis_pendaftaran_id_str'],
+                    'school_origin' => $student['sekolah_asal'],
+                    'birth_location' => $student['tempat_lahir'],
+                    'birth_date' => $student['tanggal_lahir'],
+                    'father_name' => $student['nama_ayah'],
+                    'father_job' => $student['pekerjaan_ayah_id_str'],
+                    'mother_name' => $student['nama_ibu'],
+                    'mother_job' => $student['pekerjaan_ibu_id_str'],
+                    'guardian_name' => $student['nama_wali'],
+                    'guardian_job' => $student['pekerjaan_wali_id_str'],
+                    'anak_keberapa' => $student['anak_keberapa'],
+                    'height' => $student['tinggi_badan'],
+                    'weight' => $student['berat_badan'],
+                    'semester' => $student['semester_id'],
+                    'tingkat_pendidikan' => $student['tingkat_pendidikan_id'],
+                    'kurikulum' => $student['kurikulum_id_str'],
+                    'kebutuhan_khusus' => $student['kebutuhan_khusus'],
+                ]
+            );
     }
 }
