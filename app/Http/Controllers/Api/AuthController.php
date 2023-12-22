@@ -78,15 +78,16 @@ class AuthController extends Controller
         ], 200);
     }
 
-    public function getToken(Request $request){
-        if(!$request->token){
+    public function getToken(){
+        if(!Auth::guard("sanctum")->check()) {
             return response()->json([
-                "status" => "error",
-                'message' => 'Token tidak boleh kosong'
-            ], 400);
+                'message' => 'Tidak terautentikasi'
+            ], 401);
         }
+        // 
+        $id = Auth::guard("sanctum")->id();
 
-        $token_access = DB::table('personal_access_tokens')->where("token", $request->token)->first();
+        $token_access = DB::table('personal_access_tokens')->where("tokenable_id", $id)->first();
         if(!$token_access){
             return response()->json([
                 "status" => "error",
