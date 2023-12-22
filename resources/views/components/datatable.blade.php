@@ -118,7 +118,7 @@
 
     var params = "";
     Object.keys(customGroups).forEach((key) => {
-        params += (`${key}=${customGroups[key]},`)
+        params += (`${key}=${customGroups[key]}&`)
     })
     
 
@@ -168,7 +168,7 @@
         customGroups['{{ $name }}'] = $('#group_{{ $name }}').val()
         params = "";
         Object.keys(customGroups).forEach((key) => {
-            params += (`${key}=${customGroups[key]},`)
+            params += (`${key}=${customGroups[key]}&`)
         })
 
         {{ $tableId }}.ajax.reload()

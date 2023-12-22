@@ -21,52 +21,70 @@
         </div>
     </div>
 
-    @php
-        $data_column = [
-            "selection" => "",
-            "date" => "Waktu",
-            "student" => "Siswa",
-            "reason" => "Alasan",
-            "status" => "Status",
-            "action" => "Aksi"
-        ];
-        $custom_group = [
-            "status" => [
-                "title" => "Status",
-                "options" => [
-                    "" => "Semua",
-                    "pending" => "Pending",
-                    "accepted" => "Dibolehkan",
-                    "rejected" => "Dilarang",
-                    "back" => "Telah Kembali"
+    @role('satpam')
+        @php
+            $data_column = [
+                "date" => "Waktu",
+                "student" => "Siswa",
+                "reason" => "Alasan",
+                "status" => "Status",
+            ];
+        @endphp
+        <x-datatable
+            card-title="Tabel Izin"
+            data-url="{{ route('permit.get-main-datatables') }}?status=accepted"
+            :table-columns="$data_column"
+            delete-option="permit/soft-delete/deleted_id"
+            arrange-order="desc"
+        />
+    @else
+        @php
+            $data_column = [
+                "selection" => "",
+                "date" => "Waktu",
+                "student" => "Siswa",
+                "reason" => "Alasan",
+                "status" => "Status",
+                "action" => "Aksi"
+            ];
+            $custom_group = [
+                "status" => [
+                    "title" => "Status",
+                    "options" => [
+                        "" => "Semua",
+                        "pending" => "Pending",
+                        "accepted" => "Dibolehkan",
+                        "rejected" => "Dilarang",
+                        "back" => "Telah Kembali"
+                    ]
                 ]
             ]
-        ]
-    @endphp
-    <x-datatable
-        card-title="Tabel Izin"
-        data-url="{{ route('permit.get-main-datatables') }}"
-        :table-columns="$data_column"
-        delete-option="permit/soft-delete/deleted_id"
-        data-add-url="{{ url('permit/create') }}"
-        :with-multiple-select="true"
-        multiple-select-all='<div class="d-flex justify-content-between align-items-center gap-3 mb-3">
-            <div class="">
-                <input type="checkbox" name="select-all" id="select-all" class="me-2">
-                <label for="select-all">pilih semua data pending</label>
-            </div>
-            <div class="">
-                <select name="select-action" id="select-action" class="form-select">
-                    <option value="">Pilih Aksi</option>
-                    <option value="accepted">Setujui</option>
-                    <option value="rejected">Tolak</option>
-                </select>
-            </div>
+        @endphp
+        <x-datatable
+            card-title="Tabel Izin"
+            data-url="{{ route('permit.get-main-datatables') }}"
+            :table-columns="$data_column"
+            delete-option="permit/soft-delete/deleted_id"
+            data-add-url="{{ url('permit/create') }}"
+            :with-multiple-select="true"
+            multiple-select-all='<div class="d-flex justify-content-between align-items-center gap-3 mb-3">
+                <div class="">
+                    <input type="checkbox" name="select-all" id="select-all" class="me-2">
+                    <label for="select-all">pilih semua data pending</label>
+                </div>
+                <div class="">
+                    <select name="select-action" id="select-action" class="form-select">
+                        <option value="">Pilih Aksi</option>
+                        <option value="accepted">Setujui</option>
+                        <option value="rejected">Tolak</option>
+                    </select>
+                </div>
 
-        </div>'
-        :with-custom-groups="$custom_group"
-        arrange-order="desc"
-    />
+            </div>'
+            :with-custom-groups="$custom_group"
+            arrange-order="desc"
+        />
+    @endrole
 
     {{-- <div class="card">
         <div class="card-body d-flex justify-content-start align-items-center gap-3">
@@ -117,7 +135,7 @@
 
                             $.ajax({
                                 url: "",
-                                method: "DELETE",
+                                method: "PATCH",
                                 data: {
                                     _token: "{{ csrf_token() }}",
                                     selected_id: all_id

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+Route::get('scan-attendance', [AttendanceController::class, 'scanAttendance'])->name('scan.index');
 Route::middleware(['auth'])->group(function () {
     
     Route::prefix('attendance')->name('attendance.')->controller(AttendanceController::class)->group(function() {
@@ -26,7 +26,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/new-attendance','newAttendences')->name('new-list');
         Route::get('/count-must-late','studentMustLate')->name('must-late');
     });
-    Route::get('scan-attendance', [AttendanceController::class, 'scanAttendance'])->name('scan.index');
     Route::resource('attendance', AttendanceController::class);
     
     // get controller from PermitController
