@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -64,7 +65,7 @@ class AuthController extends Controller
         if(!Auth::guard("sanctum")->check()) {
             return response()->json([
                 'message' => 'Tidak terautentikasi'
-            ], 401);;
+            ], 401);
         }
         // 
         $id = Auth::guard("sanctum")->id();
@@ -74,6 +75,29 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'logout success'
+        ], 200);
+    }
+
+    public function getToken(Request $request){
+        if(!$request->token){
+            return response()->json([
+                "status" => "error",
+                'message' => 'Token tidak boleh kosong'
+            ], 400);
+        }
+
+        $token_access = DB::table('personal_access_tokens')->where("token", $request->token)->first();
+        if(!$token_access){
+            return response()->json([
+                "status" => "error",
+                'message' => 'Token user tidak terdaftar'
+            ], 404);
+        }
+
+        return response()->json([
+            "status" => "success",
+            'message' => 'Berhasil akses',
+            "data" => $token_access
         ], 200);
     }
 }
