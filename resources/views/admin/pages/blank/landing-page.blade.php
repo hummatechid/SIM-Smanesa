@@ -19,8 +19,8 @@
             <div class="container-fluid">
                 <img src="{{ asset('assets/compiled/logos/logo-sm.png') }}" alt="Smanesa" height="50">
                 <div class="d-flex gap-2">
-                    @if(Auth::check())
                     <a href="{{ route('scan.index') }}" class="btn btn-primary">Scan Kehadiran</a>
+                    @if(Auth::check())
                     <a href="{{ route('dashboard') }}" class="btn btn-primary">Dashboard</a>
                     @else
                     <a href="{{ route('login') }}" class="btn btn-primary">Login</a>

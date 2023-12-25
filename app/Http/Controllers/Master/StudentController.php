@@ -59,13 +59,13 @@ class StudentController extends Controller
         $npsn = config('app.web_service_npsn');
         $key = config('app.web_service_key');
         $students = $this->repository->fetchStudentFromDapodik($npsn, $key);
-
-        if($students == null) {
+        if ($students == null) {
             return response()->json([
                 'message' => $students
             ]);
         }
 
+        // dd($students['rows']);
         $this->service->handleSyncStudent($students['rows']);
 
         return response()->json([
@@ -73,7 +73,8 @@ class StudentController extends Controller
         ]);
     }
 
-    public function detailOneStudent(string $id){
+    public function detailOneStudent(string $id)
+    {
         $student = $this->repository->getOneById($id);
 
         return response()->json([
@@ -81,11 +82,11 @@ class StudentController extends Controller
             "data" => $student
         ]);
     }
-    
+
     public function detailManyStudent(Request $request)
     {
         // check request ids
-        if(!$request->ids){
+        if (!$request->ids) {
             return response()->json([
                 "message" => "Data ids harus dikirim, dan harus berupa array",
                 "data" => null
@@ -93,8 +94,8 @@ class StudentController extends Controller
         }
 
         // get data
-        $student = $this->repository->getWhereIn("id",$request->ids);
-    
+        $student = $this->repository->getWhereIn("id", $request->ids);
+
         return response()->json([
             "message" => "Sukses mengambil data student",
             "data" => $student

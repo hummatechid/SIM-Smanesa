@@ -1,5 +1,5 @@
 {{-- S:Datatable --}}
-<section class="section">
+<section class="section h-100">
     @if($dataAddUrl && $dataAddType == "modal")
     <div class="modal fade" id="modal-add-new-data" tabindex="-1">
         <div class="modal-dialog">
@@ -39,7 +39,7 @@
     </div>
     @endif
 
-    <div class="card">
+    <div class="card h-100">
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <h5 class="card-title">
@@ -55,6 +55,7 @@
             </div>
         </div>
         <div class="card-body">
+            <x-session-alert/>
             <div class="d-flex justify-content-start gap-3">
                 @foreach ($withCustomGroups as $name => $props)
                 <div class="form-group gap-1 d-flex justify-content-center align-items-center mb-3">
@@ -69,7 +70,7 @@
                 </div>
                 @endforeach
             </div>
-            <x-session-alert/>
+            {!! $multipleSelectAll !!}
             @if(isset($deleteOption))
             <div id="alert-delete"></div>
             @endif
@@ -117,13 +118,13 @@
 
     var params = "";
     Object.keys(customGroups).forEach((key) => {
-        params += (`${key}=${customGroups[key]},`)
+        params += (`${key}=${customGroups[key]}&`)
     })
     
 
     let {{ $tableId }} = $('#{{ $tableId }}').DataTable({
         processing: true,
-        serverSide: true,
+        serverSide: "{{ $serverSide }}",
         paging: "{{ $paggingTable }}",
         searching: "{{ $searchableTable }}",
         orderClasses: false,
@@ -167,7 +168,7 @@
         customGroups['{{ $name }}'] = $('#group_{{ $name }}').val()
         params = "";
         Object.keys(customGroups).forEach((key) => {
-            params += (`${key}=${customGroups[key]},`)
+            params += (`${key}=${customGroups[key]}&`)
         })
 
         {{ $tableId }}.ajax.reload()

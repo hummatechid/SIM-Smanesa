@@ -21,8 +21,10 @@ class Datatable extends Component {
         public array $dataAddSettings = [],
         public string $dataAddBtn = '',
         public bool $withMultipleSelect = false,
+        public string $multipleSelectAll = "",
         public bool $paggingTable = true,
         public bool $searchableTable = true,
+        public bool $serverSide = true,
         public array $withCustomGroups = []
     ) { }
 

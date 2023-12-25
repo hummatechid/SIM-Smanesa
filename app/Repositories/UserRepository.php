@@ -1,18 +1,19 @@
-<?php 
+<?php
 
 namespace App\Repositories;
 
 use App\Repositories\BaseRepository;
 use App\Models\{User, Role};
 
-class UserRepository extends BaseRepository {
+class UserRepository extends BaseRepository
+{
 
     private $role;
 
     // construct model
     public function __construct(User $user, Role $role)
     {
-        $this->model = $user;    
+        $this->model = $user;
         $this->role = $role;
     }
 
@@ -24,23 +25,40 @@ class UserRepository extends BaseRepository {
 
     public function getAllUserInOneRole(string $role, string $type = null)
     {
-        if($type){
-            return $this->model->with(["roles" => function ($q) use ($role){
-                $q->where("name",$role);
+        if ($type) {
+            return $this->model->with(["roles" => function ($q) use ($role) {
+                $q->where("name", $role);
             }])
-            ->whereHas("roles", function ($q) use ($role){
-                $q->where("name",$role);
-            })
-            ->whereNotNull("device_token")
-            ->get();
+                ->whereHas("roles", function ($q) use ($role) {
+                    $q->where("name", $role);
+                })
+                ->whereNotNull("device_token")
+                ->get();
         } else {
-            return $this->model->with(["roles" => function ($q) use ($role){
-                $q->where("name",$role);
+            return $this->model->with(["roles" => function ($q) use ($role) {
+                $q->where("name", $role);
             }])
-            ->whereHas("roles", function ($q) use ($role){
-                $q->where("name",$role);
-            })
-            ->get();
+                ->whereHas("roles", function ($q) use ($role) {
+                    $q->where("name", $role);
+                })
+                ->get();
         }
+    }
+
+    public function getTeacherByNik(String $nik): mixed
+    {
+        return $this->model->where("email", $nik)->first();
+    }
+
+    public function createTeacher(array $teacher): mixed
+    {
+        $teacherRole = $this->role->where("name", "guru")->first();
+
+        return $this->model->query()
+            ->create([
+                'role_id' => $teacherRole->id,
+                'email' => $teacher['nik'],
+                'password' => bcrypt($teacher['nik']),
+            ]);
     }
 }

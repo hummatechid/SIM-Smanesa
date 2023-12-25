@@ -1,10 +1,12 @@
 <?php
 
-use App\Http\Controllers\Master\{StudentController,
+use App\Http\Controllers\Master\{
+    StudentController,
     TreatmentController,
     ViolationTypeController,
     TeacherController,
-    PenggunaController};
+    PenggunaController
+};
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,17 +30,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('treatment/get-main-data', [TreatmentController::class, 'getDatatablesData'])->name('treatment.get-main-datatables');
     Route::resource('treatment', TreatmentController::class);
     Route::post('treatment/soft-delete/{id}', [TreatmentController::class, 'softDestroy'])->name('treatment.softDelete');
-    
+
     // get controller from TeacherController
-    Route::prefix('teacher')->name('teacher.')->group(function(){
+    Route::prefix('teacher')->name('teacher.')->group(function () {
+        Route::get('sync-teachers', [TeacherController::class, 'syncTeacher'])->name('sync');
         Route::get('/get-main-data', [TeacherController::class, 'getDatatablesData'])->name('get-main-datatables');
         Route::get('/{id}/edit-password', [TeacherController::class, 'editPassword'])->name('editPassword');
         Route::patch('/{id}/update-password', [TeacherController::class, 'updatePassword'])->name('updatePassword');
         Route::resource('', TeacherController::class);
         Route::post('/soft-delete/{id}', [TeacherController::class, 'softDestroy'])->name('softDestroy');
-        Route::get('sync-teachers', [TeacherController::class, 'syncTeacher'])->name('sync');
     });
-    
+
     // get controller from PenggunaController
     Route::prefix('user')->name('user.')->group(function () {
         Route::get('/get-main-data', [PenggunaController::class, 'getDatatablesData'])->name('get-main-datatables');
@@ -49,9 +51,9 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::prefix('students')->name('student.')->group(function () {
+        Route::get('sync-students', [StudentController::class, 'syncStudents'])->name('sync');
         Route::get('get-main-data', [StudentController::class, 'getDatatablesData'])->name('get-main-datatables');
         Route::get('/', [StudentController::class, 'index'])->name('index');
         Route::get('/{id}', [StudentController::class, 'show'])->name('show');
-        Route::get('sync-students', [StudentController::class, 'syncStudents'])->name('sync');
     });
 });
