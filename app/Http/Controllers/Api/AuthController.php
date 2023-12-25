@@ -16,11 +16,13 @@ class AuthController extends Controller
     
     public function login(Request $request){
         // check request send
-        if (! Auth::attempt($request->only('email', 'password'))) {
-            return response()->json([
-                'message' => 'Tidak terautentikasi'
-            ], 401);
-        }
+        // if (!Auth::attempt($request->only('email', 'password'))) {
+        //     return response()->json([
+        //         'message' => 'Tidak terautentikasi'
+        //     ], 401);
+        // }
+
+        return response()->json($request->all());
 
         // check email user
         $user = User::where('email', $request->email)->first();
@@ -84,21 +86,26 @@ class AuthController extends Controller
                 'message' => 'Tidak terautentikasi'
             ], 401);
         }
-        // 
+        // get current user
         $id = Auth::guard("sanctum")->id();
 
-        $token_access = DB::table('personal_access_tokens')->where("tokenable_id", $id)->first();
-        if(!$token_access){
+        // get data user
+        $user = User::find($id);
+        if(!$user){
             return response()->json([
                 "status" => "error",
                 'message' => 'Token user tidak terdaftar'
             ], 404);
         }
 
+        // get detail data user
+        $pengguna = Pengguna::where("user_id",$user->id)->first();
+        $user->pengguna = $pengguna;
+
         return response()->json([
             "status" => "success",
             'message' => 'Berhasil akses',
-            "data" => $token_access
+            "data" => $user
         ], 200);
     }
 }
