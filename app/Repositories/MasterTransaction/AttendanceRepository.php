@@ -37,8 +37,8 @@ class AttendanceRepository extends BaseRepository {
 
     public function getTodayAttendance(int $limit = null): Object
     {
-        if($limit) return $this->model->whereDate('created_at', '=', today())->whereIn('status', ['present'])->limit($limit)->get();
-        else return $this->model->whereDate('created_at', '=', today())->whereIn('status', ['present'])->get();
+        if($limit) return $this->model->whereDate('created_at', today())->whereIn('status', ['masuk'])->limit($limit)->get();
+        else return $this->model->whereDate('created_at', today())->whereIn('status', ['masuk'])->get();
     }
 
     public function getTodayAbsent(): Object

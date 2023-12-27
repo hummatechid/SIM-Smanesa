@@ -167,7 +167,7 @@
                         }, waiting_detect_time)
     
                         $.ajax({
-                            url: "{{ route('attendance.store') }}",
+                            url: "{{ route('test') }}",
                             method: "post",
                             data: {
                                 nipd: nipd,
