@@ -24,6 +24,15 @@ class AttendanceRepository extends BaseRepository {
         return $data->total;
     }
 
+    public function countByStatusAttendancesToday(string $status): int
+    {
+        $data = $this->model->selectRaw('COUNT(*) as total')
+            ->whereDate('present_at',today())
+            ->where('status', $status)
+            ->first();
+        return $data->total;
+    }
+
     public function getTodayCountAttendance(): Object
     {
         $data = new stdClass();

@@ -31,7 +31,7 @@ class MakeAttendences extends Command
         foreach($students as $student){
             Attendance::create([
                 "student_id" => $student->id,
-                "status" => "alfa"
+                "status" => "alpha"
             ]);
         }
     }
