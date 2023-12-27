@@ -53,9 +53,7 @@ class AttendanceController extends Controller
 
     public function report()
     {
-        $students = $this->studentRepository->getAll();
-
-        $data = $this->attendanceService->getPageData('attendance-report', 'Laporan Presensi', ['students' => $students], [], "Laporan Presensi");
+        $data = $this->attendanceService->getPageData('attendance-report', 'Laporan Presensi', [], [], "Laporan Presensi");
         return view('admin.pages.attendance.report', $data);
     }
 

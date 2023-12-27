@@ -117,6 +117,12 @@ class ViolationController extends Controller
         return redirect()->route('violation.index')->with("success","Berhasil memberikan poin pelanggaran terhadap siswa");
     }
 
+    public function report()
+    {
+        $data = $this->violationService->getPageData('violation-report', 'Laporan Pelanggaran',[], [], "Laporan Presensi");
+        return view('admin.pages.violation.report', $data);
+    }
+
     /**
      * Display the specified resource.
      */

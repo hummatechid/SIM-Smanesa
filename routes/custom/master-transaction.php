@@ -39,6 +39,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('violation')->name('violation.')->group(function(){
         Route::get('/get-main-data', [ViolationController::class, 'getDatatablesData'])->name('get-main-datatables');
+        Route::get('report', [ViolationController::class, 'report'])->name('report');
         Route::resource('/', ViolationController::class);
         Route::get('/count-must-student', [ViolationController::class, 'listMustStudent'])->name('count-student');
     });
