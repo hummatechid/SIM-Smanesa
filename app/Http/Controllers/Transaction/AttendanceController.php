@@ -27,12 +27,17 @@ class AttendanceController extends Controller
      */
     public function index()
     {
+        $attendances = $this->attendanceRepository->getTodayAttendance();
         $today_attendance = $this->attendanceRepository->getTodayCountAttendance();
         $students = $this->studentRepository->getAll();
+        $today_attendance->present = $this->attendanceService->countPresentStudent($attendances, "present");
+        $today_attendance->late = $this->attendanceService->countPresentStudent($attendances, "late");
+        $today_attendance->permit = $this->attendanceRepository->countByStatusAttendancesToday("izin");
+        $today_attendance->absent = $this->attendanceRepository->countByStatusAttendancesToday("alpha");
 
         $data = $this->attendanceService->getPageData('attendance-overview', '', [
             'count_attendance' => $today_attendance,
-            'students' => $students
+            'students' => $students,
         ], null, "Presensi");
         return view('admin.pages.attendance.index', $data);
     }
@@ -88,10 +93,11 @@ class AttendanceController extends Controller
             ->addColumn('student', function($item) {
                 return $item->student->full_name;
             })->addColumn('present_at', function($item) {
-                return $item->present_at->format('h:i');
+                return Carbon::parse($item->present_at)->format('H:i');
             })->addColumn('status', function($item) {
+                $masuk = Carbon::parse($item->present_at)->format('H:i');
                 // return $item->status;
-                if($item->status == "masuk") {
+                if($masuk < '07:00') {
                     return '<span class="badge bg-success">Tepat Waktu</span>';
                 } else {
                     return '<span class="badge bg-danger">Terlambat</span>';

@@ -7,6 +7,7 @@ use App\Repositories\StudentRepository;
 use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\Facades\DataTables;
 use App\Services\BaseService;
+use Carbon\Carbon;
 use DateTime;
 use stdClass;
 
@@ -267,5 +268,22 @@ class AttendanceService extends BaseService {
         ]);
 
         return redirect()->route('attendance.index')->with("success","Siswa berhasil absensi");
+    }
+
+    public function countPresentStudent(array|object $data, string $type = "present")
+    {
+        if($type == "late"){
+            $result = $data->filter(function ($item){
+                $masuk = Carbon::parse($item->present_at)->format("H:i");
+                if($masuk > "07:00") return $item;
+            });
+        } else {
+            $result = $data->filter(function ($item){
+                $masuk = Carbon::parse($item->present_at)->format("H:i");
+                if($masuk < "07:00") return $item;
+            });
+        }
+
+        return count($result);
     }
 }
