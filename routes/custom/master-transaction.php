@@ -32,16 +32,16 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('permit')->name('permit.')->group(function(){
         Route::get('/waiting-acception', [PermitController::class, 'showAccListPage']);
         Route::get('/get-main-data', [PermitController::class, 'getDatatablesData'])->name('get-main-datatables');
-        Route::post('/update/many-data', [PermitController::class, 'updateManyData'])->name('updateManyData');
-        Route::resource('/', PermitController::class);
+        Route::patch('/update/many-data', [PermitController::class, 'updateManyData'])->name('updateManyData');
         Route::post('/soft-delete/{id}', [PermitController::class, 'softDestroy'])->name('softDelete');
     });
+    Route::resource('/permit', PermitController::class);
 
     Route::prefix('violation')->name('violation.')->group(function(){
         Route::get('/get-main-data', [ViolationController::class, 'getDatatablesData'])->name('get-main-datatables');
         Route::get('report', [ViolationController::class, 'report'])->name('report');
-        Route::resource('/', ViolationController::class);
         Route::get('/count-must-student', [ViolationController::class, 'listMustStudent'])->name('count-student');
     });
+    Route::resource('/violation', ViolationController::class);
     
 });

@@ -124,7 +124,6 @@ class PermitController extends Controller
      */
     public function edit(string $id)
     {
-        //
     }
 
     /**
@@ -135,7 +134,7 @@ class PermitController extends Controller
         // check have data permit or not
         $permit = $this->permitRepository->getOneById($id);
 
-        if(!$permit) return redirect()->back()->with('error',"Data izin tidak ditemukan")->withInput();
+        if(!$permit) return redirect()->back()->with('error',"Data izin tidak ditemukan");
 
         // check request status or not
         if(!$request->status) return redirect()->back()->with('error', 'Anda tidak mengirimkan sebuah tanggapan, mohon cek ulang')->withInput();
@@ -233,18 +232,21 @@ class PermitController extends Controller
         $data = [];
 
         // check request status or not
-        if(!$request->status) return redirect()->back()->with('error', 'Anda tidak mengirimkan sebuah tanggapan, mohon cek ulang')->withInput();
+        if(!$request->status) return response()->json([
+            "status" => "error",
+            "message" => "Status penerimaan harus diisi"
+        ], 400);
 
         // check id is array data
-        if(is_array($request->ids)){
+        if(is_array($request->selected_id)){
             // foreach array id
-            foreach($request->ids as $id){
+            foreach($request->selected_id as $id){
                 // check have data permit or not
                 $permit = $this->permitRepository->getOneById($id);
     
                 // check data has or notfoung
                 if(!$permit) continue;
-                else array_push($id);
+                else $data[] = $id;
     
                 // get data user
                 $user = Auth::user();
@@ -261,11 +263,17 @@ class PermitController extends Controller
                 $permit->update($dataUpdate);
             }
             $sukses = count($data);
-            $error = count($request->ids) - $sukses;
-            return redirect()->route('permit.index')->with('success', "Berhasil memberikan tanggapan di surat izin, dengan ". $sukses ." sukses, dan ". $error ." error");
+            $error = count($request->selected_id) - $sukses;
+            return response()->json([
+                "status" => "error",
+                "message" => "Berhasil memberikan tanggapan di surat izin, dengan ". $sukses ." sukses, dan ". $error ." error"
+            ], 200); 
         }else {
             // if data id not array
-            return redirect()->back()->with("error","Id yang dikirim harus berupa array")->withInput();
+            return response()->json([
+                "status" => "error",
+                "message" => "Tidak ada surat izin yang dipilih"
+            ], 400);
         }
     }
 

@@ -128,17 +128,19 @@
                         confirmButtonColor: '#dc3545',
                     }).then(result => {
                         if (result.isConfirmed) {
+                            console.log("test")
                             var all_id = [];
                             $('input:checkbox[name=permit]:checked').each(function() {
                                 all_id.push($(this).val())
                             })
 
                             $.ajax({
-                                url: "",
+                                url: "{{ route('permit.updateManyData') }}",
                                 method: "PATCH",
                                 data: {
                                     _token: "{{ csrf_token() }}",
-                                    selected_id: all_id
+                                    status: $(this).val(),
+                                    selected_id: all_id,
                                 },
                                 success: function(res) {
                                     jquery_datatable.ajax.reload()
