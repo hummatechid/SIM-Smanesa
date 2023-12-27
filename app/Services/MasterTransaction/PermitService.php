@@ -27,8 +27,9 @@ class PermitService extends BaseService {
      */
     public function getDataDatatable(Request $request) :JsonResponse
     {
-        if(!isset($request->status) || !$request->status) $data = $this->repository->getAll();
-        else $data = $this->repository->whereOneCondition('status', 'pending');
+
+        if(!isset($request->status) || !$request->status || $request->status == "null") $data = $this->repository->getAll();
+        else $data = $this->repository->whereOneCondition('status', $request->status);
 
         return Datatables::of($data)
             ->addIndexColumn()
