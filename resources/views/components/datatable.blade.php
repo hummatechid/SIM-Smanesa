@@ -123,6 +123,16 @@
     Object.keys(customGroups).forEach((key) => {
         params += (`${key}=${customGroups[key]}&`)
     })
+
+    const getParams = () => {
+        @foreach ($withCustomGroups as $name => $props)
+            params = "";
+            Object.keys(customGroups).forEach((key) => {
+                params += (`${key}=${customGroups[key]}&`)
+            })
+        @endforeach
+        return params;
+    }
     
     let {{ $tableId }} = $('#{{ $tableId }}').DataTable({
         processing: true,
@@ -151,7 +161,7 @@
             @endforeach
         ],
         ajax: {
-            url: "{{ url($dataUrl) }}?"+params,
+            url: "{{ url($dataUrl) }}?" + getParams(),
             data: {
                 _token: "{{ csrf_token() }}",
             }
@@ -192,7 +202,7 @@
             params += (`${key}=${customGroups[key]}&`)
         })
 
-        {{ $tableId }}.ajax.reload()
+        {{ $tableId }}.ajax.url("{{ url($dataUrl) }}?" + getParams()).load()
     })
     @endforeach
 
