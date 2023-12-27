@@ -219,7 +219,7 @@ class AttendanceService extends BaseService {
         }
 
         $now = now();
-        $attendance = $this->studentRepository->getDataDateWithCondition($now, [], "student_id",$student->id, "first");
+        $attendance = $this->repository->getDataDateWithCondition($now, [], "student_id",$student->id, "first");
         if(!$attendance){
             return response()->json([
                 "status" => "error",
@@ -256,7 +256,7 @@ class AttendanceService extends BaseService {
         }
 
         $now = now();
-        $attendance = $this->studentRepository->getDataDateWithCondition($now, [], "student_id",$student->id, "first");
+        $attendance = $this->repository->getDataDateWithCondition($now, [], "student_id",$student->id, "first");
         if(!$attendance){
             return redirect()->back()->with("error","Data absensi siswa tidak ditemukan");
         }

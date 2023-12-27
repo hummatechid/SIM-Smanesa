@@ -68,10 +68,11 @@ class AttendanceController extends Controller
             ->addColumn('student', function($item) {
                 return $item->student->full_name;
             })->addColumn('present_at', function($item) {
-                return $item->present_at->format('h:i');
+                return Carbon::parse($item->present_at)->format('H:i');
             })->addColumn('status', function($item) {
+                $masuk = Carbon::parse($item->present_at)->format('H:i');
                 // return $item->status;
-                if($item->status == "masuk") {
+                if($masuk < '07:00') {
                     return '<span class="badge bg-success">Tepat Waktu</span>';
                 } else {
                     return '<span class="badge bg-danger">Terlambat</span>';

@@ -14,10 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('scan-attendance', [AttendanceController::class, 'scanAttendance'])->name('scan.index');
+Route::get('attendance/get-main-data',[AttendanceController::class, 'getDatatablesData'])->name('attendance.get-main-datatables');
+Route::post('attendance/present',[AttendanceController::class, 'store'])->name('test');
 Route::middleware(['auth'])->group(function () {
-    
     Route::prefix('attendance')->name('attendance.')->controller(AttendanceController::class)->group(function() {
-        Route::get('get-main-data','getDatatablesData')->name('get-main-datatables');
         Route::get('get-limited-data','getDatatablesLimit')->name('get-limit-datatables');
         Route::get('get-permit-data','getDatatablesPermit')->name('get-permit-datatables');
         Route::get('presence','presence')->name('presence');
