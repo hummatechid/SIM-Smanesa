@@ -25,6 +25,7 @@ class Datatable extends Component {
         public bool $paggingTable = true,
         public bool $searchableTable = true,
         public bool $serverSide = true,
+        public bool $infoTable = true,
         public array $withCustomGroups = [],
         public array $customExportButton = [],
         public string $customExportTitle = "",

@@ -59,6 +59,7 @@
         arrange-order="desc"
         :pagging-table="false"
         :searchable-table="false"
+        :info-table="false"
     />
 
 </div>

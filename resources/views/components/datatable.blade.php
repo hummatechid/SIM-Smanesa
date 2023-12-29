@@ -124,7 +124,7 @@
         params += (`${key}=${customGroups[key]}&`)
     })
 
-    const getParams = () => {
+    const getParams{{ $tableId }} = () => {
         @foreach ($withCustomGroups as $name => $props)
             params = "";
             Object.keys(customGroups).forEach((key) => {
@@ -141,6 +141,7 @@
         @endif
         serverSide: "{{ $serverSide }}",
         paging: "{{ $paggingTable }}",
+        info: "{{ $infoTable }}",
         searching: "{{ $searchableTable }}",
         orderClasses: false,
         deferRender: true,
@@ -161,7 +162,7 @@
             @endforeach
         ],
         ajax: {
-            url: "{{ url($dataUrl) }}?" + getParams(),
+            url: "{{ url($dataUrl) }}?" + getParams{{ $tableId }}(),
             data: {
                 _token: "{{ csrf_token() }}",
             }
@@ -202,7 +203,7 @@
             params += (`${key}=${customGroups[key]}&`)
         })
 
-        {{ $tableId }}.ajax.url("{{ url($dataUrl) }}?" + getParams()).load()
+        {{ $tableId }}.ajax.url("{{ url($dataUrl) }}?" + getParams{{ $tableId }}()).load()
     })
     @endforeach
 

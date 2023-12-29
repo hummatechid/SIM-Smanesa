@@ -78,7 +78,7 @@
     </form>
     
     @php
-        $data_column = ["student" => "Siswa", "class" => "Kelas", "present" => "Hadir", "permit" => "Izin", "sick" => "Sakit"];
+        $data_column = ["student" => "Siswa", "class" => "Kelas", "present" => "Hadir", "permit" => "Izin", "sick" => "Sakit", "alpa" => "Tanpa Ket."];
     @endphp
     <x-datatable
         card-title="Tabel Data Kehadiran"

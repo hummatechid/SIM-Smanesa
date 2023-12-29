@@ -46,6 +46,7 @@
                 :pagging-table="false"
                 :searchable-table="false"
                 :server-side="false"
+                :info-table="false"
             />
         </div>
         <div class="col-md-6 col-12 mb-4">
@@ -59,6 +60,7 @@
                 :pagging-table="false"
                 :searchable-table="false"
                 :server-side="false"
+                :info-table="false"
             />
         </div>
         <div class="col-12 mb-4">
@@ -72,6 +74,7 @@
                 :pagging-table="false"
                 :searchable-table="false"
                 :server-side="false"
+                :info-table="false"
             />
         </div>
     </div>
