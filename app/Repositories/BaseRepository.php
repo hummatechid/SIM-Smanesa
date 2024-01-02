@@ -177,7 +177,7 @@ class BaseRepository implements RepositoryInterface {
 
     public function getWhereIn(string $column, array $arrayIn) : object|null
     {
-        return $this->model->whereNotNull("deleted_at")->whereIn($column, $arrayIn)->get();
+        return $this->model->whereIn($column, $arrayIn)->get();
     }
 
     public function getWhereInHistory(string $column, array $arrayIn, bool $history = false) : object|null

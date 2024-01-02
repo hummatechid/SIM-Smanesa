@@ -2,16 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\PenggunaRepository;
+use App\Repositories\StudentRepository;
+use App\Repositories\TeacherRepository;
 use App\Services\HomeService;
+use App\Services\MasterData\PenggunaService;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {   
-    private $homeService;
+    private $homeService, $penggunaService;
+    private $studentRepository, $teacherRepository ,$penggunaRepository;
 
-    public function __construct(HomeService $homeService)
+    public function __construct(
+        HomeService $homeService,
+        PenggunaService $penggunaService,
+        StudentRepository $studentRepository,
+        TeacherRepository $teacherRepository,
+        PenggunaRepository $penggunaRepository
+    )
     {
         $this->homeService = $homeService;
+        $this->penggunaService = $penggunaService;
+        $this->studentRepository = $studentRepository;
+        $this->teacherRepository = $teacherRepository;
+        $this->penggunaRepository = $penggunaRepository;
     }
 
     /**
@@ -33,10 +48,13 @@ class HomeController extends Controller
 
     public function landingPage()
     {
+        $student_count = $this->studentRepository->randomData("count");
+        $teacher_count = $this->teacherRepository->randomData("count");
+        $user_count = $this->penggunaRepository->randomData("count");
         $data = [
-            "count_student" => 123,
-            "count_teacher" => 123,
-            "count_admin" => 123,
+            "count_student" => $student_count,
+            "count_teacher" => $teacher_count,
+            "count_admin" => $user_count,
         ];
         return view('admin.pages.blank.landing-page', $data);
     }
