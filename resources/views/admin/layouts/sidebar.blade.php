@@ -183,10 +183,12 @@
 
                     <ul class="submenu active">
 
+                        @hasrole(['guru', 'staf', 'pimpinan', 'superadmin'])
                         <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'permit-add' ? 'active' : '' }}">
                             <a href="{{ url('permit/create') }}" class="submenu-link">Tambah Izin</a>
 
                         </li>
+                        @endhasrole
                         <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'permit-list' ? 'active' : '' }}">
                             <a href="{{ url('permit') }}" class="submenu-link">List Izin</a>
 

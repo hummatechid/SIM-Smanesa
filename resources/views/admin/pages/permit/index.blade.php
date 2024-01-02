@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    @role('satpam')
+    @if(auth()->user()->hasExactRoles('satpam'))
         @php
             $data_column = [
                 "date" => "Waktu",
@@ -36,8 +36,7 @@
             :table-columns="$data_column"
             arrange-order="desc"
         />
-    @endrole
-    @role('guru')
+    @elseif(auth()->user()->hasExactRoles('guru'))
         @php
             $data_column = [
                 "date" => "Waktu",
@@ -99,7 +98,7 @@
             :with-custom-groups="$custom_group"
             arrange-order="desc"
         />
-    @endrole
+    @endif
 
     {{-- <div class="card">
         <div class="card-body d-flex justify-content-start align-items-center gap-3">
