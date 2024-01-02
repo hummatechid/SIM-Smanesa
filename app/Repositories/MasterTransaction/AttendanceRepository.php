@@ -24,6 +24,15 @@ class AttendanceRepository extends BaseRepository {
         return $data->total;
     }
 
+    public function countByStatusAttendancesToday(string $status): int
+    {
+        $data = $this->model->selectRaw('COUNT(*) as total')
+            ->whereDate('present_at',today())
+            ->where('status', $status)
+            ->first();
+        return $data->total;
+    }
+
     public function getTodayCountAttendance(): Object
     {
         $data = new stdClass();
@@ -37,8 +46,8 @@ class AttendanceRepository extends BaseRepository {
 
     public function getTodayAttendance(int $limit = null): Object
     {
-        if($limit) return $this->model->whereDate('created_at', '=', today())->whereIn('status', ['present'])->limit($limit)->get();
-        else return $this->model->whereDate('created_at', '=', today())->whereIn('status', ['present'])->get();
+        if($limit) return $this->model->whereDate('created_at', today())->whereIn('status', ['masuk'])->limit($limit)->get();
+        else return $this->model->whereDate('created_at', today())->whereIn('status', ['masuk'])->get();
     }
 
     public function getTodayAbsent(): Object

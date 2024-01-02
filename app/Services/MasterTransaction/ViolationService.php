@@ -43,6 +43,49 @@ class ViolationService extends BaseService {
             ->make(true);
     }
 
+    
+    /**
+     * Get data for datatables in index page
+     *
+     * @return DataTables
+     */
+    public function getReportDataDatatable(array|object $data) :JsonResponse
+    {
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->addColumn('name', function($item) {
+                return $item->student->full_name . "(".$item->student->nisn.") | ".$item->student->nama_rombel;
+            })->addColumn('violation', function($item) {
+                return $item->violationType->name;
+            })->addColumn('score', function($item) {
+                return $item->score;
+            })->addColumn('date', function($item) {
+                return Carbon::parse($item->created_at)->isoFormat('DD-MM-YYYY');
+            })
+            ->make(true);
+    }
+
+    /**
+     * Get data for datatables in index page
+     *
+     * @return DataTables
+     */
+    public function getReportDataDatatableV2(array|object $data) :JsonResponse
+    {
+        $data = $data->groupBy('student_id');
+
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->addColumn('name', function($item) {
+                return $item[0]->student->full_name . "(".$item[0]->student->nisn.")";
+            })->addColumn('class', function($item) {
+                return $item[0]->student->nama_rombel;
+            })->addColumn('violation_score', function($item) {
+                return $item[0]->student->score;
+            })
+            ->make(true);
+    }
+
     /**
      * Get
      *

@@ -44,8 +44,7 @@
                             <h1 class="display-5 fw-bold lh-1 mb-3 text-white text-center text-lg-start">SMANESA</h1>
                             <p class="lead text-light text-center text-lg-start">Berimtaq, Unggul, dan Berbudaya</p>
                             <p class="lead text-light text-center text-lg-start">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis corporis molestiae
-                                adipisci dolorum nemo consequuntur deserunt ipsa quisquam officia sunt!
+                                Sistem Informasi Manajemen SMAN 1 Purwosari yang terintegrasi dengan data Dapodik
                             </p>
                         </div>
                     </div>
@@ -55,7 +54,7 @@
                 <div class="container">
                     <div class="text-center mb-3 pb-0 mb-lg-5 pb-lg-3">
                         <h2 class="mb-0">SMAN 1 Purwosari</h2>
-                        <div class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. In, officiis.</div>
+                        <div class="lead">Data pada website saat ini</div>
                     </div>
 
                     <div class="row">
@@ -86,7 +85,7 @@
                         <div class="col-6 col-md-4 mb-3">
                             <h5>Tentang</h5>
                             <ul class="nav flex-column">
-                                <li class="nav-item mb-2"><span class="nav-link p-0 text-body-secondary">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Corrupti minima recusandae perspiciatis!</span></li>
+                                <li class="nav-item mb-2"><span class="nav-link p-0 text-body-secondary">Sistem Informasi Manajemen SMAN 1 Purwosari yang terintegrasi dengan data Dapodik</span></li>
                             </ul>
                         </div>
 

@@ -22,7 +22,12 @@
     </div>
 
     @php
-        $data_column = ["category" => "Kategori", "score" => "Poin","treatment" => "Tindakan" ,"action" => "Aksi"];
+        if(auth()->user()->hasRole('superadmin')) {
+            $data_column = ["category" => "Kategori", "score" => "Poin","treatment" => "Tindakan" ,"action" => "Aksi"];
+
+        } else {
+            $data_column = ["category" => "Kategori", "score" => "Poin","treatment" => "Tindakan"];
+        }
         $data_settings = [
             "category" => [
                 "title" => "Kategori",

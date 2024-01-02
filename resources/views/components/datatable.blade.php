@@ -84,7 +84,7 @@
 {{-- E:DataTable --}}
 
 @push("custom-style")
-    <link href="https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-1.13.8/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/datatables.min.css" rel="stylesheet">
     <style>
         .parsley-errors-list {
             color: var(--bs-danger)
@@ -96,7 +96,9 @@
 @endpush
 
 @push('custom-script')
-<script src="https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-1.13.8/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/datatables.min.js"></script>
 <script src=" https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js "></script>
 <script src="{{ asset('assets/extensions/parsleyjs/parsley.min.js') }}"></script>
 <script src="{{ asset('assets/extensions/parsleyjs/i18n/id.js') }}"></script>
@@ -111,6 +113,7 @@
 </script>
 
 <script>
+    var export_title = '{{ $customExportTitle }}';
     var customGroups = {}
     @foreach($withCustomGroups as $name => $props)
     customGroups["{{ $name }}"] = $('#group_{{ $name }}').val() ? $('#group_{{ $name }}').val() : null;
@@ -120,17 +123,46 @@
     Object.keys(customGroups).forEach((key) => {
         params += (`${key}=${customGroups[key]}&`)
     })
-    
 
+    const getParams{{ $tableId }} = () => {
+        @foreach ($withCustomGroups as $name => $props)
+            params = "";
+            Object.keys(customGroups).forEach((key) => {
+                params += (`${key}=${customGroups[key]}&`)
+            })
+        @endforeach
+        return params;
+    }
+    
     let {{ $tableId }} = $('#{{ $tableId }}').DataTable({
         processing: true,
+        @if(!empty($customExportButton))
+        dom: 'Bfrtip',
+        @endif
         serverSide: "{{ $serverSide }}",
         paging: "{{ $paggingTable }}",
+        info: "{{ $infoTable }}",
         searching: "{{ $searchableTable }}",
         orderClasses: false,
         deferRender: true,
+        buttons: [
+            @foreach($customExportButton as $exportBtn)
+            {
+                extend: '{{ $exportBtn }}',
+                title: () => {
+                    return export_title
+                },
+                filename: function(){
+                    let d = new Date();
+                    let n = d.getTime();
+                    let str = export_title.replace(/\s/g, "_");
+                    return str + n;
+                },
+            },
+            @endforeach
+        ],
         ajax: {
-            url: "{{ url($dataUrl) }}?"+params,
+            url: "{{ url($dataUrl) }}?" + getParams{{ $tableId }}(),
             data: {
                 _token: "{{ csrf_token() }}",
             }
@@ -171,7 +203,7 @@
             params += (`${key}=${customGroups[key]}&`)
         })
 
-        {{ $tableId }}.ajax.reload()
+        {{ $tableId }}.ajax.url("{{ url($dataUrl) }}?" + getParams{{ $tableId }}()).load()
     })
     @endforeach
 

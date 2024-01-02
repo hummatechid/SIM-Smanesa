@@ -37,18 +37,18 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/get-main-data', [TeacherController::class, 'getDatatablesData'])->name('get-main-datatables');
         Route::get('/{id}/edit-password', [TeacherController::class, 'editPassword'])->name('editPassword');
         Route::patch('/{id}/update-password', [TeacherController::class, 'updatePassword'])->name('updatePassword');
-        Route::resource('', TeacherController::class);
         Route::post('/soft-delete/{id}', [TeacherController::class, 'softDestroy'])->name('softDestroy');
     });
+    Route::resource('/teacher', TeacherController::class);
 
     // get controller from PenggunaController
     Route::prefix('user')->name('user.')->group(function () {
         Route::get('/get-main-data', [PenggunaController::class, 'getDatatablesData'])->name('get-main-datatables');
-        Route::resource('', PenggunaController::class);
         Route::get('/{id}/edit-password', [PenggunaController::class, 'editPassword'])->name('editPassword');
         Route::patch('/{id}/update-password', [PenggunaController::class, 'updatePassword'])->name('updatePassword');
         Route::post('/soft-delete/{id}', [PenggunaController::class, 'softDestroy'])->name('softDelete');
     });
+    Route::resource('/user', PenggunaController::class);
 
     Route::prefix('students')->name('student.')->group(function () {
         Route::get('sync-students', [StudentController::class, 'syncStudents'])->name('sync');

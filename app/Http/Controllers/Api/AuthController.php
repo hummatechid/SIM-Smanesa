@@ -16,13 +16,11 @@ class AuthController extends Controller
     
     public function login(Request $request){
         // check request send
-        // if (!Auth::attempt($request->only('email', 'password'))) {
-        //     return response()->json([
-        //         'message' => 'Tidak terautentikasi'
-        //     ], 401);
-        // }
-
-        return response()->json($request->all());
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return response()->json([
+                'message' => 'Tidak terautentikasi'
+            ], 401);
+        }
 
         // check email user
         $user = User::where('email', $request->email)->first();

@@ -44,4 +44,12 @@ class PenggunaService extends BaseService {
             })->rawColumns(['action'])
             ->make(true);
     }
+
+    public function countUser(array|object $data)
+    {
+        $result = collect($data)->map(function($item){
+            if($item->user) return $item;
+        });
+        return count($result);
+    }
 }

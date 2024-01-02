@@ -7,6 +7,7 @@ use App\Repositories\StudentRepository;
 use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\Facades\DataTables;
 use App\Services\BaseService;
+use Carbon\Carbon;
 use DateTime;
 use stdClass;
 
@@ -219,7 +220,7 @@ class AttendanceService extends BaseService {
         }
 
         $now = now();
-        $attendance = $this->studentRepository->getDataDateWithCondition($now, [], "student_id",$student->id, "first");
+        $attendance = $this->repository->getDataDateWithCondition($now, [], "student_id",$student->id, "first");
         if(!$attendance){
             return response()->json([
                 "status" => "error",
@@ -256,7 +257,7 @@ class AttendanceService extends BaseService {
         }
 
         $now = now();
-        $attendance = $this->studentRepository->getDataDateWithCondition($now, [], "student_id",$student->id, "first");
+        $attendance = $this->repository->getDataDateWithCondition($now, [], "student_id",$student->id, "first");
         if(!$attendance){
             return redirect()->back()->with("error","Data absensi siswa tidak ditemukan");
         }
@@ -267,5 +268,78 @@ class AttendanceService extends BaseService {
         ]);
 
         return redirect()->route('attendance.index')->with("success","Siswa berhasil absensi");
+    }
+
+    public function countPresentStudent(array|object $data, string $type = "present")
+    {
+        if($type == "late"){
+            $result = $data->filter(function ($item){
+                $masuk = Carbon::parse($item->present_at)->format("H:i");
+                if($masuk > "07:00") return $item;
+            });
+        } else {
+            $result = $data->filter(function ($item){
+                $masuk = Carbon::parse($item->present_at)->format("H:i");
+                if($masuk < "07:00") return $item;
+            });
+        }
+
+        return count($result);
+    }
+
+    /**
+     * Get data for datatables in index page
+     *
+     * @return DataTables
+     */
+    public function getReportDataDatatable(array|object $data) :JsonResponse
+    {
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->addColumn('student', function($item) {
+                return $item->student->full_name . " (".$item->student->nisn.")";
+            })->addColumn('class', function($item) {
+                return $item->student->nama_rombel;
+            })->addColumn('present', function($item) {
+                return $item->status;
+            })->addColumn('date', function($item) {
+                return Carbon::parse($item->present_at ?? $item->created_at)->isoFormat('DD-MM-YYYY');
+            })
+            ->make(true);
+    }
+
+     /**
+     * Get data for datatables in index page
+     *
+     * @return DataTables
+     */
+    public function getReportDataDatatableV2(array|object $data) :JsonResponse
+    {
+        $data = $data->groupBy("student_id");
+
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->addColumn('student', function($item) {
+                return $item[0]->student->full_name . " (".$item[0]->student->nisn.")";
+            })->addColumn('class', function($item) {
+                return $item[0]->student->nama_rombel;
+            })->addColumn('present', function($item) {
+                return $item->filter(function($barang) {
+                    return $barang->status == "masuk";
+                })->count();
+            })->addColumn('permit', function($item) {
+                return $item->filter(function($barang) {
+                    return $barang->status == "izin";
+                })->count();
+            })->addColumn('sick', function($item) {
+                return $item->filter(function($barang) {
+                    return $barang->status == "sakit";
+                })->count();
+            })->addColumn('alpa', function($item) {
+                return $item->filter(function($barang) {
+                    return $barang->status == "alpha";
+                })->count();
+            })
+            ->make(true);
     }
 }

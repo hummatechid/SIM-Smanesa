@@ -27,12 +27,17 @@ class AttendanceController extends Controller
      */
     public function index()
     {
+        $attendances = $this->attendanceRepository->getTodayAttendance();
         $today_attendance = $this->attendanceRepository->getTodayCountAttendance();
         $students = $this->studentRepository->getAll();
+        $today_attendance->present = $this->attendanceService->countPresentStudent($attendances, "present");
+        $today_attendance->late = $this->attendanceService->countPresentStudent($attendances, "late");
+        $today_attendance->permit = $this->attendanceRepository->countByStatusAttendancesToday("izin");
+        $today_attendance->absent = $this->attendanceRepository->countByStatusAttendancesToday("alpha");
 
         $data = $this->attendanceService->getPageData('attendance-overview', '', [
             'count_attendance' => $today_attendance,
-            'students' => $students
+            'students' => $students,
         ], null, "Presensi");
         return view('admin.pages.attendance.index', $data);
     }
@@ -53,9 +58,7 @@ class AttendanceController extends Controller
 
     public function report()
     {
-        $students = $this->studentRepository->getAll();
-
-        $data = $this->attendanceService->getPageData('attendance-report', 'Laporan Presensi', ['students' => $students], [], "Laporan Presensi");
+        $data = $this->attendanceService->getPageData('attendance-report', 'Laporan Presensi', [], [], "Laporan Presensi");
         return view('admin.pages.attendance.report', $data);
     }
 
@@ -68,10 +71,11 @@ class AttendanceController extends Controller
             ->addColumn('student', function($item) {
                 return $item->student->full_name;
             })->addColumn('present_at', function($item) {
-                return $item->present_at->format('h:i');
+                return Carbon::parse($item->present_at)->format('H:i');
             })->addColumn('status', function($item) {
+                $masuk = Carbon::parse($item->present_at)->format('H:i');
                 // return $item->status;
-                if($item->status == "masuk") {
+                if($masuk < '07:00') {
                     return '<span class="badge bg-success">Tepat Waktu</span>';
                 } else {
                     return '<span class="badge bg-danger">Terlambat</span>';
@@ -80,6 +84,7 @@ class AttendanceController extends Controller
             ->rawColumns(['status'])
             ->make(true);
     }
+
     public function getDatatablesLimit()
     {
         $data = $this->attendanceRepository->getTodayAttendance(10);
@@ -89,10 +94,11 @@ class AttendanceController extends Controller
             ->addColumn('student', function($item) {
                 return $item->student->full_name;
             })->addColumn('present_at', function($item) {
-                return $item->present_at->format('h:i');
+                return Carbon::parse($item->present_at)->format('H:i');
             })->addColumn('status', function($item) {
+                $masuk = Carbon::parse($item->present_at)->format('H:i');
                 // return $item->status;
-                if($item->status == "masuk") {
+                if($masuk < '07:00') {
                     return '<span class="badge bg-success">Tepat Waktu</span>';
                 } else {
                     return '<span class="badge bg-danger">Terlambat</span>';
@@ -127,6 +133,46 @@ class AttendanceController extends Controller
             })
             ->rawColumns(['status'])
             ->make(true);
+    }
+
+    public function getReportDatatablesData(Request $request)
+    {
+        switch($request->type){
+            case "monthly":
+                if(!$request->year) $year = date('Y');
+                else $year = $request->year;
+                $data = $this->attendanceRepository->getDataMonth($year,$request->month,["student"]);
+            case "yearly":
+                $data = $this->attendanceRepository->getDataYears($request->year,["student"]);
+            case "custom":
+                if(!$request->date){
+                    $date_from = date('Y-m-d');
+                    $date_to = date('Y-m-d');
+                }else {
+                    $date_from = str_split("-",$request->date)[0];
+                    $date_to = str_split("-",$request->date)[1];
+                }
+                $data = $this->attendanceRepository->getDataCustomDate($date_from,$date_to,["student"]);
+            default:
+                if(!$request->year) $year = date('Y');
+                else $year = $request->year;
+                if(!$request->month) $month = date('m');
+                else $month = $request->month;
+                $data = $this->attendanceRepository->getDataMonth($year,$month,["student"]);
+        }
+        if($request->data == "per_class"){
+            $class = $request->class;
+            $data = $data->filter(function($item) use ($class){
+                return $item->student->nama_rombel == $class;
+            });
+        }else if($request->data == "per_grade"){
+            $grade = $request->grade;
+            $data = $data->filter(function($item) use ($grade){
+                return $item->student->tingkat_pendidikan == $grade;
+            });
+        }
+
+        return $this->attendanceService->getReportDataDatatable($data);
     }
 
     /**
