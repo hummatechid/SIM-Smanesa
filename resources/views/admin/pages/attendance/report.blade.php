@@ -78,7 +78,7 @@
     </form>
     
     @php
-        $data_column = ["student" => "Siswa", "class" => "Kelas", "present" => "Hadir", "permit" => "Izin", "sick" => "Sakit", "alpa" => "Tanpa Ket."];
+        $data_column = ["student" => "Siswa", "class" => "Kelas", "present" => "Kehadiran", "date" => "Tanggal"];
     @endphp
     <x-datatable
         card-title="Tabel Data Kehadiran"
@@ -187,7 +187,10 @@
         $('#date').flatpickr({
             mode: 'range',
             maxDate: 'today',
-            locale: 'id'
+            locale: 'id',
+            onChange: function(selectedDates, dateStr, instance) {
+                if(selectedDates.length > 1) reloadNewUrl();
+            }
         })
     })
 </script>

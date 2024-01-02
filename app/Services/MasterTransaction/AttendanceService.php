@@ -286,4 +286,25 @@ class AttendanceService extends BaseService {
 
         return count($result);
     }
+
+    /**
+     * Get data for datatables in index page
+     *
+     * @return DataTables
+     */
+    public function getReportDataDatatable(array|object $data) :JsonResponse
+    {
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->addColumn('name', function($item) {
+                return $item->student->full_name . "(".$item->student->nisn.")";
+            })->addColumn('class', function($item) {
+                return $item->student->nama_rombel;
+            })->addColumn('present', function($item) {
+                return $item->status;
+            })->addColumn('date', function($item) {
+                return Carbon::parse($item->present_at ?? $item->created_at)->isoFormat('DD-MM-YYYY');
+            })
+            ->make(true);
+    }
 }

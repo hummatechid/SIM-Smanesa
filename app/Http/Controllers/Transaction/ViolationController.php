@@ -67,12 +67,12 @@ class ViolationController extends Controller
         if($request->data == "per_class"){
             $class = $request->class;
             $data = $data->filter(function($item) use ($class){
-                return $item->nama_rombel == $class;
+                return $item->student->nama_rombel == $class;
             });
         }else if($request->data == "per_grade"){
             $grade = $request->grade;
             $data = $data->filter(function($item) use ($grade){
-                return $item->tingkat_pendidikan == $grade;
+                return $item->student->tingkat_pendidikan == $grade;
             });
         }
 
