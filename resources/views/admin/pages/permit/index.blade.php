@@ -34,7 +34,22 @@
             card-title="Tabel Izin"
             data-url="{{ route('permit.get-main-datatables') }}?status=accepted"
             :table-columns="$data_column"
-            delete-option="permit/soft-delete/deleted_id"
+            arrange-order="desc"
+        />
+    @endrole
+    @role('guru')
+        @php
+            $data_column = [
+                "date" => "Waktu",
+                "student" => "Siswa",
+                "reason" => "Alasan",
+                "status" => "Status",
+            ];
+        @endphp
+        <x-datatable
+            card-title="Tabel Izin"
+            data-url="{{ route('permit.get-main-datatables') }}"
+            :table-columns="$data_column"
             arrange-order="desc"
         />
     @else

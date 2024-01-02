@@ -178,7 +178,7 @@
                             <label for="address">Alamat</label>
                         </div>
                         <div class="form-group col-md-9">
-                            <input type="text" name="address" id="address" class="form-control @error('address') is-invalid @enderror" placeholder="Alamat" value="{{ old('address', ($dataUser ? $dataUser->address : '')) }}" @if(isset($dataUser->is_dapodik) && $dataUser->is_dapodik ) readonly @endif />
+                            <textarea name="address" id="address" class="form-control @error('address') is-invalid @enderror" placeholder="Alamat" @if(isset($dataUser->is_dapodik) && $dataUser->is_dapodik) readonly @endif>{{ old('address', ($dataUser ? $dataUser->address : '')) }}</textarea>
                             @error('address')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
