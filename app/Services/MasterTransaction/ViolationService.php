@@ -66,6 +66,27 @@ class ViolationService extends BaseService {
     }
 
     /**
+     * Get data for datatables in index page
+     *
+     * @return DataTables
+     */
+    public function getReportDataDatatableV2(array|object $data) :JsonResponse
+    {
+        $data = $data->groupBy('student_id');
+
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->addColumn('name', function($item) {
+                return $item[0]->student->full_name . "(".$item[0]->student->nisn.")";
+            })->addColumn('class', function($item) {
+                return $item[0]->student->nama_rombel;
+            })->addColumn('violation_score', function($item) {
+                return $item[0]->student->score;
+            })
+            ->make(true);
+    }
+
+    /**
      * Get
      *
      * @return DataTables

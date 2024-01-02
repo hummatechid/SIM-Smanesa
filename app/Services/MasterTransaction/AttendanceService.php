@@ -296,14 +296,49 @@ class AttendanceService extends BaseService {
     {
         return Datatables::of($data)
             ->addIndexColumn()
-            ->addColumn('name', function($item) {
-                return $item->student->full_name . "(".$item->student->nisn.")";
+            ->addColumn('student', function($item) {
+                return $item->student->full_name . " (".$item->student->nisn.")";
             })->addColumn('class', function($item) {
                 return $item->student->nama_rombel;
             })->addColumn('present', function($item) {
                 return $item->status;
             })->addColumn('date', function($item) {
                 return Carbon::parse($item->present_at ?? $item->created_at)->isoFormat('DD-MM-YYYY');
+            })
+            ->make(true);
+    }
+
+     /**
+     * Get data for datatables in index page
+     *
+     * @return DataTables
+     */
+    public function getReportDataDatatableV2(array|object $data) :JsonResponse
+    {
+        $data = $data->groupBy("student_id");
+
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->addColumn('student', function($item) {
+                return $item[0]->student->full_name . " (".$item[0]->student->nisn.")";
+            })->addColumn('class', function($item) {
+                return $item[0]->student->nama_rombel;
+            })->addColumn('present', function($item) {
+                return $item->filter(function($barang) {
+                    return $barang->status == "masuk";
+                })->count();
+            })->addColumn('permit', function($item) {
+                return $item->filter(function($barang) {
+                    return $barang->status == "izin";
+                })->count();
+            })->addColumn('sick', function($item) {
+                return $item->filter(function($barang) {
+                    return $barang->status == "sakit";
+                })->count();
+            })->addColumn('alpa', function($item) {
+                return $item->filter(function($barang) {
+                    return $barang->status == "alpha";
+                })->count();
             })
             ->make(true);
     }

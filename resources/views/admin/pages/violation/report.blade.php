@@ -79,6 +79,7 @@
     
     @php
         $data_column = ["name" => "Siswa", "violation" => "Pelanggaran", "score" => "Poin Pelanggaran", "date" => "Tanggal"];
+        // $data_column = ["name" => "Siswa", "class" => "Kelas", "violation_score" => "Poin Pelanggaran"];
     @endphp
     <x-datatable
         card-title="Tabel Data Pelanggaran"
