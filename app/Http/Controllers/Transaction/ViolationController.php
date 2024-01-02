@@ -39,6 +39,46 @@ class ViolationController extends Controller
         return $this->violationService->getDataDatatable();
     }
 
+    public function getReportDatatablesData(Request $request)
+    {
+        switch($request->type){
+            case "monthly":
+                if(!$request->year) $year = date('Y');
+                else $year = $request->year;
+                $data = $this->violationRepository->getDataMonth($year,$request->month,["violationType","student"]);
+            case "yearly":
+                $data = $this->violationRepository->getDataYears($request->year,["violationType","student"]);
+            case "custom":
+                if(!$request->date){
+                    $date_from = date('Y-m-d');
+                    $date_to = date('Y-m-d');
+                }else {
+                    $date_from = str_split("-",$request->date)[0];
+                    $date_to = str_split("-",$request->date)[1];
+                }
+                $data = $this->violationRepository->getDataCustomDate($date_from,$date_to,["violationType","student"]);
+            default:
+                if(!$request->year) $year = date('Y');
+                else $year = $request->year;
+                if(!$request->month) $month = date('m');
+                else $month = $request->month;
+                $data = $this->violationRepository->getDataMonth($year,$month,["violationType","student"]);
+        }
+        if($request->data == "per_class"){
+            $class = $request->class;
+            $data = $data->filter(function($item) use ($class){
+                return $item->nama_rombel == $class;
+            });
+        }else if($request->data == "per_grade"){
+            $grade = $request->grade;
+            $data = $data->filter(function($item) use ($grade){
+                return $item->tingkat_pendidikan == $grade;
+            });
+        }
+
+        return $this->violationService->getReportDataDatatable($data);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

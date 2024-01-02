@@ -260,6 +260,15 @@ class BaseRepository implements RepositoryInterface {
         } 
     }
 
+    public function getDataCustomDate($date_from, $date_to, array $relations = [], bool $history = false): object | null
+    {
+        if($history == true){
+            return $this->model->with($relations)->whereNotNull("deleted_at")->whereBetween("created_at",[$date_from, $date_to])->get(); 
+        } else {
+            return $this->model->with($relations)->whereNull("deleted_at")->whereBetween("created_at",[$date_from, $date_to])->get(); 
+        } 
+    }
+
     public function getDataDateWithCondition($date, array $relations = [], string $column, mixed $data ,string $type = "get", bool $history = false): object | null
     {
         switch($type){

@@ -20,6 +20,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('attendance')->name('attendance.')->controller(AttendanceController::class)->group(function() {
         Route::get('get-limited-data','getDatatablesLimit')->name('get-limit-datatables');
         Route::get('get-permit-data','getDatatablesPermit')->name('get-permit-datatables');
+        Route::get('get-report-data','getDatatablesPermit')->name('get-report-datatables');
         Route::get('presence','presence')->name('presence');
         Route::get('report','report')->name('report');
         Route::post('presence','createPermit')->name('presence.create-permit');
@@ -40,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('violation')->name('violation.')->group(function(){
         Route::get('/get-main-data', [ViolationController::class, 'getDatatablesData'])->name('get-main-datatables');
         Route::get('report', [ViolationController::class, 'report'])->name('report');
+        Route::get('/get-report-data', [ViolationController::class, 'getReportDatatablesData'])->name('get-report-datatables');
         Route::get('/count-must-student', [ViolationController::class, 'listMustStudent'])->name('count-student');
     });
     Route::resource('/violation', ViolationController::class);
