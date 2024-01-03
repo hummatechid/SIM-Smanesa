@@ -13,7 +13,7 @@
                     data-bs-toggle="modal"
                     data-bs-target="#staticBackdrop"
                 >
-                    Sync Siswa
+                    Sinkronisasi Siswa
                 </button>
 
                 <!--Basic Modal -->

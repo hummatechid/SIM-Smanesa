@@ -28,7 +28,7 @@
                     data-bs-toggle="modal"
                     data-bs-target="#staticBackdrop"
                 >
-                    Sync Guru
+                    Sinkronisasi Guru
                 </button>
 
                 <!--Basic Modal -->
