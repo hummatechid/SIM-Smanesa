@@ -74,7 +74,7 @@
         </div>
     </div>
 
-    @php $data_column = [ "full_name" => "Nama", "email" => "Email",
+    @php $data_column = [ "full_name" => "Nama", "email" => "Email / NIK",
     "phone_number" => "Nomor", "action" => "Aksi" ]; @endphp
     <x-datatable
         card-title="Tabel Guru"

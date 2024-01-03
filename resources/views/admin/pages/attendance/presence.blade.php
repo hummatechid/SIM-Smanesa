@@ -23,6 +23,8 @@
 
     @php
         $data_column = ["student" => "Siswa", "present_at" => "Waktu Kehadiran", "status" => "Status"];
+        if(auth()->user()->hasExactRoles('satpam')) $btn_add = '<div class="d-flex gap-3"><a href="'.route("scan.index").'" class="btn btn-primary">Scan Kehadiran</a></div>';
+        else $btn_add = '<div class="d-flex gap-3"><a href="'.route("scan.index").'" class="btn btn-primary">Scan Kehadiran</a><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-add-permit">+ Tambah izin</button></div>';
     @endphp
     <x-datatable
         card-title="Tabel Data Kehadiran"
@@ -31,7 +33,7 @@
         default-order="2"
         arrange-order="desc"
         data-add-type="custom-btn"
-        data-add-btn='<div class="d-flex gap-3"><a href="{{ route("scan.index") }}" class="btn btn-primary">Scan Kehadiran</a><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-add-permit">+ Tambah izin</button></div>'
+        :data-add-btn="$btn_add"
     />
 {{-- 
     @php
