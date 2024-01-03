@@ -35,6 +35,7 @@
             ]
         ];
     @endphp
+    @hasrole('superadmin')
     <x-datatable
         card-title="Tabel Jenis Pelanggaran"
         data-url="{{ route('violation-type.get-main-datatables') }}"
@@ -44,6 +45,13 @@
         data-add-type="modal"
         :data-add-settings="$data_settings"
     />
+    @else
+    <x-datatable
+        card-title="Tabel Jenis Pelanggaran"
+        data-url="{{ route('violation-type.get-main-datatables') }}"
+        :table-columns="$data_column"
+    />
+    @endhasrole
 
 </div>
 

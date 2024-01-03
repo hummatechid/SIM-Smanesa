@@ -20,9 +20,13 @@
                     <div class="d-flex flex-column align-items-center gap-2">
                         <div class="d-flex justify-content-center  gap-2">
                             <a href="{{ $backUrl }}" class="btn btn-secondary">Kembali</a>
+                            @if(auth()->user()->hasRole('superadmin') || $dataUser->user->id === auth()->id())
                             <a href="{{ $editUrl }}" class="btn btn-primary">Ubah</a>
+                            @endif
                         </div>
+                        @if(auth()->user()->hasRole('superadmin') || $dataUser->user->id === auth()->id())
                         <a href="{{ $editPasswordUrl }}" class="btn btn-primary">Ubah Password</a>
+                        @endif
                     </div>
                 </div>
             </div>

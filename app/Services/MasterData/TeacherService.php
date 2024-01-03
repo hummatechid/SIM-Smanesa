@@ -42,11 +42,14 @@ class TeacherService extends BaseService
             })->addColumn('phone_number', function ($item) {
                 return $item->phone_number;
             })->addColumn('action', function ($item) {
-                return
-                    '<div class="d-flex gap-2 justify-content-start align-items-center">
-                    <a href="' . route('teacher.show', $item->id) . '" class="btn btn-sm btn-primary">Detail</a>
-                    <button class="btn btn-sm btn-danger delete-data" data-id="' . $item->id . '">Hapus</button>
-                </div>';
+                $button = '<div class="d-flex gap-2 justify-content-start align-items-center">
+                    <a href="' . route('teacher.show', $item->id) . '" class="btn btn-sm btn-primary">Detail</a>';
+                if(auth()->user()->hasRole('superadmin')) {
+                    $button .= '<button class="btn btn-sm btn-danger delete-data" data-id="' . $item->id . '">Hapus</button>';
+                }
+                $button .= '</div>';
+
+                return $button;
             })->rawColumns(['action'])
             ->make(true);
     }

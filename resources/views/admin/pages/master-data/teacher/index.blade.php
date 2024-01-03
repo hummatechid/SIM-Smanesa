@@ -6,6 +6,7 @@
                 <h3>{{ $page_title }}</h3>
                 <p class="text-subtitle text-muted">{{ $sub_title }}</p>
             </div>
+            @role('superadmin')
             <div class="col-12 col-md-6 text-end order-md-2 order-first">
                 <!-- <nav
                     aria-label="breadcrumb"
@@ -71,11 +72,14 @@
                     </div>
                 </div>
             </div>
+            @endrole
         </div>
     </div>
 
-    @php $data_column = [ "full_name" => "Nama", "email" => "Email / NIK",
-    "phone_number" => "Nomor", "action" => "Aksi" ]; @endphp
+    @php
+        $data_column = [ "full_name" => "Nama", "email" => "Email / NIK", "phone_number" => "Nomor", "action" => "Aksi" ];
+    @endphp
+    @hasrole('superadmin')
     <x-datatable
         card-title="Tabel Guru"
         data-url="{{ route('teacher.get-main-datatables') }}"
@@ -83,6 +87,13 @@
         delete-option="teacher/soft-delete/deleted_id"
         data-add-url="{{ url('teacher/create') }}"
     />
+    @else
+    <x-datatable
+        card-title="Tabel Guru"
+        data-url="{{ route('teacher.get-main-datatables') }}"
+        :table-columns="$data_column"
+    />
+    @endhasrole
 </div>
 @endsection @push('custom-script')
 <script>

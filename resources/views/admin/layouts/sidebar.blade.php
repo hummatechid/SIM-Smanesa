@@ -81,11 +81,11 @@
                     </a>
 
                     <ul class="submenu active">
-
+                        @hasrole('superadmin')
                         <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'teacher-add' ? 'active' : '' }}">
                             <a href="{{ url('teacher/create') }}" class="submenu-link">Tambah Guru</a>
-
                         </li>
+                        @endhasrole
                         <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'teacher-list' ? 'active' : '' }}">
                             <a href="{{ url('teacher') }}" class="submenu-link">List Guru</a>
 
@@ -106,16 +106,14 @@
                     </a>
 
                     <ul class="submenu active">
-
+                        @hasrole('superadmin')
                         <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'user-add' ? 'active' : '' }}">
                             <a href="{{ url('user/create') }}" class="submenu-link">Tambah Pengguna</a>
-
                         </li>
+                        @endhasrole
                         <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'user-list' ? 'active' : '' }}">
                             <a href="{{ url('user') }}" class="submenu-link">List Pengguna</a>
-
                         </li>
-
                     </ul>
                 </li>
                 @endhasrole
@@ -129,7 +127,6 @@
                     </a>
 
                     <ul class="submenu active">
-
                         <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'violation-type' ? 'active' : '' }}">
                             <a href="{{ url('violation-type') }}" class="submenu-link">Jenis Pelanggaran</a>
 
