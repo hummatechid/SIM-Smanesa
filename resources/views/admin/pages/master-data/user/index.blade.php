@@ -29,6 +29,7 @@
             "action" => "Aksi"
         ];
     @endphp
+    @hasrole('superadmin')
     <x-datatable
         card-title="Tabel Pengguna"
         data-url="{{ route('user.get-main-datatables') }}"
@@ -36,6 +37,13 @@
         delete-option="user/soft-delete/deleted_id"
         data-add-url="{{ url('user/create') }}"
     />
+    @else
+    <x-datatable
+        card-title="Tabel Pengguna"
+        data-url="{{ route('user.get-main-datatables') }}"
+        :table-columns="$data_column"
+    />
+    @endif
 
 </div>
 @endsection

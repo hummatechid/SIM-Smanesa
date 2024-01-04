@@ -54,11 +54,15 @@ class UserRepository extends BaseRepository
     {
         $teacherRole = $this->role->where("name", "guru")->first();
 
-        return $this->model->query()
+        $newTeacher = $this->model->query()
             ->create([
                 'role_id' => $teacherRole->id,
                 'email' => $teacher['nik'],
                 'password' => bcrypt($teacher['nik']),
             ]);
+
+        $newTeacher->assignRole($teacherRole->name);
+
+        return $newTeacher;
     }
 }

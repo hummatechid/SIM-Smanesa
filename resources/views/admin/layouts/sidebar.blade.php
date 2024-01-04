@@ -60,20 +60,32 @@
                 <li class="sidebar-title">Master Data</li>
                 @endunlessrole
 
+                @hasrole(['staf', 'superadmin', 'pimpinan', 'guru'])
+                <li
+                    class="sidebar-item {{ isset($main_menu) && $main_menu == 'student' ? 'active' : '' }}">
+                    <a href="{{ route('student.index') }}" class='sidebar-link'>
+                        <i class="bi bi-mortarboard-fill"></i>
+                        <span>Siswa</span>
+                    </a>
+
+
+                </li>
+                @endhasrole
+
                 @hasrole(['staf', 'superadmin', 'pimpinan'])
                 <li
                     class="sidebar-item {{ isset($main_menu) && $main_menu == 'teacher' ? 'active' : '' }} has-sub">
                     <a href="#" class='sidebar-link'>
-                        <i class="bi bi-stack"></i>
+                        <i class="bi bi-person-fill"></i>
                         <span>Guru</span>
                     </a>
 
                     <ul class="submenu active">
-
+                        @hasrole('superadmin')
                         <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'teacher-add' ? 'active' : '' }}">
                             <a href="{{ url('teacher/create') }}" class="submenu-link">Tambah Guru</a>
-
                         </li>
+                        @endhasrole
                         <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'teacher-list' ? 'active' : '' }}">
                             <a href="{{ url('teacher') }}" class="submenu-link">List Guru</a>
 
@@ -85,37 +97,23 @@
                 </li>
                 @endhasrole
 
-                @hasrole(['staf', 'superadmin', 'pimpinan', 'guru'])
-                <li
-                    class="sidebar-item {{ isset($main_menu) && $main_menu == 'student' ? 'active' : '' }}">
-                    <a href="{{ route('student.index') }}" class='sidebar-link'>
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Siswa</span>
-                    </a>
-
-
-                </li>
-                @endhasrole
-
                 @hasrole('superadmin')
                 <li
                     class="sidebar-item has-sub {{ isset($main_menu) && $main_menu == 'user' ? 'active' : '' }}">
                     <a href="#" class='sidebar-link'>
-                        <i class="bi bi-stack"></i>
+                        <i class="bi bi-people-fill"></i>
                         <span>Pengguna</span>
                     </a>
 
                     <ul class="submenu active">
-
+                        @hasrole('superadmin')
                         <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'user-add' ? 'active' : '' }}">
                             <a href="{{ url('user/create') }}" class="submenu-link">Tambah Pengguna</a>
-
                         </li>
+                        @endhasrole
                         <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'user-list' ? 'active' : '' }}">
                             <a href="{{ url('user') }}" class="submenu-link">List Pengguna</a>
-
                         </li>
-
                     </ul>
                 </li>
                 @endhasrole
@@ -124,12 +122,11 @@
                 <li
                     class="sidebar-item has-sub {{ isset($main_menu) && $main_menu == 'violation-master' ? 'active' : '' }}">
                     <a href="#" class='sidebar-link'>
-                        <i class="bi bi-stack"></i>
+                        <i class="bi bi-pass-fill"></i>
                         <span>Pelanggaran</span>
                     </a>
 
                     <ul class="submenu active">
-
                         <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'violation-type' ? 'active' : '' }}">
                             <a href="{{ url('violation-type') }}" class="submenu-link">Jenis Pelanggaran</a>
 
@@ -150,7 +147,7 @@
                 <li
                     class="sidebar-item has-sub {{ isset($main_menu) && $main_menu == 'attendance' ? 'active' : '' }}">
                     <a href="#" class='sidebar-link'>
-                        <i class="bi bi-stack"></i>
+                        <i class="bi bi-clock-fill"></i>
                         <span>Presensi</span>
                     </a>
 
@@ -177,16 +174,18 @@
                 <li
                     class="sidebar-item has-sub {{ isset($main_menu) && $main_menu == 'permit' ? 'active' : '' }}">
                     <a href="#" class='sidebar-link'>
-                        <i class="bi bi-stack"></i>
+                        <i class="bi bi-door-open-fill"></i>
                         <span>Izin Keluar-Masuk</span>
                     </a>
 
                     <ul class="submenu active">
 
+                        @hasrole(['guru', 'staf', 'pimpinan', 'superadmin'])
                         <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'permit-add' ? 'active' : '' }}">
                             <a href="{{ url('permit/create') }}" class="submenu-link">Tambah Izin</a>
 
                         </li>
+                        @endhasrole
                         <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'permit-list' ? 'active' : '' }}">
                             <a href="{{ url('permit') }}" class="submenu-link">List Izin</a>
 
@@ -200,7 +199,7 @@
                 <li
                     class="sidebar-item has-sub {{ isset($main_menu) && $main_menu == 'violation' ? 'active' : '' }}">
                     <a href="#" class='sidebar-link'>
-                        <i class="bi bi-stack"></i>
+                        <i class="bi bi-clipboard-x-fill"></i>
                         <span>Catat Pelanggaran</span>
                     </a>
 
