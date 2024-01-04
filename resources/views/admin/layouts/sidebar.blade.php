@@ -205,12 +205,12 @@
 
                     <ul class="submenu active">
 
-                        <li class="submenu-item {{ isset($main_menu) && $main_menu == 'violation' ? 'active' : '' }}">
+                        <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'violation' ? 'active' : '' }}">
                             <a href="{{ url('violation') }}" class="submenu-link">Pelanggaran</a>
 
                         </li>
 
-                        <li class="submenu-item {{ isset($main_menu) && $main_menu == 'violation-report' ? 'active' : '' }}">
+                        <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'violation-report' ? 'active' : '' }}">
                             <a href="{{ url('violation/report') }}" class="submenu-link">Laporan Pelanggaran</a>
 
                         </li>

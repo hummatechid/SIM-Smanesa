@@ -51,7 +51,7 @@
                         <button class="btn btn-primary btn-block btn-lg shadow-lg mt-5">Kirim</button>
                     </form>
                     <div class="text-center mt-3 fs-5">
-                        <p class="text-gray-600">Ingat akun anda? <a class="font-bold" href="{{ route('login') }}">Login</a></p>
+                        <p class="text-gray-600">Ingat akun anda? <a class="font-bold" href="{{ route('login') }}">Masuk</a></p>
                     </div>
                 </div>
             </div>

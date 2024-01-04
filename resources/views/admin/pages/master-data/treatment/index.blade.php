@@ -35,7 +35,7 @@
                 "first_option" => "-- pilih kategori pelanggaran --",
                 "options" => [
                     "Pelanggaran ringan" => "Pelanggaran Ringan",
-                    "Pelanggaran sedang" => "Pelanggaran Ringan",
+                    "Pelanggaran sedang" => "Pelanggaran Sedang",
                     "Pelanggaran berat" => "Pelanggaran Berat",
                 ],
                 "attr" => ["required" => "required"],
