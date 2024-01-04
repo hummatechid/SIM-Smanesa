@@ -119,7 +119,13 @@
 
 </div>
 @endsection
-
+@push('custom-style')
+<style>
+    .table-responsive {
+        overflow-x: visible!important;
+    }
+</style>
+@endpush
 @push('custom-script')
     <script>
         $(function(){
