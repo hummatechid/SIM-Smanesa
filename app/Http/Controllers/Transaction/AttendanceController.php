@@ -232,6 +232,8 @@ class AttendanceController extends Controller
         $path = 'images/permit/'.$year.'/'.$data->student->tingkat_pendidikan.'/'.$data->student->nama_rombel;
         !is_dir($path) && mkdir($path, 0777, true);
         
+        if($data->present_at) return redirect()->back()->with("error","Siswa ini telah absensi");
+        
         if($request->permit_file) {
             $file = $request->file('permit_file');
             $fileData = $this->uploads($file,$path);
@@ -239,6 +241,7 @@ class AttendanceController extends Controller
         } else {
             $photo = "";
         }
+
 
         $data->update([
             "present_at" => $now,
