@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Transaction;
 
+use App\Helpers\UploadImage;
 use App\Http\Controllers\Controller;
 use App\Repositories\MasterTransaction\AttendanceRepository;
 use App\Repositories\StudentRepository;
@@ -13,6 +14,8 @@ use Yajra\DataTables\Facades\DataTables;
 
 class AttendanceController extends Controller
 {
+    use UploadImage;
+
     private $attendanceRepository, $attendanceService, $studentRepository;
 
     public function __construct(AttendanceService $attendanceService, AttendanceRepository $attendanceRepository, StudentRepository $studentRepository)
@@ -196,6 +199,39 @@ class AttendanceController extends Controller
                 $absensi = $this->attendanceService->storeAttendance($request->nipd, $request->status);
                 return $absensi;
         }
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function createPermit(Request $request)
+    {
+        $now = now();
+        $data = $this->attendanceRepository->getDataDateWithCondition($now, ["student"], "student_id", $request->student_id, "first");
+        
+        if(!$data) return redirect()->back()->with("error","Data absensi siswa ini tidak ada");
+        
+        if($data->present_at) return redirect()->back()->with("error","Siswa ini sudah melakukan absensi");
+
+        // set image
+        $path = 'images/permit/'.$data->student->tingkat_pendidikan.'/'.$data->student->nama_rombel;
+        !is_dir($path) && mkdir($path, 0777, true);
+        
+        if($request->permit_file) {
+            $file = $request->file('permit_file');
+            $fileData = $this->uploads($file,$path);
+            $photo = $fileData["filePath"].".".$fileData["fileType"];
+        } else {
+            $photo = "";
+        }
+
+        $data->update([
+            "present_at" => $now,
+            "status" => "izin",
+            "permit_file" => $photo
+        ]);
+
+        return redirect()->back()->with("success","Berhasil absensi izin untuk ". $data->student->full_name);
     }
 
     /**
