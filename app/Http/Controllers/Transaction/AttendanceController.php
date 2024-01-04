@@ -207,6 +207,7 @@ class AttendanceController extends Controller
     public function createPermit(Request $request)
     {
         $now = now();
+        $year = date('Y');
         $data = $this->attendanceRepository->getDataDateWithCondition($now, ["student"], "student_id", $request->student_id, "first");
         
         if(!$data) return redirect()->back()->with("error","Data absensi siswa ini tidak ada");
@@ -214,7 +215,7 @@ class AttendanceController extends Controller
         if($data->present_at) return redirect()->back()->with("error","Siswa ini sudah melakukan absensi");
 
         // set image
-        $path = 'images/permit/'.$data->student->tingkat_pendidikan.'/'.$data->student->nama_rombel;
+        $path = 'images/permit/'.$year.'/'.$data->student->tingkat_pendidikan.'/'.$data->student->nama_rombel;
         !is_dir($path) && mkdir($path, 0777, true);
         
         if($request->permit_file) {
