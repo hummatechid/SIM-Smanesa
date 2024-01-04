@@ -67,7 +67,10 @@ class AttendanceController extends Controller
 
     public function getDatatablesData()
     {
-        $data = $this->attendanceRepository->getTodayAttendance();
+        $data = $this->attendanceRepository->getDataDate(today());
+        $data = $data->filter(function($item){
+            return $item->present_at;
+        });
 
         return Datatables::of($data)
             ->addIndexColumn()
@@ -78,11 +81,19 @@ class AttendanceController extends Controller
             })->addColumn('status', function($item) {
                 $masuk = Carbon::parse($item->present_at)->format('H:i');
                 // return $item->status;
-                if($masuk < '07:00') {
-                    return '<span class="badge bg-success">Tepat Waktu</span>';
+                if($item->status == "masuk"){
+                    if($masuk < '07:00') {
+                        return '<span class="badge bg-success">Tepat Waktu</span>';
+                    } else {
+                        return '<span class="badge bg-danger">Terlambat</span>';
+                    } 
+                } else if($item->status == "izin"){
+                    return '<span class="badge bg-warning">Izin</span>';
+                } else if($item->status == "sakit"){
+                    return '<span class="badge bg-info">Sakit</span>';
                 } else {
-                    return '<span class="badge bg-danger">Terlambat</span>';
-                } 
+                    return '<span class="badge bg-danger">Tanpa Keterangan</span>';
+                }
             })
             ->rawColumns(['status'])
             ->make(true);
@@ -206,6 +217,9 @@ class AttendanceController extends Controller
      */
     public function createPermit(Request $request)
     {
+        if($request->status != "izin" || $request->status != "masuk") $status = "izin";
+        else $status = $request->status;
+
         $now = now();
         $year = date('Y');
         $data = $this->attendanceRepository->getDataDateWithCondition($now, ["student"], "student_id", $request->student_id, "first");
@@ -228,7 +242,7 @@ class AttendanceController extends Controller
 
         $data->update([
             "present_at" => $now,
-            "status" => "izin",
+            "status" => $status,
             "permit_file" => $photo
         ]);
 
