@@ -6,6 +6,7 @@
                 <h3>{{ $page_title }}</h3>
                 <p class="text-subtitle text-muted">{{ $sub_title }}</p>
             </div>
+            @role('superadmin')
             <div class="col-6 order-md-2 order-last align-items-end text-end">
                 <button
                     id="sync-siswa"
@@ -56,6 +57,7 @@
                     </div>
                 </div>
             </div>
+            @endrole
         </div>
     </div>
 

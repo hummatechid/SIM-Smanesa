@@ -52,7 +52,7 @@
 
 <div class="modal modal-lg fade" id="modal-add-permit">
     <div class="modal-dialog">
-        <form action="{{ route('attendance.presence.create-permit') }}" class="modal-content" method="POST">
+        <form action="{{ route('attendance.presence.create-permit') }}" class="modal-content" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="modal-header">
                 <h4 class="m-0">Tambah Siswa Izin</h4>
@@ -73,7 +73,7 @@
                 </div>
                 <div class="form-group mb-3">
                     <label for="permit_file" class="form-label">File Izin <span class="text-danger">*</span></label>
-                    <input type="file" id="permit_file" name="permit_file"/>
+                    <input type="file" id="permit_file" name="permit_file" class="my-pond"/>
                     @error('permit_file')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror

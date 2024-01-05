@@ -35,7 +35,7 @@
                 "first_option" => "-- pilih kategori pelanggaran --",
                 "options" => [
                     "Pelanggaran ringan" => "Pelanggaran Ringan",
-                    "Pelanggaran sedang" => "Pelanggaran Ringan",
+                    "Pelanggaran sedang" => "Pelanggaran Sedang",
                     "Pelanggaran berat" => "Pelanggaran Berat",
                 ],
                 "attr" => ["required" => "required"],
@@ -55,6 +55,7 @@
             ], 
         ];
     @endphp
+    @hasrole('superadmin')
     <x-datatable
         card-title="Tabel Tindak Lanjut"
         data-url="{{ route('treatment.get-main-datatables') }}"
@@ -65,6 +66,14 @@
         data-add-type="modal"
         :data-add-settings="$data_settings"
     />
+    @else
+    <x-datatable
+        card-title="Tabel Tindak Lanjut"
+        data-url="{{ route('treatment.get-main-datatables') }}"
+        :table-columns="$data_column"
+        :default-order="2"
+    />
+    @endhasrole
 
 </div>
 

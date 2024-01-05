@@ -36,7 +36,7 @@
             :table-columns="$data_column"
             arrange-order="desc"
         />
-    @elseif(auth()->user()->hasExactRoles('guru'))
+    @elseif(auth()->user()->hasRole(['guru', 'staf']))
         @php
             $data_column = [
                 "date" => "Waktu",
@@ -69,7 +69,7 @@
                         "pending" => "Pending",
                         "accepted" => "Dibolehkan",
                         "rejected" => "Dilarang",
-                        "back" => "Telah Kembali"
+                        // "back" => "Telah Kembali"
                     ]
                 ]
             ]
@@ -119,7 +119,13 @@
 
 </div>
 @endsection
-
+@push('custom-style')
+<style>
+    .table-responsive {
+        overflow-x: visible!important;
+    }
+</style>
+@endpush
 @push('custom-script')
     <script>
         $(function(){

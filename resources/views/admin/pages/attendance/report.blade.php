@@ -78,8 +78,8 @@
     </form>
     
     @php
-        $data_column = ["student" => "Siswa", "class" => "Kelas", "present" => "Kehadiran", "date" => "Tanggal"];
-        // $data_column = ["student" => "Siswa", "class" => "Kelas", "present" => "Jumlah Masuk", "permit" => "Jumlah Izin","sick" => "Jumlah Sakit","alpa" => "Tanpa keterangan",];
+        // $data_column = ["student" => "Siswa", "class" => "Kelas", "present" => "Kehadiran", "date" => "Tanggal"];
+        $data_column = ["student" => "Siswa", "class" => "Kelas", "present" => "Jumlah Masuk", "permit" => "Jumlah Izin","sick" => "Jumlah Sakit","alpa" => "Tanpa keterangan",];
     @endphp
     <x-datatable
         card-title="Tabel Data Kehadiran"

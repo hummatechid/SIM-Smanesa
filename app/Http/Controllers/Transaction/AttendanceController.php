@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Transaction;
 
+use App\Helpers\UploadImage;
 use App\Http\Controllers\Controller;
 use App\Repositories\MasterTransaction\AttendanceRepository;
 use App\Repositories\StudentRepository;
@@ -13,6 +14,8 @@ use Yajra\DataTables\Facades\DataTables;
 
 class AttendanceController extends Controller
 {
+    use UploadImage;
+
     private $attendanceRepository, $attendanceService, $studentRepository;
 
     public function __construct(AttendanceService $attendanceService, AttendanceRepository $attendanceRepository, StudentRepository $studentRepository)
@@ -64,7 +67,10 @@ class AttendanceController extends Controller
 
     public function getDatatablesData()
     {
-        $data = $this->attendanceRepository->getTodayAttendance();
+        $data = $this->attendanceRepository->getDataDate(today());
+        $data = $data->filter(function($item){
+            return $item->present_at;
+        });
 
         return Datatables::of($data)
             ->addIndexColumn()
@@ -75,11 +81,19 @@ class AttendanceController extends Controller
             })->addColumn('status', function($item) {
                 $masuk = Carbon::parse($item->present_at)->format('H:i');
                 // return $item->status;
-                if($masuk < '07:00') {
-                    return '<span class="badge bg-success">Tepat Waktu</span>';
+                if($item->status == "masuk"){
+                    if($masuk < '07:00') {
+                        return '<span class="badge bg-success">Tepat Waktu</span>';
+                    } else {
+                        return '<span class="badge bg-danger">Terlambat</span>';
+                    } 
+                } else if($item->status == "izin"){
+                    return '<span class="badge bg-warning">Izin</span>';
+                } else if($item->status == "sakit"){
+                    return '<span class="badge bg-info">Sakit</span>';
                 } else {
-                    return '<span class="badge bg-danger">Terlambat</span>';
-                } 
+                    return '<span class="badge bg-danger">Tanpa Keterangan</span>';
+                }
             })
             ->rawColumns(['status'])
             ->make(true);
@@ -172,7 +186,7 @@ class AttendanceController extends Controller
             });
         }
 
-        return $this->attendanceService->getReportDataDatatable($data);
+        return $this->attendanceService->getReportDataDatatableV2($data);
     }
 
     /**
@@ -196,6 +210,46 @@ class AttendanceController extends Controller
                 $absensi = $this->attendanceService->storeAttendance($request->nipd, $request->status);
                 return $absensi;
         }
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function createPermit(Request $request)
+    {
+        if($request->status != "izin" || $request->status != "masuk") $status = "izin";
+        else $status = $request->status;
+
+        $now = now();
+        $year = date('Y');
+        $data = $this->attendanceRepository->getDataDateWithCondition($now, ["student"], "student_id", $request->student_id, "first");
+        
+        if(!$data) return redirect()->back()->with("error","Data absensi siswa ini tidak ada");
+        
+        if($data->present_at) return redirect()->back()->with("error","Siswa ini sudah melakukan absensi");
+
+        // set image
+        $path = 'images/permit/'.$year.'/'.$data->student->tingkat_pendidikan.'/'.$data->student->nama_rombel;
+        !is_dir($path) && mkdir($path, 0777, true);
+        
+        if($data->present_at) return redirect()->back()->with("error","Siswa ini telah absensi");
+        
+        if($request->permit_file) {
+            $file = $request->file('permit_file');
+            $fileData = $this->uploads($file,$path);
+            $photo = $fileData["filePath"].".".$fileData["fileType"];
+        } else {
+            $photo = "";
+        }
+
+
+        $data->update([
+            "present_at" => $now,
+            "status" => $status,
+            "permit_file" => $photo
+        ]);
+
+        return redirect()->back()->with("success","Berhasil absensi izin untuk ". $data->student->full_name);
     }
 
     /**
