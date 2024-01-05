@@ -59,4 +59,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Pengguna::class, 'user_id', 'id');
     }
+
+    public function routeNotificationForFcm()
+    {
+        return $this->device_token;
+    }
 }
