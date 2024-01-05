@@ -253,6 +253,19 @@ class AttendanceController extends Controller
     }
 
     /**
+     * Store a newly created resource in storage.
+     */
+    public function syncAttendanceToday(Request $request)
+    {
+        $students = $this->studentRepository->getAll();
+        foreach($students as $student) $this->attendanceRepository->create(
+            ["status" => "alpha", "student_id" => $student->id]
+        );
+
+        return redirect()->back()->with("success","Berhasil sinkron data absensi hari ini");
+    }
+
+    /**
      * Display the specified resource.
      */
     public function show(string $id)
