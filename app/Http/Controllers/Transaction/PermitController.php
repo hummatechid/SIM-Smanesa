@@ -83,47 +83,22 @@ class PermitController extends Controller
         $validateData["created_by"] = $user->id;
         $validateData["status"] = "pending";
 
-        $pimpinan = $this->userRepository->getAllUserInOneRole("pimpinan", "mobile");
+        $pimpinan = $this->userRepository->getOneUserInOneRole("pimpinan", "mobile");
 
-        // try {
-        // set message notification
-        $title = "Pengajuan Izin Keluar";
-        $message = "Siswa / siswi anda mengajukan permintaan untuk keluar dari lingkungan sekolah !";
-        $type = "basic";
+        try {
+            // store data 
+            foreach($request->student_id as $student_id){
+                $validateData["student_id"] = $student_id;
+                $this->permitRepository->create($validateData);
+            }
 
-        // store data 
-        // foreach($request->student_id as $student_id){
-        //     $validateData["student_id"] = $student_id;
-        //     $this->permitRepository->create($validateData);
-        // }
+            // send message
+            $pimpinan->notify(new PermitNotification("Gembes"));
 
-        // send message
-        foreach ($pimpinan as $pimpin) {
-            $pimpin->notify(new PermitNotification("Gembes"));
-            // while (count($request->student_id)) {
-            //     $notification_id = $pimpin->device_token;
-            //     $id = $pimpin->id;
-            // dd($pimpinan);
-
-
-            // Membuat objek FcmMessage
-            // $fcmMessage = FcmMessage::create()
-            //     ->token($notification_id)
-            //     ->data(['title' => $title, 'body' => $message, 'id' => $id, 'type' => $type]);
-
-            // Membuat notifikasi dan mengirimnya
-            // $permitNotification = new PermitNotification();
-            // $permitNotification->toFcm(null);
-
-            // Menggunakan laravel-firebase:^3.0, menyertakan proyek Firebase (optional)
-            // $permitNotification->fcmProject(null, $fcmMessage);
-            // }
+            return redirect()->route('permit.index')->with('success', "Berhasil membuat surat izin");
+        } catch (\Throwable $th) {
+            return redirect()->back()->with("error", $th->getMessage())->withInput();
         }
-
-        return redirect()->route('permit.index')->with('success', "Berhasil membuat surat izin");
-        // } catch (\Throwable $th) {
-        //     return redirect()->back()->with("error", $th->getMessage())->withInput();
-        // }
     }
 
     /**

@@ -45,6 +45,28 @@ class UserRepository extends BaseRepository
         }
     }
 
+    public function getOneUserInOneRole(string $role, string $type = null)
+    {
+        if ($type) {
+            return $this->model->with(["roles" => function ($q) use ($role) {
+                $q->where("name", $role);
+            }])
+                ->whereHas("roles", function ($q) use ($role) {
+                    $q->where("name", $role);
+                })
+                ->whereNotNull("device_token")
+                ->first();
+        } else {
+            return $this->model->with(["roles" => function ($q) use ($role) {
+                $q->where("name", $role);
+            }])
+                ->whereHas("roles", function ($q) use ($role) {
+                    $q->where("name", $role);
+                })
+                ->first();
+        }
+    }
+
     public function getTeacherByNik(String $nik): mixed
     {
         return $this->model->where("email", $nik)->first();
