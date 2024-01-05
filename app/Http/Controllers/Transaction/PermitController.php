@@ -83,7 +83,7 @@ class PermitController extends Controller
         $validateData["created_by"] = $user->id;
         $validateData["status"] = "pending";
 
-        $pimpinan = $this->userRepository->getOneUserInOneRole("pimpinan", "mobile");
+        $pimpinan = $this->userRepository->getAllUserInOneRole("pimpinan", "mobile");
 
         try {
             // store data 
@@ -93,7 +93,15 @@ class PermitController extends Controller
             }
 
             // send message
-            $pimpinan->notify(new PermitNotification("Gembes"));
+            $token_success = [];
+            foreach($pimpinan as $pimpin){
+                foreach(explode(",",$pimpin->device_token) as $device_token){
+                    if(!in_array($device_token, $token_success)){
+                        $pimpin->notify(new PermitNotification("Gembes"));
+                        $token_success[] = $device_token;
+                    } 
+                }
+            }
 
             return redirect()->route('permit.index')->with('success', "Berhasil membuat surat izin");
         } catch (\Throwable $th) {

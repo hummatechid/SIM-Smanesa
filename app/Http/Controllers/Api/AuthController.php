@@ -44,9 +44,19 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $accesstoken = config('app.fcm_token');
-        $user->device_token = $accesstoken;
-        $user->save();
+        // for broadcasting notif
+        if($user->device_token){
+            if(!in_array($request->device_token, explode(",",$user->device_token))){
+                $accesstoken = $user->device_token ?? "," . $request->device_token ?? config('app.fcm_token');
+                $user->device_token = $accesstoken;
+                $user->save();
+            }
+        } else {
+            $accesstoken = $request->device_token ?? config('app.fcm_token');
+            $user->device_token = $accesstoken;
+            $user->save();
+        }
+
 
         // get detail data user
         $pengguna = Pengguna::where("user_id",$user->id)->first();
