@@ -47,7 +47,7 @@ class AuthController extends Controller
         // for broadcasting notif
         if($user->device_token){
             if(!in_array($request->device_token, explode(",",$user->device_token))){
-                $accesstoken = $user->device_token ?? "," . $request->device_token ?? config('app.fcm_token');
+                $accesstoken = $user->device_token. "," . $request->device_token ?? config('app.fcm_token');
                 $user->device_token = $accesstoken;
                 $user->save();
             }
