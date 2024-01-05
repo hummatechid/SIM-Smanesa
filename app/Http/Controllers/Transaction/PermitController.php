@@ -88,8 +88,11 @@ class PermitController extends Controller
 
         try {
             // store data 
+            $students = [];
             foreach($request->student_id as $student_id){
                 $validateData["student_id"] = $student_id;
+                $selected = $this->studentRepository->getOneById($student_id);
+                $students[] = $selected->full_name. " | " . $selected->nama_rombel;
                 $this->permitRepository->create($validateData);
             }
 
@@ -98,7 +101,7 @@ class PermitController extends Controller
             foreach($pimpinan as $pimpin){
                 foreach(explode(",",$pimpin->device_token) as $device_token){
                     if(!in_array($device_token, $token_success)){
-                        $pimpin->notify(new PermitNotification("Gembes"));
+                        foreach($students as $student) $pimpin->notify(new PermitNotification($student));
                         $token_success[] = $device_token;
                     } 
                 }
