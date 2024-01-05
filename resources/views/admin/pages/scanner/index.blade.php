@@ -84,6 +84,12 @@
         }
         #tb { grid-area: tb;}
         #howto {grid-area: howto;}
+        #back-button {
+            position: fixed;
+            bottom: 25px;
+            left: 30px;
+        }
+
 
         @media only screen and (max-width: 720px) {
             html {
@@ -137,6 +143,8 @@
             </div>
         </div>
     </div>
+
+    <a href="{{ route('landing-page') }}" id="back-button" class="btn btn-lg btn-primary"><i class="bi bi-house-fill"></i></a>
     
 
     <script src="{{ asset('assets/static/js/initTheme.js') }}"></script>
