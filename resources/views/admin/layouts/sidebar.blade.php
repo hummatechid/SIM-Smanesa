@@ -3,7 +3,7 @@
         <div class="sidebar-header position-relative">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo mt-2">
-                    <a href="{{ route('dashboard') }}" class="d-flex gap-1 justify-content-center align-items-center">
+                    <a href="{{ route('landing-page') }}" class="d-flex gap-1 justify-content-center align-items-center">
                         <img src="{{ asset('assets/compiled/logos/logo-sm.png') }}" alt="SMAN 1 Purwosari" width="50" style="height: auto">
                         {{-- <span class="fs-6">SMANESA</span> --}}
                     </a>

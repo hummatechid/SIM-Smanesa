@@ -32,7 +32,7 @@
                             <label for="email">Email <span class="text-danger">*</span></label>
                         </div>
                         <div class="form-group col-md-9">
-                            <input type="email" name="email" id="email" class="form-control @error('email') is-invalid @enderror" placeholder="Email" value="{{ old('email', ($dataUser ? $dataUser->user->email : '')) }}" required @if(isset($dataUser->is_dapodik) && $dataUser->is_dapodik ) readonly @endif />
+                            <input type="email" name="email" id="email" class="form-control @error('email') is-invalid @enderror" placeholder="Email" value="{{ old('email', ($dataUser ? $dataUser->user->email : '')) }}" required/>
                             @error('email')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -150,7 +150,7 @@
                             <label for="gender">Jenis Kelamin <span class="text-danger">*</span></label>
                         </div>
                         <div class="form-group col-md-9">
-                            <Select name="gender" id="gender" class="form-select @error('gender') is-invalid @enderror" required @if(isset($dataUser->is_dapodik) && $dataUser->is_dapodik ) readonly @endif>
+                            <Select name="gender" id="gender" class="form-select @error('gender') is-invalid @enderror" required @if(isset($dataUser->is_dapodik) && $dataUser->is_dapodik ) disabled @endif>
                                 @if(!$isEdit)
                                 <option value="" {{ !old('gender') ? 'selected' : '' }} disabled>-- pilih jenis kelamin --</option>
                                 @endif
@@ -192,7 +192,7 @@
                             <label for="religion">Agama <span class="text-danger">*</span></label>
                         </div>
                         <div class="form-group col-md-9">
-                            <select name="religion" id="religion" class="form-select @error('religion') is-invalid @enderror" required @if(isset($dataUser->is_dapodik) && $dataUser->is_dapodik ) readonly @endif>
+                            <select name="religion" id="religion" class="form-select @error('religion') is-invalid @enderror" required @if(isset($dataUser->is_dapodik) && $dataUser->is_dapodik ) disabled @endif>
                                 @if(!$isEdit)
                                 <option value="" {{ !old('religion') ? 'selected' : '' }} disabled>-- pilih agama --</option>
                                 @endif
@@ -236,6 +236,11 @@
         }
         .parsley-error {
             border-color: var(--bs-danger)!important
+        }
+
+        input[readonly], textarea[readonly] {
+            color: var(--bs-gray)!important;
+            background: #40404d!important;
         }
     </style>
 @endpush

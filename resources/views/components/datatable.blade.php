@@ -62,11 +62,15 @@
                     <div class="d-flex align-items-center h-100">
                         <label for="group_{{ $name }}">{{ $props['title'] }}:</label>
                     </div>
-                    <select name="group_{{ $name }}" id="group_{{ $name }}" class="form-select">
-                    @foreach ($props['options'] as $value => $title)
-                        <option value="{{ $value }}">{{ $title }}</option>
-                    @endforeach
-                    </select>
+                    @if(!isset($props['type']) || $props['type'] == 'select')
+                        <select name="group_{{ $name }}" id="group_{{ $name }}" class="form-select">
+                        @foreach ($props['options'] as $value => $title)
+                            <option value="{{ $value }}">{{ $title }}</option>
+                        @endforeach
+                        </select>
+                    @else
+                        <input type="{{ $props['type'] }}" name="group_{{ $name }}" id="group_{{ $name }}" class="form-control" value="{{ $props['default'] }}">
+                    @endif
                 </div>
                 @endforeach
             </div>
@@ -145,6 +149,9 @@
         searching: "{{ $searchableTable }}",
         orderClasses: false,
         deferRender: true,
+        drawCallback: () => {
+            $('[data-bs-toggle=popover]').popover()
+        },
         buttons: [
             @foreach($customExportButton as $exportBtn)
             {

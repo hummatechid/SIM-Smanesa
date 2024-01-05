@@ -14,7 +14,7 @@
                         <img src="{{ $dataUser->photo ? asset(Storage::url($dataUser->photo)) : asset('assets/compiled/jpg/0.webp') }}" alt="foto pengguna" class="rounded-4 mb-2" style="width: 200px; height: 200px; object-fit: cover;">
                     </div>
                     <div class="mb-3 text-center">
-                        <div class="lead">{{ $dataUser->full_name }}</div>
+                        <div class="lead"><span class="text-primary" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Tersinkronisasi dengan dapodik" data-bs-placement="top"><i class="bi bi-patch-check-fill"></i></span> {{ $dataUser->full_name }}</div>
                         <div class="fw-bold">{{ $dataUser->user->email }}</div>
                     </div>
                     <div class="d-flex flex-column align-items-center gap-2">

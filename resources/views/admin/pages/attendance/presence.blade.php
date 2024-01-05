@@ -22,9 +22,16 @@
     </div>
 
     @php
-        $data_column = ["student" => "Siswa", "present_at" => "Waktu Kehadiran", "status" => "Status"];
+        $data_column = ["student" => "Siswa", "present_at" => "Waktu Kehadiran", "status" => "Status", "action" => "Aksi"];
         if(auth()->user()->hasExactRoles('satpam')) $btn_add = '<div class="d-flex gap-3"><a href="'.route("scan.index").'" class="btn btn-primary">Scan Kehadiran</a></div>';
-        else $btn_add = '<div class="d-flex gap-3"><a href="'.route("scan.index").'" class="btn btn-primary">Scan Kehadiran</a><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-add-permit">+ Tambah izin</button></div>';
+        else $btn_add = '<div class="d-flex gap-3"><a href="'.route("scan.index").'" class="btn btn-primary">Scan Kehadiran</a><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-add-permit">+ Tambah Izin</button></div>';
+        $custom_group = [
+                "date" => [
+                    "title" => "Date",
+                    "type" => "date",
+                    "default" => date('Y-m-d')
+                ]
+            ]
     @endphp
     <x-datatable
         card-title="Tabel Data Kehadiran"
@@ -34,19 +41,8 @@
         arrange-order="desc"
         data-add-type="custom-btn"
         :data-add-btn="$btn_add"
+        :with-custom-groups="$custom_group"
     />
-{{-- 
-    @php
-        $data_column = ["student" => "Siswa", "status" => "Status", "action" => "Aksi"];
-    @endphp
-    <x-datatable
-        card-title="Tabel Data Izin / Sakit"
-        data-url="{{ route('attendance.get-permit-datatables') }}"
-        :table-columns="$data_column"
-        default-order="2"
-        arrange-order="desc"
-        delete-option="attendance/presence/deleted_id?status=absent"
-    /> --}}
 
 </div>
 
@@ -60,6 +56,10 @@
             </div>
             <div class="modal-body">
                 <div class="form-group mb-3">
+                    <label for="date" class="form-label">Tanggal Izin <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" name="date" id="date" value="{{ old('date', date('Y-m-d')) }}" required>
+                </div>
+                <div class="form-group mb-3">
                     <label for="student_id" class="form-label">Siswa <span class="text-danger">*</span></label>
                     <select name="student_id" id="student_id" class="form-select choices" required>
                         <option value="" selected disabled>-- pilih siswa --</option>
@@ -70,6 +70,14 @@
                     @error('student_id')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
+                </div>
+                <div class="form-group mb-">
+                    <label for="status" class="form-lael">Status <span class="text-danger">*</span></label>
+                    <select name="status" id="status" class="form-select" required>
+                        <option value="" selected disabled>-- pilih status --</option>
+                        <option value="sakit">Sakit</option>
+                        <option value="izin">Izin</option>
+                    </select>
                 </div>
                 <div class="form-group mb-3">
                     <label for="permit_file" class="form-label">File Izin <span class="text-danger">*</span></label>
