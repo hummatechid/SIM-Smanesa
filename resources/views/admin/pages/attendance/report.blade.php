@@ -37,19 +37,23 @@
                 </div>
                 <div class="form-group mb-3 col-md-6" id="type_monthly">
                     <label for="month">Bulan</label>
-                    <select name="month" id="month" class="form-control" required>
-                        <option value="1">Januari</option>
+                    <select name="month" id="month" class="form-select input-data" required>
+                        @foreach($months as $month_id => $month)
+                        <option value="{{ $month_id }}">{{ $month }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="form-group mb-3 col-md-6" id="type_yearly" style="display: none;">
                     <label for="year">Tahun</label>
-                    <select name="month" id="month" class="form-control">
-                        <option value="2024">2024</option>
+                    <select name="year" id="year" class="form-select input-data">
+                        @foreach($years as $year)
+                        <option value="{{ $year }}">{{ $year }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="form-group mb-3 col-md-6" id="type_custom_date" style="display: none;">
                     <label for="date">Tanggal</label>
-                    <input type="text" name="date" id="date" class="form-control">
+                    <input type="text" name="date" id="date" class="form-control input-data">
                 </div>
                 <div class="form-group mb-3 col-md">
                     <label for="data">Data yang Dicetak</label>
@@ -61,16 +65,18 @@
                 </div>
                 <div class="form-group mb-3 col-md-6" id="data_grade" style="display: none;">
                     <label for="grade">Angkatan</label>
-                    <select name="grade" id="grade" class="form-select">
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
+                    <select name="grade" id="grade" class="form-select input-data">
+                        @foreach($grades as $grade)
+                        <option value="{{ $grade }}">{{ $grade }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="form-group mb-3 col-md-6" id="data_class" style="display: none;">
                     <label for="class">Kelas</label>
-                    <select name="class" id="class" class="form-select">
-                        <option value="10">10 A</option>
+                    <select name="class" id="class" class="form-select input-data">
+                        @foreach($classes as $kls)
+                        <option value="{{ $kls->nama_rombel }}">{{ $kls->nama_rombel }} A</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
@@ -79,7 +85,7 @@
     
     @php
         // $data_column = ["student" => "Siswa", "class" => "Kelas", "present" => "Kehadiran", "date" => "Tanggal"];
-        $data_column = ["student" => "Siswa", "class" => "Kelas", "present" => "Jumlah Masuk", "permit" => "Jumlah Izin","sick" => "Jumlah Sakit","alpa" => "Tanpa keterangan",];
+        $data_column = ["student" => "Siswa", "class" => "Kelas", "present" => "Masuk", "permit" => "Izin","sick" => "Sakit","alpa" => "Tanpa keterangan",];
     @endphp
     <x-datatable
         card-title="Tabel Data Kehadiran"
@@ -89,6 +95,9 @@
         arrange-order="asc"
         :custom-export-button="['csv', 'excel', 'pdf', 'print']"
         custom-export-title="Laporan Presensi"
+        :server-side="false"
+        :info-table="false"
+        :pagging-table="false"
     />
 </div>
 
@@ -168,6 +177,9 @@
             $('#form').parsley()
             let id = e.target.getAttribute('id')
             $('#'+id).parsley().validate()
+        })
+        $(document).on('input change', '.input-data', function() {
+            reloadNewUrl()
         })
 
         function reloadNewUrl()
