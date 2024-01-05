@@ -75,7 +75,7 @@ class AttendanceController extends Controller
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('student', function($item) {
-                return $item->student->full_name;
+                return $item->student->full_name." (".$item->student->nama_rombel.")";
             })->addColumn('present_at', function($item) {
                 return Carbon::parse($item->present_at)->format('H:i');
             })->addColumn('status', function($item) {
@@ -85,7 +85,7 @@ class AttendanceController extends Controller
                     if($masuk < '07:00') {
                         return '<span class="badge bg-success">Tepat Waktu</span>';
                     } else {
-                        return '<span class="badge bg-danger">Terlambat</span>';
+                        return '<span class="badge bg-secondary">Terlambat</span>';
                     } 
                 } else if($item->status == "izin"){
                     return '<span class="badge bg-warning">Izin</span>';
@@ -94,8 +94,10 @@ class AttendanceController extends Controller
                 } else {
                     return '<span class="badge bg-danger">Tanpa Keterangan</span>';
                 }
+            })->addColumn('action', function($item) {
+                return view('admin.pages.attendance.datatable-presence', ['item' => $item, 'student' => $item->student]);
             })
-            ->rawColumns(['status'])
+            ->rawColumns(['status', 'action'])
             ->make(true);
     }
 

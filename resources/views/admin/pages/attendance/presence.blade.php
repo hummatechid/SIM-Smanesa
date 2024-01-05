@@ -81,7 +81,59 @@
                 </div>
                 <div class="form-group mb-3">
                     <label for="permit_file" class="form-label">File Izin <span class="text-danger">*</span></label>
-                    <input type="file" id="permit_file" name="permit_file" class="my-pond"/>
+                    <input type="file" id="permit_file" name="permit_file" class="add-image"/>
+                    @error('permit_file')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Tambah</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal modal-lg fade" id="modal-edit-data">
+    <div class="modal-dialog">
+        <form id="form-edit" action="{{ route('attendance.update', 'updated_id') }}" class="modal-content" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+            <div class="modal-header">
+                <h4 class="m-0">Ubah Kehadiran Siswa</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group mb-3">
+                    <label for="date" class="form-label">Tanggal <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" name="date" id="date" value="{{ old('date', date('Y-m-d')) }}" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="student_id" class="form-label">Siswa <span class="text-danger">*</span></label>
+                    <input type="hidden" name="student_id" id="student_id">
+                    <input type="text" id="student_name" class="form-control" readonly>
+                    {{-- <select name="student_id" id="student_id" class="form-select choices" required>
+                        <option value="" selected disabled>-- pilih siswa --</option>
+                        @foreach($students as $student)
+                        <option value="{{ $student->id }}">{{ $student->full_name }} | {{ $student->nisn }} | {{ $student->gender }} | {{ $student->nama_rombel }}</option>
+                        @endforeach
+                    </select>
+                    @error('student_id')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror --}}
+                </div>
+                <div class="form-group mb-">
+                    <label for="status" class="form-lael">Status <span class="text-danger">*</span></label>
+                    <select name="status" id="status" class="form-select" required>
+                        <option value="hadir">Hadir</option>
+                        <option value="sakit">Sakit</option>
+                        <option value="izin">Izin</option>
+                        <option value="alpa">Alpa</option>
+                    </select>
+                </div>
+                <div class="form-group mb-3" id="edit-img-container">
+                    <label for="permit_file" class="form-label">File Izin <span class="text-danger">*</span></label>
+                    <input type="file" id="permit_file" name="permit_file" class="edit-image"/>
                     @error('permit_file')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
@@ -114,7 +166,21 @@
         FilePondPluginFileValidateType,
     )
     // Filepond: Image Preview
-    FilePond.create(document.getElementById("permit_file"), {
+    FilePond.create(document.querySelector(".add-image"), {
+        credits: null,
+        allowImagePreview: true,
+        allowImageFilter: false,
+        allowImageExifOrientation: false,
+        allowImageCrop: false,
+        acceptedFileTypes: ["image/png", "image/jpg", "image/jpeg"],
+        fileValidateTypeDetectType: (source, type) =>
+            new Promise((resolve, reject) => {
+            // Do custom type detection here and return with promise
+            resolve(type)
+            }),
+        storeAsFile: true,
+    })
+    FilePond.create(document.querySelector(".edit-image"), {
         credits: null,
         allowImagePreview: true,
         allowImageFilter: false,
@@ -135,6 +201,34 @@
     for (let i = 0; i < choices.length; i++) {
         new Choices(choices[i]);
     }
+</script>
+<script>
+    $(document).on('click', '.btn-change', function() {
+        const item = $(this).data('data');
+        const student = $(this).data('student');
+        let action = "{{ route('attendance.update', 'updated_id') }}";
+        action = action.replace('updated_id', item.id)
+        
+        let date = new Date(item.present_at)
+        let formated_date = date.toISOString().split('T')[0]
+        let img = "{{ asset(Storage::url('')) }}";
+        img = img+item['permit_file'];
+
+        $('#form-edit').attr('action', action)
+        $('#form-edit #student_id').val(student['id'])
+        $('#form-edit #student_name').val(student['full_name'])
+        $('#form-edit #date').val(formated_date)
+        $('#form-edit #status option').each((index, el) => {
+            if(item.status == el.value) el.setAttribute('selected', true)
+            else el.removeAttribute('selected')
+        })
+        if($('#form-edit #status').val() == 'izin' || $('#form-edit #status').val() == 'sakit') $('#edit-img-container').show()
+        else $('#edit-img-container').hide()
+    })
+    $(document).on('change input', '#form-edit #status', function(){
+        if($('#form-edit #status').val() == 'izin' || $('#form-edit #status').val() == 'sakit') $('#edit-img-container').show()
+        else $('#edit-img-container').hide()
+    })
 </script>
 @endpush
 @push('custom-style')
