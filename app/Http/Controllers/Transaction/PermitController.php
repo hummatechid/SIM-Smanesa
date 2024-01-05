@@ -13,6 +13,7 @@ use App\Repositories\UserRepository;
 use App\Services\MasterTransaction\PermitService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use NotificationChannels\Fcm\FcmMessage;
 
 class PermitController extends Controller
@@ -87,15 +88,16 @@ class PermitController extends Controller
 
         try {
             // store data 
-            foreach($request->student_id as $student_id){
-                $validateData["student_id"] = $student_id;
-                $this->permitRepository->create($validateData);
-            }
+            // foreach($request->student_id as $student_id){
+            //     $validateData["student_id"] = $student_id;
+            //     $this->permitRepository->create($validateData);
+            // }
 
             // send message
             $token_success = [];
             foreach($pimpinan as $pimpin){
                 foreach(explode(",",$pimpin->device_token) as $device_token){
+                    dd($pimpin->device_token, explode(",",$pimpin->device_token), $device_token, DB::select("describe users"));
                     if(!in_array($device_token, $token_success)){
                         $pimpin->notify(new PermitNotification("Gembes"));
                         $token_success[] = $device_token;
