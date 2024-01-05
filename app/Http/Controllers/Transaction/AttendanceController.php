@@ -61,7 +61,13 @@ class AttendanceController extends Controller
 
     public function report()
     {
-        $data = $this->attendanceService->getPageData('attendance-report', 'Laporan Presensi', [], [], "Laporan Presensi");
+        $group_data = [
+            'years' => ["2024"],
+            'months' => $this->months,
+            'grades' => $this->grades,
+            'classes' => \App\Models\Student::select('nama_rombel')->groupBy('nama_rombel')->get()
+        ];
+        $data = $this->attendanceService->getPageData('attendance-report', 'Laporan Presensi', $group_data, [], "Laporan Presensi");
         return view('admin.pages.attendance.report', $data);
     }
 

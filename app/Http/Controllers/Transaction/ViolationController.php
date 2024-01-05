@@ -159,7 +159,13 @@ class ViolationController extends Controller
 
     public function report()
     {
-        $data = $this->violationService->getPageData('violation-report', 'Laporan Pelanggaran',[], [], "Laporan Presensi");
+        $group_data = [
+            'years' => ["2024"],
+            'months' => $this->months,
+            'grades' => $this->grades,
+            'classes' => \App\Models\Student::select('nama_rombel')->groupBy('nama_rombel')->get()
+        ];
+        $data = $this->violationService->getPageData('violation-report', 'Laporan Pelanggaran',$group_data, [], "Laporan Presensi");
         return view('admin.pages.violation.report', $data);
     }
 
