@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Transaction;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PermitRequest;
+use App\Notifications\PermitNotification;
 use App\Repositories\MasterTransaction\PermitRepository;
 use App\Repositories\PenggunaRepository;
 use App\Repositories\TeacherRepository;
@@ -12,6 +13,7 @@ use App\Repositories\UserRepository;
 use App\Services\MasterTransaction\PermitService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use NotificationChannels\Fcm\FcmMessage;
 
 class PermitController extends Controller
 {
@@ -91,17 +93,31 @@ class PermitController extends Controller
             $type = "basic";
 
             // store data 
-            foreach($request->student_id as $student_id){
-                $validateData["student_id"] = $student_id;
-                $this->permitRepository->create($validateData);
-            }
+            // foreach($request->student_id as $student_id){
+            //     $validateData["student_id"] = $student_id;
+            //     $this->permitRepository->create($validateData);
+            // }
 
             // send message
             foreach($pimpinan as $pimpin){
                 while (count($request->student_id)){
                     $notification_id = $pimpin->device_token;
                     $id = $pimpin->id;
-                    send_notification_FCM($notification_id, $title, $message, $id,$type);
+                    // dd($pimpinan);
+
+                    $pimpin->notify(new PermitNotification());
+
+                    // Membuat objek FcmMessage
+                    // $fcmMessage = FcmMessage::create()
+                    //     ->token($notification_id)
+                    //     ->data(['title' => $title, 'body' => $message, 'id' => $id, 'type' => $type]);
+
+                    // Membuat notifikasi dan mengirimnya
+                    // $permitNotification = new PermitNotification();
+                    // $permitNotification->toFcm(null);
+
+                    // Menggunakan laravel-firebase:^3.0, menyertakan proyek Firebase (optional)
+                    // $permitNotification->fcmProject(null, $fcmMessage);
                 }
             }
 
