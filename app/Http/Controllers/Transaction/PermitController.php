@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Transaction;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PermitRequest;
+use App\Notifications\PermitNotification;
 use App\Repositories\MasterTransaction\PermitRepository;
 use App\Repositories\PenggunaRepository;
 use App\Repositories\TeacherRepository;
@@ -12,6 +13,7 @@ use App\Repositories\UserRepository;
 use App\Services\MasterTransaction\PermitService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use NotificationChannels\Fcm\FcmMessage;
 
 class PermitController extends Controller
 {
@@ -25,8 +27,7 @@ class PermitController extends Controller
         TeacherRepository $teacherRepository,
         StudentRepository $studentRepository,
         UserRepository $userRepository,
-    )
-    {
+    ) {
         $this->permitService = $permitService;
         $this->permitRepository = $permitRepository;
         $this->penggunaRepository = $penggunaRepository;
@@ -67,9 +68,9 @@ class PermitController extends Controller
     public function store(PermitRequest $request)
     {
         // check validaiton 
-        if(!is_array($request->student_id)) return redirect()->back()->with("error","Data siswa tidak boleh kosong")->withInput();
-        foreach($request->student_id as $key => $value){
-            if(!$value) return redirect()->back()->with("error","Data siswa tidak boleh kosong")->withInput();
+        if (!is_array($request->student_id)) return redirect()->back()->with("error", "Data siswa tidak boleh kosong")->withInput();
+        foreach ($request->student_id as $key => $value) {
+            if (!$value) return redirect()->back()->with("error", "Data siswa tidak boleh kosong")->withInput();
         }
 
         // validation data for request
@@ -84,12 +85,7 @@ class PermitController extends Controller
 
         $pimpinan = $this->userRepository->getAllUserInOneRole("pimpinan", "mobile");
 
-        try{
-            // set message notification
-            $title = "Pengajuan Izin Keluar";
-            $message = "Siswa / siswi anda mengajukan permintaan untuk keluar dari lingkungan sekolah !";
-            $type = "basic";
-
+        try {
             // store data 
             foreach($request->student_id as $student_id){
                 $validateData["student_id"] = $student_id;
@@ -97,17 +93,19 @@ class PermitController extends Controller
             }
 
             // send message
+            $token_success = [];
             foreach($pimpinan as $pimpin){
-                while (count($request->student_id)){
-                    $notification_id = $pimpin->device_token;
-                    $id = $pimpin->id;
-                    send_notification_FCM($notification_id, $title, $message, $id,$type);
+                foreach(explode(",",$pimpin->device_token) as $device_token){
+                    if(!in_array($device_token, $token_success)){
+                        $pimpin->notify(new PermitNotification("Gembes"));
+                        $token_success[] = $device_token;
+                    } 
                 }
             }
 
             return redirect()->route('permit.index')->with('success', "Berhasil membuat surat izin");
-        }catch(\Throwable $th){
-            return redirect()->back()->with("error",$th->getMessage())->withInput();
+        } catch (\Throwable $th) {
+            return redirect()->back()->with("error", $th->getMessage())->withInput();
         }
     }
 
@@ -134,10 +132,10 @@ class PermitController extends Controller
         // check have data permit or not
         $permit = $this->permitRepository->getOneById($id);
 
-        if(!$permit) return redirect()->back()->with('error',"Data izin tidak ditemukan");
+        if (!$permit) return redirect()->back()->with('error', "Data izin tidak ditemukan");
 
         // check request status or not
-        if(!$request->status) return redirect()->back()->with('error', 'Anda tidak mengirimkan sebuah tanggapan, mohon cek ulang')->withInput();
+        if (!$request->status) return redirect()->back()->with('error', 'Anda tidak mengirimkan sebuah tanggapan, mohon cek ulang')->withInput();
 
         // get data user
         $user = Auth::user();
@@ -148,15 +146,15 @@ class PermitController extends Controller
             "updated_by" => $user->id
         ];
 
-        if($request->status == "accepted") $dataUpdate["accepted_by"] = $user->id;
+        if ($request->status == "accepted") $dataUpdate["accepted_by"] = $user->id;
 
-        try{
+        try {
             // store data 
             $permit->update($dataUpdate);
 
             return redirect()->route('permit.index')->with('success', "Berhasil memberikan tanggapan di surat izin");
-        }catch(\Throwable $th){
-            return redirect()->back()->with("error",$th->getMessage())->withInput();
+        } catch (\Throwable $th) {
+            return redirect()->back()->with("error", $th->getMessage())->withInput();
         }
     }
 
@@ -168,22 +166,22 @@ class PermitController extends Controller
         // check have data permit or not
         $permit = $this->permitRepository->getOneById($id);
 
-        if(!$permit) {
+        if (!$permit) {
             return response()->json([
                 "success" => false,
                 "message" => "Surat izin tidak ditemukan"
             ], 404);
         }
 
-        try{
+        try {
             // delete data
             $this->permitRepository->softDelete($id);
-            
+
             return response()->json([
                 "success" => true,
                 "message" => "Berhasil menghapus surat izin"
             ], 201);
-        }catch(\Throwable $th){
+        } catch (\Throwable $th) {
             return response()->json([
                 "success" => false,
                 "message" => $th->getMessage()
@@ -198,24 +196,24 @@ class PermitController extends Controller
     {
         // check have data permit or not
         $permit = $this->permitRepository->getOneById($id);
-        if(!$permit) $permit = $this->permitRepository->getOneById($id, true);
+        if (!$permit) $permit = $this->permitRepository->getOneById($id, true);
 
-        if(!$permit) {
+        if (!$permit) {
             return response()->json([
                 "success" => false,
                 "message" => "Surat izin tidak ditemukan"
             ], 404);
         }
 
-        try{
+        try {
             // delete data
             $this->permitRepository->softDelete($id);
-            
+
             return response()->json([
                 "success" => true,
                 "message" => "Berhasil menghapus surat izin permanent"
             ], 201);
-        }catch(\Throwable $th){
+        } catch (\Throwable $th) {
             return response()->json([
                 "success" => false,
                 "message" => $th->getMessage()
@@ -232,32 +230,32 @@ class PermitController extends Controller
         $data = [];
 
         // check request status or not
-        if(!$request->status) return response()->json([
+        if (!$request->status) return response()->json([
             "status" => "error",
             "message" => "Status penerimaan harus diisi"
         ], 400);
 
         // check id is array data
-        if(is_array($request->selected_id)){
+        if (is_array($request->selected_id)) {
             // foreach array id
-            foreach($request->selected_id as $id){
+            foreach ($request->selected_id as $id) {
                 // check have data permit or not
                 $permit = $this->permitRepository->getOneById($id);
-    
+
                 // check data has or notfoung
-                if(!$permit) continue;
+                if (!$permit) continue;
                 else $data[] = $id;
-    
+
                 // get data user
                 $user = Auth::user();
-    
+
                 //set data update
                 $dataUpdate = [
                     "status" => $request->status,
                     "updated_by" => $user->id
                 ];
-    
-                if($request->status == "accepted") $dataUpdate["accepted_by"] = $user->id;
+
+                if ($request->status == "accepted") $dataUpdate["accepted_by"] = $user->id;
 
                 // update data
                 $permit->update($dataUpdate);
@@ -266,9 +264,9 @@ class PermitController extends Controller
             $error = count($request->selected_id) - $sukses;
             return response()->json([
                 "status" => "error",
-                "message" => "Berhasil memberikan tanggapan di surat izin, dengan ". $sukses ." sukses, dan ". $error ." error"
-            ], 200); 
-        }else {
+                "message" => "Berhasil memberikan tanggapan di surat izin, dengan " . $sukses . " sukses, dan " . $error . " error"
+            ], 200);
+        } else {
             // if data id not array
             return response()->json([
                 "status" => "error",
@@ -284,23 +282,23 @@ class PermitController extends Controller
      *  
      * */
     public function listToday(Request $request)
-    { 
-        try{
-            if($request->status){
-                $list = $this->permitRepository->listTodayWithCondition("status",$request->status);
+    {
+        try {
+            if ($request->status) {
+                $list = $this->permitRepository->listTodayWithCondition("status", $request->status);
             } else {
                 $list = $this->permitRepository->listToday();
             }
-    
-            if($request->sort) $list = $list->sortByDesc($request->sort);
-            if($request->limit) $list = $list->take($request->limit);
-    
+
+            if ($request->sort) $list = $list->sortByDesc($request->sort);
+            if ($request->limit) $list = $list->take($request->limit);
+
             return response()->json([
                 "status" => "success",
                 "messages" => "Berhasil memuat data surat izin",
                 "data" => $list
             ], 200);
-        }catch(\Throwable $th){
+        } catch (\Throwable $th) {
             return response()->json([
                 "status" => "error",
                 "messages" => $th->getMessage(),
@@ -315,13 +313,13 @@ class PermitController extends Controller
      *  
      * */
     public function detailList(Request $request, string $id)
-    { 
-        try{
+    {
+        try {
             //set relationship;
             $relation = ["student"];
             $permit = $this->permitRepository->relationship($relation, "first");
 
-            if(!$permit) {
+            if (!$permit) {
                 return response()->json([
                     "status" => "error",
                     "messages" => "Surat izin tidak ditemukan",
@@ -331,10 +329,10 @@ class PermitController extends Controller
 
             // get data user created permit
             $user_created = $this->penggunaRepository->getOneById($permit->created_by);
-            if(!$user_created) $user_created = $this->teacherRepository->getOneById($permit->created_by);
+            if (!$user_created) $user_created = $this->teacherRepository->getOneById($permit->created_by);
 
             // check data user created
-            if(!$user_created) {
+            if (!$user_created) {
                 return response()->json([
                     "status" => "error",
                     "messages" => "Data user yang membuat tidak ditemukan",
@@ -347,13 +345,13 @@ class PermitController extends Controller
             // get data user acepted
             $user_accepted = $this->penggunaRepository->getOneById($permit->created_by);
             $permit->user_accepted = $user_accepted;
-    
+
             return response()->json([
                 "status" => "success",
                 "messages" => "Berhasil memuat data surat izin",
                 "data" => $permit
             ], 200);
-        }catch(\Throwable $th){
+        } catch (\Throwable $th) {
             return response()->json([
                 "status" => "error",
                 "messages" => $th->getMessage(),
@@ -368,10 +366,10 @@ class PermitController extends Controller
      *  
      * */
     public function studentList(Request $request)
-    { 
+    {
         // get data student
         $student = $this->studentRepository->getOneById($request->student_id);
-        if(!$student) {
+        if (!$student) {
             return response()->json([
                 "status" => "error",
                 "messages" => "Siswa tidak ditemukan",
@@ -379,12 +377,12 @@ class PermitController extends Controller
             ], 404);
         }
 
-        try{
-            
+        try {
+
             //set relationship get data permit
             $relation = [];
-            $permit = $this->permitRepository->oneConditionOneRelation("student_id",$request->student_id, $relation, "get");
-            
+            $permit = $this->permitRepository->oneConditionOneRelation("student_id", $request->student_id, $relation, "get");
+
             $student->permit = $permit;
 
             return response()->json([
@@ -392,7 +390,7 @@ class PermitController extends Controller
                 "messages" => "Berhasil memuat data surat izin",
                 "data" => $student
             ], 200);
-        }catch(\Throwable $th){
+        } catch (\Throwable $th) {
             return response()->json([
                 "status" => "error",
                 "messages" => $th->getMessage(),
@@ -409,7 +407,7 @@ class PermitController extends Controller
     public function updateStatus(Request $request)
     {
         // check request id
-        if(!$request->id) {
+        if (!$request->id) {
             return response()->json([
                 "status" => "error",
                 "messages" => "Dimohon check ulang pengiriman id",
@@ -418,8 +416,8 @@ class PermitController extends Controller
         }
 
         // check request status
-        $status = ["accepted","rejected","back"];
-        if(!$request->status) {
+        $status = ["accepted", "rejected", "back"];
+        if (!$request->status) {
             return response()->json([
                 "status" => "error",
                 "messages" => "Dimohon check ulang pengiriman status",
@@ -428,7 +426,7 @@ class PermitController extends Controller
         }
 
         // check status has or not
-        if(!in_array($request->status, $status)) {
+        if (!in_array($request->status, $status)) {
             return response()->json([
                 "status" => "error",
                 "messages" => "Status tidak terdaftar, silahkan cek ulang",
@@ -437,7 +435,7 @@ class PermitController extends Controller
         }
 
         // check data user
-        if(!$request->user_id) {
+        if (!$request->user_id) {
             return response()->json([
                 "status" => "error",
                 "messages" => "Data user harus dikirim, silahkan cek ulang.",
@@ -450,17 +448,17 @@ class PermitController extends Controller
             "updated_by" => $request->user_id
         ];
 
-        if($request->status == "accepted") $data["accepted_by"] = $request->user_id;
+        if ($request->status == "accepted") $data["accepted_by"] = $request->user_id;
 
         $permit = $this->permitRepository->getOneById($request->id);
 
         // check permit
-        if(!$permit){
+        if (!$permit) {
             return response()->json([
                 "status" => "error",
                 "messages" => "Surat izin tidak ditemukan",
                 "data" => null
-            ], 404);   
+            ], 404);
         }
 
         // update data
@@ -477,5 +475,4 @@ class PermitController extends Controller
     {
         return view('admin.pages.permit.acc');
     }
-     
 }

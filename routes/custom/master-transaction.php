@@ -24,6 +24,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('presence','presence')->name('presence');
         Route::get('report','report')->name('report');
         Route::post('presence','createPermit')->name('presence.create-permit');
+        Route::post('sync-attendances','syncAttendanceToday')->name('sync');
         Route::get('/new-attendance','newAttendences')->name('new-list');
         Route::get('/count-must-late','studentMustLate')->name('must-late');
     });
