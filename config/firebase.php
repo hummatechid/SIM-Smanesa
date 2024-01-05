@@ -50,20 +50,20 @@ return [
              *
              */
 
-            // 'credentials' => env('FIREBASE_CREDENTIALS', env('GOOGLE_APPLICATION_CREDENTIALS')),
-            'credentials' => [
-                "type" => "service_account",
-                "project_id" => "smanesa-app",
-                "private_key_id" => "c1c37d86a05402ceef62aaece9c3121dd8ae3fb8",
-                "private_key" => "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC6Bw7Nx9n/ArFZ\n4UjZb/CJwOw7Pn3SHDWxsRcBDVUa3wZ1uzHtkRSK+IlIOASOJ/rG4KUpxPO6c59C\nGl06mbOxOYXyfckkFDihKIUHZqaJr+L9orUa9xb8pvsaOB5IaHcmldZbxOaAaS8S\npyXv7XfGOBakJJ+ATHA2Q+wJ+dg+45AV2tPcLXAgMqEK4Yz5DBaw3nLMGjs1z1rr\nfRqAoyZleNREb+zz0HUGWWPjeWcpK9CW5+bwVBe58A83kHQMJBJh1pOWOsvJB5xT\naPOsr8Mp9fPZQYjZ8pZ9vFqYAaiEJE+gmL8hXtgYhuCHyxLk2aKMjAA84KIkNjd/\nCWB8+191AgMBAAECggEAR+r/maWoTRLE7ssOR2Wj2BW6HkNQEEEwrvQYQSNe4gcT\n78MBj+cVSo7AQCfL9wtUw7tIjwfh9BTMHpmjrkqKsjrbYn6nmueoZwGLwGs6eiOB\n/W2AV57sB5wkmqPUbUjZu5SU7SCHvmArvynYnFOxiPPZKPcxpL+oaApFQCwTomfc\nUCADi32Z88EOEeiJsKhYr6r3Kd+GBcIznWLifeVaZEZS1unmZ1jBezO0/CMXHi7S\nywHvyZY8Z8ZNfCA+490FTZLbjUHBR0kxvZj5trT/T5xBO6OAs1RKVIHTgYssTZ69\nZIgrRmJB8XjoNMRlwpEPu/M+vpammShg0/bNcv5RdwKBgQD6azZW0ZMFmu63LZDs\nY8GvlX+FApWwzva9mTPxAwJkQfINRtkKIHiNs2diHU8deBgmt8/f3cbEr4E13Egr\nyY7smHMj/FLzbF01BYz/8YFgcY30uSMrJ2e1BLeV6/HX0QKWQffa4mvcepu3y15L\n6YHs2sbp2G0vlD+3yrmznP58mwKBgQC+LHSWtej0f0idGYigsTzpExQ2I3Tj/bY2\nMa4gpZsjO1wRCQzKnSdtJZjAWOJ2A+PJNz0kRdWslRFhHqQP0WswZmSSRZwj/XDV\n8e5JphEWweNfgOhSQuss4YSF6ZVOR4YRGZUJV5pC6yE74uuL/W5PMbtw9MrvqCg7\nGtXP06XtLwKBgA7OdgkOHTZQodq82/vOLi6WlVKlA3rP0fEF9PdEKUkKSSiVztF1\neAtQ10UK3Jmudyca6TSgZVdN1UL9AltscIH2xaAUFEeGWcB/0oVznyW3sSAOLlEn\n5E7kt4Iq0ELlfdSqk+AiUSRZL4nfgXTVmrQJf4dmH5aXmmjgmLhRCQ8PAoGAIJe9\n45aJtl2aNFKL9/5oUgnTDPRGtExnTiJ1lWLMk904ijLi3lbQywQGifCx30gLYhD1\niaHuXQWvVNXLiGp71G+4DNmhSQnGrOQp0rWDeEMClPui1XZil+6Op+TAkgnwED4y\nLMe2yIFD0N+zPurQXQJI/bL2lNxdCMQwoM3FQkECgYEAp9WMRkTTTvIit1ww51a0\n20kWqmuOaIuKWVk1E7F84ik0UrENpjca5WmklXh2uqAOaPK53WE28ZlAp//JXdYP\nSPRuFXSqJOr5px7x1umNTvoNCvinMuydhwX1jXbBitS6/9qqrQxJ3AV+DGeH8VRX\njN0wiw8D6VSkktjp+RZIm9E=\n-----END PRIVATE KEY-----\n",
-                "client_email" => "firebase-adminsdk-a5kpn@smanesa-app.iam.gserviceaccount.com",
-                "client_id" => "115970911275373275025",
-                "auth_uri" => "https://accounts.google.com/o/oauth2/auth",
-                "token_uri" => "https://oauth2.googleapis.com/token",
-                "auth_provider_x509_cert_url" => "https://www.googleapis.com/oauth2/v1/certs",
-                "client_x509_cert_url" => "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-a5kpn%40smanesa-app.iam.gserviceaccount.com",
-                "universe_domain" => "googleapis.com"
-            ],
+            'credentials' => env('FIREBASE_CREDENTIALS', env('GOOGLE_APPLICATION_CREDENTIALS')),
+            // 'credentials' => [
+            //     "type" => "service_account",
+            //     "project_id" => "smanesa-app",
+            //     "private_key_id" => "c1c37d86a05402ceef62aaece9c3121dd8ae3fb8",
+            //     "private_key" => "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC6Bw7Nx9n/ArFZ\n4UjZb/CJwOw7Pn3SHDWxsRcBDVUa3wZ1uzHtkRSK+IlIOASOJ/rG4KUpxPO6c59C\nGl06mbOxOYXyfckkFDihKIUHZqaJr+L9orUa9xb8pvsaOB5IaHcmldZbxOaAaS8S\npyXv7XfGOBakJJ+ATHA2Q+wJ+dg+45AV2tPcLXAgMqEK4Yz5DBaw3nLMGjs1z1rr\nfRqAoyZleNREb+zz0HUGWWPjeWcpK9CW5+bwVBe58A83kHQMJBJh1pOWOsvJB5xT\naPOsr8Mp9fPZQYjZ8pZ9vFqYAaiEJE+gmL8hXtgYhuCHyxLk2aKMjAA84KIkNjd/\nCWB8+191AgMBAAECggEAR+r/maWoTRLE7ssOR2Wj2BW6HkNQEEEwrvQYQSNe4gcT\n78MBj+cVSo7AQCfL9wtUw7tIjwfh9BTMHpmjrkqKsjrbYn6nmueoZwGLwGs6eiOB\n/W2AV57sB5wkmqPUbUjZu5SU7SCHvmArvynYnFOxiPPZKPcxpL+oaApFQCwTomfc\nUCADi32Z88EOEeiJsKhYr6r3Kd+GBcIznWLifeVaZEZS1unmZ1jBezO0/CMXHi7S\nywHvyZY8Z8ZNfCA+490FTZLbjUHBR0kxvZj5trT/T5xBO6OAs1RKVIHTgYssTZ69\nZIgrRmJB8XjoNMRlwpEPu/M+vpammShg0/bNcv5RdwKBgQD6azZW0ZMFmu63LZDs\nY8GvlX+FApWwzva9mTPxAwJkQfINRtkKIHiNs2diHU8deBgmt8/f3cbEr4E13Egr\nyY7smHMj/FLzbF01BYz/8YFgcY30uSMrJ2e1BLeV6/HX0QKWQffa4mvcepu3y15L\n6YHs2sbp2G0vlD+3yrmznP58mwKBgQC+LHSWtej0f0idGYigsTzpExQ2I3Tj/bY2\nMa4gpZsjO1wRCQzKnSdtJZjAWOJ2A+PJNz0kRdWslRFhHqQP0WswZmSSRZwj/XDV\n8e5JphEWweNfgOhSQuss4YSF6ZVOR4YRGZUJV5pC6yE74uuL/W5PMbtw9MrvqCg7\nGtXP06XtLwKBgA7OdgkOHTZQodq82/vOLi6WlVKlA3rP0fEF9PdEKUkKSSiVztF1\neAtQ10UK3Jmudyca6TSgZVdN1UL9AltscIH2xaAUFEeGWcB/0oVznyW3sSAOLlEn\n5E7kt4Iq0ELlfdSqk+AiUSRZL4nfgXTVmrQJf4dmH5aXmmjgmLhRCQ8PAoGAIJe9\n45aJtl2aNFKL9/5oUgnTDPRGtExnTiJ1lWLMk904ijLi3lbQywQGifCx30gLYhD1\niaHuXQWvVNXLiGp71G+4DNmhSQnGrOQp0rWDeEMClPui1XZil+6Op+TAkgnwED4y\nLMe2yIFD0N+zPurQXQJI/bL2lNxdCMQwoM3FQkECgYEAp9WMRkTTTvIit1ww51a0\n20kWqmuOaIuKWVk1E7F84ik0UrENpjca5WmklXh2uqAOaPK53WE28ZlAp//JXdYP\nSPRuFXSqJOr5px7x1umNTvoNCvinMuydhwX1jXbBitS6/9qqrQxJ3AV+DGeH8VRX\njN0wiw8D6VSkktjp+RZIm9E=\n-----END PRIVATE KEY-----\n",
+            //     "client_email" => "firebase-adminsdk-a5kpn@smanesa-app.iam.gserviceaccount.com",
+            //     "client_id" => "115970911275373275025",
+            //     "auth_uri" => "https://accounts.google.com/o/oauth2/auth",
+            //     "token_uri" => "https://oauth2.googleapis.com/token",
+            //     "auth_provider_x509_cert_url" => "https://www.googleapis.com/oauth2/v1/certs",
+            //     "client_x509_cert_url" => "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-a5kpn%40smanesa-app.iam.gserviceaccount.com",
+            //     "universe_domain" => "googleapis.com"
+            // ],
 
             /*
              * ------------------------------------------------------------------------
