@@ -46,6 +46,7 @@ class AuthController extends Controller
 
         $accesstoken = config('app.fcm_token');
         $user->device_token = $accesstoken;
+        $user->save();
 
         // get detail data user
         $pengguna = Pengguna::where("user_id",$user->id)->first();
