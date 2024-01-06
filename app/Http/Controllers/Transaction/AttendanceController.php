@@ -76,12 +76,14 @@ class AttendanceController extends Controller
         $data = $this->attendanceRepository->getDataDate(today());
         $data = $data->filter(function($item){
             return $item->present_at;
-        });
+        })->sortBy('present_at');
 
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('student', function($item) {
-                return $item->student->full_name." (".$item->student->nama_rombel.")";
+                return $item->student->full_name;
+            })->addColumn('class', function($item) {
+                return $item->student->nama_rombel;
             })->addColumn('present_at', function($item) {
                 return Carbon::parse($item->present_at)->format('H:i');
             })->addColumn('status', function($item) {
@@ -265,6 +267,11 @@ class AttendanceController extends Controller
      */
     public function syncAttendanceToday(Request $request)
     {
+        $checkData = $this->attendanceRepository->getDataDate(today());
+        if(count($checkData) > 0){
+            return redirect()->back()->with("error","Data absensi hari ini sudah tersedia, tidak bisa melakukan sinkronisasi lagi!");
+        }
+
         $students = $this->studentRepository->getAll();
         foreach($students as $student) $this->attendanceRepository->create(
             ["status" => "alpha", "student_id" => $student->id]
