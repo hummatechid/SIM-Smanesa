@@ -169,19 +169,6 @@
 
             reloadNewUrl()
         })
-
-        $('#form').parsley()
-        
-        $(document).on('input change mouseenter focus', 'input', (e) => {
-            $('#form').parsley()
-            let id = e.target.getAttribute('id')
-            $("#"+id).parsley().validate()
-        })
-        $(document).on('input change mouseenter focus', 'select', (e) => {
-            $('#form').parsley()
-            let id = e.target.getAttribute('id')
-            $('#'+id).parsley().validate()
-        })
         $(document).on('input change', '.input-data', function() {
             reloadNewUrl()
         })
