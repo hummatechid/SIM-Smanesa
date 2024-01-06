@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\FcmToken;
 use App\Models\Pengguna;
 use App\Models\Role;
 use App\Models\User;
@@ -45,17 +46,21 @@ class AuthController extends Controller
         }
 
         // for broadcasting notif
-        if($user->device_token){
-            if(!in_array($request->device_token, explode(",",$user->device_token))){
-                $accesstoken = $user->device_token. "," . $request->device_token ?? config('app.fcm_token');
-                $user->device_token = $accesstoken;
-                $user->save();
-            }
-        } else {
+        // if($user->device_token){
+        //     if(!in_array($request->device_token, explode(",",$user->device_token))){
+        //         $accesstoken = $user->device_token. "," . $request->device_token ?? config('app.fcm_token');
+        //         $user->device_token = $accesstoken;
+        //         $user->save();
+        //     }
+        // } else {
+        //     $accesstoken = $request->device_token ?? config('app.fcm_token');
+        //     $user->device_token = $accesstoken;
+        //     $user->save();
+        // }
             $accesstoken = $request->device_token ?? config('app.fcm_token');
             $user->device_token = $accesstoken;
+            FcmToken::create(["user_id"=>$user->id,"token"=>$accesstoken]);
             $user->save();
-        }
 
 
         // get detail data user
