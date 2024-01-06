@@ -67,7 +67,7 @@ class User extends Authenticatable
 
     public function routeNotificationForFcm()
     {
-        // return explode(",",$this->device_token);
-        return $this->fcm->pluck('token')->toArray();
+        return explode(",",$this->device_token);
+        // return $this->fcm->pluck('token')->toArray();
     }
 }
