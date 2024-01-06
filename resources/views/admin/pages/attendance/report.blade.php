@@ -27,7 +27,7 @@
         <div class="card-body">
             @csrf
             <div class="row">
-                <div class="form-group mb-3 col-md">
+                <div class="form-group mb-3 col-md-6">
                     <label for="type">Tipe Laporan</label>
                     <select name="type" id="type" class="form-select" required>
                         <option value="monthly">Bulanan</option>
@@ -43,7 +43,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="form-group mb-3 col-md-6" id="type_yearly">
+                <div class="form-group mb-3 col-md" id="type_yearly">
                     <label for="year">Tahun</label>
                     <select name="year" id="year" class="form-select input-data" required>
                         @foreach($years as $year)
