@@ -147,6 +147,7 @@
         paging: "{{ $paggingTable }}",
         info: "{{ $infoTable }}",
         searching: "{{ $searchableTable }}",
+        ordering: "{{ $orderable }}",
         orderClasses: false,
         deferRender: true,
         drawCallback: () => {
@@ -198,7 +199,7 @@
                 @else
                 {
                     data: "{{ $column }}",
-                    title: "{{ $value }}"
+                    title: "{{ $value }}",
                 },
                 @endif
             @endforeach

@@ -35,7 +35,7 @@
                         <option value="custom">Kustom Tanggal</option>
                     </select>
                 </div>
-                <div class="form-group mb-3 col-md-6" id="type_monthly">
+                <div class="form-group mb-3 col-md" id="type_monthly">
                     <label for="month">Bulan</label>
                     <select name="month" id="month" class="form-select input-data" required>
                         @foreach($months as $month_id => $month)
@@ -43,9 +43,9 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="form-group mb-3 col-md-6" id="type_yearly" style="display: none;">
+                <div class="form-group mb-3 col-md" id="type_yearly">
                     <label for="year">Tahun</label>
-                    <select name="year" id="year" class="form-select input-data">
+                    <select name="year" id="year" class="form-select input-data" required>
                         @foreach($years as $year)
                         <option value="{{ $year->tahun }}">{{ $year->tahun }}</option>
                         @endforeach
@@ -55,6 +55,8 @@
                     <label for="date">Tanggal</label>
                     <input type="text" name="date" id="date" class="form-control input-data">
                 </div>
+            </div>
+            <div class="row">
                 <div class="form-group mb-3 col-md">
                     <label for="data">Data yang Dicetak</label>
                     <select name="data" id="data" class="form-select" required>
@@ -91,13 +93,13 @@
         card-title="Tabel Data Kehadiran"
         data-url="{{ route('attendance.get-report-datatables') }}"
         :table-columns="$data_column"
-        default-order="1"
-        arrange-order="asc"
         :custom-export-button="['csv', 'excel', 'pdf', 'print']"
         custom-export-title="Laporan Presensi"
         :server-side="false"
         :info-table="false"
         :pagging-table="false"
+        :is-report="true"
+        :orderable="false"
     />
 </div>
 
@@ -128,8 +130,8 @@
                 $('#type_custom_date').hide()
                 $('#date').removeAttr('required')
             } else if($('#type').val() == 'monthly') {
-                $('#type_yearly').hide()
-                $('#year').removeAttr('required')
+                $('#type_yearly').show()
+                $('#year').attr('required', 'required')
                 $('#type_monthly').show()
                 $('#month').attr('required', 'required')
                 $('#type_custom_date').hide()
@@ -165,19 +167,7 @@
 
             reloadNewUrl()
         })
-
-        $('#form').parsley()
         
-        $(document).on('input change mouseenter focus', 'input', (e) => {
-            $('#form').parsley()
-            let id = e.target.getAttribute('id')
-            $("#"+id).parsley().validate()
-        })
-        $(document).on('input change mouseenter focus', 'select', (e) => {
-            $('#form').parsley()
-            let id = e.target.getAttribute('id')
-            $('#'+id).parsley().validate()
-        })
         $(document).on('input change', '.input-data', function() {
             reloadNewUrl()
         })
@@ -200,8 +190,7 @@
         $('#date').flatpickr({
             mode: 'range',
             maxDate: 'today',
-            locale: 'id',
-            onChange: function(selectedDates, dateStr, instance) {
+            locale: 'id',            onChange: function(selectedDates, dateStr, instance) {
                 if(selectedDates.length > 1) reloadNewUrl();
             }
         })

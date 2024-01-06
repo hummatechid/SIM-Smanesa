@@ -182,7 +182,7 @@ class AttendanceController extends Controller
             case "monthly":
                 if(!$request->year) $year = date('Y');
                 else $year = $request->year;
-                dd($year);
+        
                 $data = $this->attendanceRepository->getDataMonth($year,$request->month,["student"]);
             case "yearly":
                 $data = $this->attendanceRepository->getDataYears($request->year,["student"]);
