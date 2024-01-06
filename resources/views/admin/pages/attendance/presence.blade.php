@@ -23,8 +23,16 @@
 
     @php
         $data_column = ["student" => "Siswa", "class" => "Kelas", "present_at" => "Waktu Kehadiran", "status" => "Status", "action" => "Aksi"];
-        if(auth()->user()->hasExactRoles('satpam')) $btn_add = '<div class="d-flex gap-3"><a href="'.route("scan.index").'" class="btn btn-sm btn-primary">Scan Kehadiran</a></div>';
-        elseif(auth()->user()->hasRole('superadmin')) {
+        if(auth()->user()->hasExactRoles('satpam')) {
+            $btn_add = '
+            <div class="d-flex gap-3">
+                <form method="POST" action="'.route('attendance.sync').'">
+                    <input type="hidden" name="_token" value="'.csrf_token().'" />
+                    <button type="submit" class="btn btn-sm btn-primary">Sinkronisasi Absensi</button>
+                </form>
+                <a href="'.route("scan.index").'" class="btn btn-sm btn-primary">Scan Kehadiran</a>
+            </div>';
+        } elseif(auth()->user()->hasRole('superadmin')) {
             $btn_add = '
             <div class="d-flex gap-3">
                 <form method="POST" action="'.route('attendance.sync').'">
@@ -34,15 +42,14 @@
                 <a href="'.route("scan.index").'" class="btn btn-sm btn-primary">Scan Kehadiran</a>
                 <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-add-permit">+ Tambah Izin</button>
             </div>';
-        } 
-        else $btn_add = '<div class="d-flex gap-3"><a href="'.route("scan.index").'" class="btn btn-sm btn-primary">Scan Kehadiran</a><button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-add-permit">+ Tambah Izin</button></div>';
+        } else $btn_add = '<div class="d-flex gap-3"><a href="'.route("scan.index").'" class="btn btn-sm btn-primary">Scan Kehadiran</a><button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-add-permit">+ Tambah Izin</button></div>';
         $custom_group = [
-                "date" => [
-                    "title" => "Date",
-                    "type" => "date",
-                    "default" => date('Y-m-d')
-                ]
+            "date" => [
+                "title" => "Date",
+                "type" => "date",
+                "default" => date('Y-m-d')
             ]
+        ]
     @endphp
     <x-datatable
         card-title="Tabel Data Kehadiran"
