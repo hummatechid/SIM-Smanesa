@@ -29,14 +29,15 @@ class UserRequest extends FormRequest
     {
         if ($this->getMethod() === 'PUT' || $this->getMethod() === 'PATCH') {
             // Update Rules
-            $id = $this->route('pengguna');
+            $id = $this->route('user');
             
             // check id from route student has or not
             if(!$id) $id = $this->route('teacher');
-            else $user = Pengguna::find($id);
             
-            // check id from route teacher has or not 
-            if($id) $user = Teacher::find($id);
+            $user = Pengguna::find($id);
+
+            // check user from route user has or not 
+            if(!$user) $user = Teacher::find($id);
 
             $route = Route::current()->uri();
             if($route == "user"){
