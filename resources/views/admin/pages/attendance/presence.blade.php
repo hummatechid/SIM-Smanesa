@@ -116,7 +116,7 @@
             <div class="modal-body">
                 <div class="form-group mb-3">
                     <label for="date" class="form-label">Tanggal <span class="text-danger">*</span></label>
-                    <input type="date" class="form-control" name="date" id="date" value="{{ old('date', date('Y-m-d')) }}" required>
+                    <input type="date" class="form-control" name="date" id="date" value="{{ old('date', date('Y-m-d')) }}" readonly required>
                 </div>
                 <div class="form-group mb-3">
                     <label for="student_id" class="form-label">Siswa <span class="text-danger">*</span></label>
@@ -220,7 +220,7 @@
         // action = action.replace('updated_id', item.id)
         
         let date = new Date(item.present_at)
-        let formated_date = date.toISOString().split('T')[0]
+        let formated_date = item.present_at.split(' ')[0]
         let img = "{{ asset(Storage::url('')) }}";
         img = img+item['permit_file'];
 
