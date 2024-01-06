@@ -30,6 +30,7 @@ class Datatable extends Component {
         public array $customExportButton = [],
         public string $customExportTitle = "",
         public bool $orderable = true,
+        public bool $isResponsive = true,
     ) { }
 
     public function render() :View

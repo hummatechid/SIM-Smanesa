@@ -118,6 +118,7 @@
                     default-order="2"
                     arrange-order="desc"
                     :searchable-table="false"
+                    :is-responsive="false"
                 />
             </div>
             <div id="howto">
