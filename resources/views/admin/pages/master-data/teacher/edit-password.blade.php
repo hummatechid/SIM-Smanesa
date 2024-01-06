@@ -24,7 +24,7 @@
     <x-edit-password
         update-url="{{ route('teacher.updatePassword', $teacher->id) }}"
         card-title="Ubah Password"
-        back-url="{{ url($main_url) }}"
+        back-url="{{ url($main_url).'/'.$teacher->id }}"
         form-for="guru"
         :data-user="$teacher"
     />
