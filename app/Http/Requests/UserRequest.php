@@ -38,10 +38,17 @@ class UserRequest extends FormRequest
             // check id from route teacher has or not 
             if($id) $user = Teacher::find($id);
 
-            return [
-                'email' => ['required','email', Rule::unique('users')->ignore($user->user_id)],
-                'role_id' => 'required',
-            ];
+            $route = Route::current()->uri();
+            if($route == "user"){
+                return [
+                    'email' => ['required','email', Rule::unique('users')->ignore($user->user_id)],
+                    'role_id' => 'required',
+                ];
+            } else {
+                return [
+                    'email' => ['required','email', Rule::unique('users')->ignore($user->user_id)],
+                ];
+            }
         } else {
             // create rules
             $route = Route::current()->uri();

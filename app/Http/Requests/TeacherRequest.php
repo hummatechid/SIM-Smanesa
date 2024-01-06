@@ -24,8 +24,8 @@ class TeacherRequest extends FormRequest
     {
         return [
             "nip" => "required",
-            "nik" => "required",
-            "nuptk" => "required",
+            "nik" => "nullable",
+            "nuptk" => "nullable",
             "full_name" => "required",
             'gender' => 'required|in:Laki-laki,Perempuan',
             'phone_number' => "required",
