@@ -33,8 +33,9 @@ class PermitNotification extends Notification
 
     public function toFcm($notifiable)
     {
+        dd($notifiable);
         return FcmMessage::create()
-            // ->setData(['data1' => 'value', 'data2' => 'value2'])
+            ->setData($notifiable)
             ->setNotification(\NotificationChannels\Fcm\Resources\Notification::create()
                 ->setTitle('Permintaan Izin Keluar')
                 ->setBody($this->message . ' mengirimkan permintaan izin untuk keluar.'));
