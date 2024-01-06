@@ -33,7 +33,6 @@ class PermitNotification extends Notification
 
     public function toFcm($notifiable)
     {
-        dd($notifiable);
         return FcmMessage::create()
             ->setData($notifiable)
             ->setNotification(\NotificationChannels\Fcm\Resources\Notification::create()
