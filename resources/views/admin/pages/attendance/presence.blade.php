@@ -22,7 +22,7 @@
     </div>
 
     @php
-        $data_column = ["student" => "Siswa", "present_at" => "Waktu Kehadiran", "status" => "Status", "action" => "Aksi"];
+        $data_column = ["student" => "Siswa", "class" => "Kelas", "present_at" => "Waktu Kehadiran", "status" => "Status", "action" => "Aksi"];
         if(auth()->user()->hasExactRoles('satpam')) $btn_add = '<div class="d-flex gap-3"><a href="'.route("scan.index").'" class="btn btn-sm btn-primary">Scan Kehadiran</a></div>';
         elseif(auth()->user()->hasRole('superadmin')) {
             $btn_add = '
@@ -107,9 +107,8 @@
 </div>
 <div class="modal modal-lg fade" id="modal-edit-data">
     <div class="modal-dialog">
-        <form id="form-edit" action="{{ route('attendance.update', 'updated_id') }}" class="modal-content" method="POST" enctype="multipart/form-data">
+        <form id="form-edit" action="{{ route('attendance.presence.create-permit') }}" class="modal-content" method="POST" enctype="multipart/form-data">
             @csrf
-            @method('PUT')
             <div class="modal-header">
                 <h4 class="m-0">Ubah Kehadiran Siswa</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -136,10 +135,10 @@
                 <div class="form-group mb-">
                     <label for="status" class="form-lael">Status <span class="text-danger">*</span></label>
                     <select name="status" id="status" class="form-select" required>
-                        <option value="hadir">Hadir</option>
+                        <option value="masuk">Hadir</option>
                         <option value="sakit">Sakit</option>
                         <option value="izin">Izin</option>
-                        <option value="alpa">Alpa</option>
+                        <option value="alpha">Alpa</option>
                     </select>
                 </div>
                 <div class="form-group mb-3" id="edit-img-container">
@@ -151,7 +150,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Tambah</button>
+                <button type="submit" class="btn btn-primary">Ubah</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
             </div>
         </form>
@@ -217,8 +216,8 @@
     $(document).on('click', '.btn-change', function() {
         const item = $(this).data('data');
         const student = $(this).data('student');
-        let action = "{{ route('attendance.update', 'updated_id') }}";
-        action = action.replace('updated_id', item.id)
+        let action = "{{ route('attendance.presence.create-permit') }}";
+        // action = action.replace('updated_id', item.id)
         
         let date = new Date(item.present_at)
         let formated_date = date.toISOString().split('T')[0]

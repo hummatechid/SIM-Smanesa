@@ -49,7 +49,7 @@
     </div>
 
     @php
-        $data_column = ["student" => "Siswa", "present_at" => "Waktu Kehadiran", "status" => "Status"];
+        $data_column = ["student" => "Siswa", "class" => "Kelas", "present_at" => "Waktu Kehadiran", "status" => "Status"];
     @endphp
     <x-datatable
         card-title="Tabel Data Kehadiran Terbaru"
