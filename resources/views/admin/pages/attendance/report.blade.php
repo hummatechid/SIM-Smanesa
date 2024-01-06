@@ -47,7 +47,7 @@
                     <label for="year">Tahun</label>
                     <select name="year" id="year" class="form-select input-data">
                         @foreach($years as $year)
-                        <option value="{{ $year }}">{{ $year }}</option>
+                        <option value="{{ $year->tahun }}">{{ $year->tahun }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -184,7 +184,7 @@
 
         function reloadNewUrl()
         {
-            let main_url = "{{ route('attendance.get-main-datatables') }}"
+            let main_url = "{{ route('attendance.get-report-datatables') }}"
 
             let params = "?type=" + $('#type').val()
             params += "&date=" + $('#date').val()

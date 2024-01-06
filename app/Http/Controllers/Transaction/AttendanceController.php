@@ -61,8 +61,10 @@ class AttendanceController extends Controller
 
     public function report()
     {
+        $tahun = \App\Models\Attendance::selectRaw('YEAR(created_at) as tahun')->orderBy('tahun','ASC')->groupBy('tahun')->get();
+        if(count($tahun) == 0) $tahun = [date('Y')];
         $group_data = [
-            'years' => ["2024"],
+            'years' => $tahun,
             'months' => $this->months,
             'grades' => $this->grades,
             'classes' => \App\Models\Student::select('nama_rombel')->groupBy('nama_rombel')->get()
@@ -180,6 +182,7 @@ class AttendanceController extends Controller
             case "monthly":
                 if(!$request->year) $year = date('Y');
                 else $year = $request->year;
+                dd($year);
                 $data = $this->attendanceRepository->getDataMonth($year,$request->month,["student"]);
             case "yearly":
                 $data = $this->attendanceRepository->getDataYears($request->year,["student"]);
@@ -188,8 +191,8 @@ class AttendanceController extends Controller
                     $date_from = date('Y-m-d');
                     $date_to = date('Y-m-d');
                 }else {
-                    $date_from = str_split("-",$request->date)[0];
-                    $date_to = str_split("-",$request->date)[1];
+                    $date_from = explode("-",$request->date)[0];
+                    $date_to = explode("-",$request->date)[1];
                 }
                 $data = $this->attendanceRepository->getDataCustomDate($date_from,$date_to,["student"]);
             default:
@@ -210,7 +213,7 @@ class AttendanceController extends Controller
                 return $item->student->tingkat_pendidikan == $grade;
             });
         }
-
+        
         return $this->attendanceService->getReportDataDatatableV2($data);
     }
 
