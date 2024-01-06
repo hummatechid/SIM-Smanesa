@@ -93,7 +93,7 @@ class PermitController extends Controller
                 $validateData["student_id"] = $student_id;
                 $selected = $this->studentRepository->getOneById($student_id);
                 $students[] = $selected->full_name. " | " . $selected->nama_rombel;
-                // $this->permitRepository->create($validateData);
+                $this->permitRepository->create($validateData);
             }
 
             // send message
