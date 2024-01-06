@@ -267,7 +267,8 @@ class AttendanceController extends Controller
             $photo = $fileData["filePath"].".".$fileData["fileType"];
             
             // type data update or create
-            $type = "create";
+            if($data->present_at) $type = "update";
+            else $type = "create";
         } else {
             $photo = null;
 
