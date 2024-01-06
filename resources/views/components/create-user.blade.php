@@ -239,6 +239,10 @@
         }
 
         input[readonly], textarea[readonly] {
+            color: #6c757d!important;
+            background: #e9ecef!important;
+        }
+        html[data-bs-theme="dark"] input[readonly], html[data-bs-theme="dark"] textarea[readonly] {
             color: var(--bs-gray)!important;
             background: #40404d!important;
         }
