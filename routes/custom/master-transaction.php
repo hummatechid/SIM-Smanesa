@@ -44,6 +44,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('report', [ViolationController::class, 'report'])->name('report');
         Route::get('/get-report-data', [ViolationController::class, 'getReportDatatablesData'])->name('get-report-datatables');
         Route::get('/count-must-student', [ViolationController::class, 'listMustStudent'])->name('count-student');
+        Route::post('/soft-destroy/{id}', [ViolationController::class, 'softDestroy'])->name('soft-destroy');
     });
     Route::resource('/violation', ViolationController::class);
     

@@ -32,7 +32,7 @@
         @endphp
         <x-datatable
             card-title="Tabel Izin"
-            data-url="{{ route('permit.get-main-datatables') }}?status=accepted"
+            data-url="{{ route('permit.get-main-datatables',).'?status=accepted' }}"
             :table-columns="$data_column"
             arrange-order="desc"
         />

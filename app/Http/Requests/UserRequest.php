@@ -40,7 +40,7 @@ class UserRequest extends FormRequest
             if(!$user) $user = Teacher::find($id);
 
             $route = Route::current()->uri();
-            if($route == "user"){
+            if($route == "user/{user}"){
                 return [
                     'email' => ['required','email', Rule::unique('users')->ignore($user->user_id)],
                     'role_id' => 'required',

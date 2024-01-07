@@ -46,23 +46,38 @@ class ViolationController extends Controller
                 if(!$request->year) $year = date('Y');
                 else $year = $request->year;
                 $data = $this->violationRepository->getDataMonth($year,$request->month,["violationType","student"]);
+                break;
             case "yearly":
                 $data = $this->violationRepository->getDataYears($request->year,["violationType","student"]);
+                break;
             case "custom":
-                if(!$request->date){
-                    $date_from = date('Y-m-d');
-                    $date_to = date('Y-m-d');
-                }else {
-                    $date_from = explode("-",$request->date)[0];
-                    $date_to = explode("-",$request->date)[1];
+                $check_date = explode("-",$request->date);
+                if(count($check_date) > 3){
+                    if(!$request->date){
+                        $date_from = date('Y-m-d');
+                        $date_to = date('Y-m-d');
+                    }else {
+                        $date_from = $check_date[0]."-".$check_date[1]."-".$check_date[2];
+                        $date_to = $check_date[3]."-".$check_date[4]."-".$check_date[5];
+                    }
+                    $data = $this->violationRepository->getDataCustomDate($date_from,$date_to,["student"]);
+                }else if(count($check_date) == 3){
+                    $data = $this->violationRepository->getDataDate($request->date,["student"]);
+                } else {
+                    if(!$request->year) $year = date('Y');
+                    else $year = $request->year;
+                    if(!$request->month) $month = date('m');
+                    else $month = $request->month;
+                    $data = $this->violationRepository->getDataMonth($year,$month,["student"]);
                 }
-                $data = $this->violationRepository->getDataCustomDate($date_from,$date_to,["violationType","student"]);
+                break;
             default:
                 if(!$request->year) $year = date('Y');
                 else $year = $request->year;
                 if(!$request->month) $month = date('m');
                 else $month = $request->month;
                 $data = $this->violationRepository->getDataMonth($year,$month,["violationType","student"]);
+                break;
         }
         if($request->data == "per_class"){
             $class = $request->class;
@@ -192,7 +207,35 @@ class ViolationController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        if(!$request->violation_type_id) return redirect()->back()->with("error","Pilih pelanggaran terlebih dahulu");
+        if(!$request->student_id) return redirect()->back()->with("error","Pilih siswa terlebih dahulu");
+
+        $violation = $this->violationRepository->getOneById($id);      
+        if(!$violation) return redirect()->back()->with("error","Pelanggaran tidak ditemukan");
+        
+        $student = $this->studentRepository->getOneById($violation->student_id);
+        if(!$student) return redirect()->back()->with("error","Siswa tidak ditemukan");
+
+        // update new score
+        $student->score -= $violation->score;
+        $student->save();
+        
+        // get data selected
+        $selected_violation = $this->violationTypeRepository->getOneById($request->violation_type_id);
+        $selected_student = $this->studentRepository->getOneById($request->student_id);
+        
+        // update violation
+        $violation->violation_type_id = $request->violation_type_id;
+        $violation->score = $selected_violation->score;
+        
+        // update score new student
+        $selected_student->score += $selected_violation->score;
+
+        // save data
+        $selected_student->save();
+        $violation->save();
+
+        return redirect()->route('violation.index')->with("success","Data pelanggaran berhasil dirubah");
     }
 
     /**
@@ -200,7 +243,67 @@ class ViolationController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $violation = $this->violationRepository->getOneById($id);      
+        if(!$violation){
+            return response()->json([
+                "status" => "error",
+                "message" => "Pelanggaran tidak ditemukan"
+            ], 404);
+        }
+
+        $student = $this->studentRepository->getOneById($violation->student_id);
+        if(!$student) {
+                return response()->json([
+                "status" => "error",
+                "message" => "Siswa tidak ditemukan"
+            ], 404);
+
+        }
+
+        // update new score
+        $student->score -= $violation->score;
+        $student->save();
+        
+        $violation->delete();
+
+        return response()->json([
+            "status" => "error",
+            "message" => "Data pelanggaran berhasil dihapus permanent"
+        ], 200);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function softDestroy(string $id)
+    {
+        $violation = $this->violationRepository->getOneById($id);      
+        if(!$violation){
+            return response()->json([
+                "status" => "error",
+                "message" => "Pelanggaran tidak ditemukan"
+            ], 404);
+        }
+
+        $student = $this->studentRepository->getOneById($violation->student_id);
+        if(!$student) {
+            return response()->json([
+                "status" => "error",
+                "message" => "Siswa tidak ditemukan"
+            ], 404);
+        }
+
+        // update new score
+        $student->score -= $violation->score;
+        $student->save();
+        
+        $violation->deleted_at = now();
+        $violation->save();
+
+        return response()->json([
+            "status" => "error",
+            "message" => "Data pelanggaran berhasil dihapus"
+        ], 200);
     }
 
     /**

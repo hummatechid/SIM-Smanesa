@@ -88,7 +88,14 @@ class AuthController extends Controller
         $id = Auth::guard("sanctum")->id();
         $user = User::find($id);
         $user->tokens()->delete();
-        // $user->update(['device_token' => null]);
+
+        $tokenaccess = ""; 
+        foreach(explode(",",$user->device_token) as $token){
+            if($token != $request->device_token){
+                $tokenaccess .= $token;
+            }
+        }
+        $user->update(['device_token' => $token]);
 
         return response()->json([
             'message' => 'logout success'

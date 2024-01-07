@@ -38,6 +38,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{id}/edit-password', [TeacherController::class, 'editPassword'])->name('editPassword');
         Route::patch('/{id}/update-password', [TeacherController::class, 'updatePassword'])->name('updatePassword');
         Route::post('/soft-delete/{id}', [TeacherController::class, 'softDestroy'])->name('softDestroy');
+        Route::post('/assign-role/{id}', [TeacherController::class, 'assignRole'])->name('assign-role');
+        Route::post('/remove-role/{id}', [TeacherController::class, 'removeRole'])->name('remove-role');
     });
     Route::resource('/teacher', TeacherController::class);
 
