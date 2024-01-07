@@ -81,7 +81,9 @@ class ViolationService extends BaseService {
             })->addColumn('class', function($item) {
                 return $item[0]->student->nama_rombel;
             })->addColumn('violation_score', function($item) {
-                return $item[0]->student->score;
+                return collect($item)->sum("score");
+            })->addColumn('violation_total', function($item) {
+                return count($item);
             })
             ->make(true);
     }

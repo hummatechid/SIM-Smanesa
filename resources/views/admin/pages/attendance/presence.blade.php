@@ -22,9 +22,27 @@
     </div>
 
     @php
-        $data_column = ["student" => "Siswa", "present_at" => "Waktu Kehadiran", "status" => "Status"];
-        if(auth()->user()->hasExactRoles('satpam')) $btn_add = '<div class="d-flex gap-3"><a href="'.route("scan.index").'" class="btn btn-primary">Scan Kehadiran</a></div>';
-        else $btn_add = '<div class="d-flex gap-3"><a href="'.route("scan.index").'" class="btn btn-primary">Scan Kehadiran</a><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-add-permit">+ Tambah izin</button></div>';
+        $data_column = ["student" => "Siswa", "class" => "Kelas", "present_at" => "Waktu Kehadiran", "status" => "Status", "action" => "Aksi"];
+        if(auth()->user()->hasExactRoles('satpam')) $btn_add = '<div class="d-flex gap-3"><a href="'.route("scan.index").'" class="btn btn-sm btn-primary">Scan Kehadiran</a></div>';
+        elseif(auth()->user()->hasRole('superadmin')) {
+            $btn_add = '
+            <div class="d-flex gap-3">
+                <form method="POST" action="'.route('attendance.sync').'">
+                    <input type="hidden" name="_token" value="'.csrf_token().'" />
+                    <button type="submit" class="btn btn-sm btn-primary">Sinkronisasi Absensi</button>
+                </form>
+                <a href="'.route("scan.index").'" class="btn btn-sm btn-primary">Scan Kehadiran</a>
+                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-add-permit">+ Tambah Izin</button>
+            </div>';
+        } 
+        else $btn_add = '<div class="d-flex gap-3"><a href="'.route("scan.index").'" class="btn btn-sm btn-primary">Scan Kehadiran</a><button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-add-permit">+ Tambah Izin</button></div>';
+        $custom_group = [
+                "date" => [
+                    "title" => "Date",
+                    "type" => "date",
+                    "default" => date('Y-m-d')
+                ]
+            ]
     @endphp
     <x-datatable
         card-title="Tabel Data Kehadiran"
@@ -34,19 +52,8 @@
         arrange-order="desc"
         data-add-type="custom-btn"
         :data-add-btn="$btn_add"
+        :with-custom-groups="$custom_group"
     />
-{{-- 
-    @php
-        $data_column = ["student" => "Siswa", "status" => "Status", "action" => "Aksi"];
-    @endphp
-    <x-datatable
-        card-title="Tabel Data Izin / Sakit"
-        data-url="{{ route('attendance.get-permit-datatables') }}"
-        :table-columns="$data_column"
-        default-order="2"
-        arrange-order="desc"
-        delete-option="attendance/presence/deleted_id?status=absent"
-    /> --}}
 
 </div>
 
@@ -60,6 +67,10 @@
             </div>
             <div class="modal-body">
                 <div class="form-group mb-3">
+                    <label for="date" class="form-label">Tanggal Izin <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" name="date" id="date" value="{{ old('date', date('Y-m-d')) }}" required>
+                </div>
+                <div class="form-group mb-3">
                     <label for="student_id" class="form-label">Siswa <span class="text-danger">*</span></label>
                     <select name="student_id" id="student_id" class="form-select choices" required>
                         <option value="" selected disabled>-- pilih siswa --</option>
@@ -71,9 +82,17 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
+                <div class="form-group mb-">
+                    <label for="status" class="form-lael">Status <span class="text-danger">*</span></label>
+                    <select name="status" id="status" class="form-select" required>
+                        <option value="" selected disabled>-- pilih status --</option>
+                        <option value="sakit">Sakit</option>
+                        <option value="izin">Izin</option>
+                    </select>
+                </div>
                 <div class="form-group mb-3">
                     <label for="permit_file" class="form-label">File Izin <span class="text-danger">*</span></label>
-                    <input type="file" id="permit_file" name="permit_file" class="my-pond"/>
+                    <input type="file" id="permit_file" name="permit_file" class="add-image"/>
                     @error('permit_file')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
@@ -81,6 +100,57 @@
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">Tambah</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal modal-lg fade" id="modal-edit-data">
+    <div class="modal-dialog">
+        <form id="form-edit" action="{{ route('attendance.presence.create-permit') }}" class="modal-content" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="modal-header">
+                <h4 class="m-0">Ubah Kehadiran Siswa</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group mb-3">
+                    <label for="date" class="form-label">Tanggal <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" name="date" id="date" value="{{ old('date', date('Y-m-d')) }}" readonly required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="student_id" class="form-label">Siswa <span class="text-danger">*</span></label>
+                    <input type="hidden" name="student_id" id="student_id">
+                    <input type="text" id="student_name" class="form-control" readonly>
+                    {{-- <select name="student_id" id="student_id" class="form-select choices" required>
+                        <option value="" selected disabled>-- pilih siswa --</option>
+                        @foreach($students as $student)
+                        <option value="{{ $student->id }}">{{ $student->full_name }} | {{ $student->nisn }} | {{ $student->gender }} | {{ $student->nama_rombel }}</option>
+                        @endforeach
+                    </select>
+                    @error('student_id')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror --}}
+                </div>
+                <div class="form-group mb-">
+                    <label for="status" class="form-lael">Status <span class="text-danger">*</span></label>
+                    <select name="status" id="status" class="form-select" required>
+                        <option value="masuk">Hadir</option>
+                        <option value="sakit">Sakit</option>
+                        <option value="izin">Izin</option>
+                        <option value="alpha">Alpa</option>
+                    </select>
+                </div>
+                <div class="form-group mb-3" id="edit-img-container">
+                    <label for="permit_file" class="form-label">File Izin <span class="text-danger">*</span></label>
+                    <input type="file" id="permit_file" name="permit_file" class="edit-image"/>
+                    @error('permit_file')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Ubah</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
             </div>
         </form>
@@ -106,7 +176,21 @@
         FilePondPluginFileValidateType,
     )
     // Filepond: Image Preview
-    FilePond.create(document.getElementById("permit_file"), {
+    FilePond.create(document.querySelector(".add-image"), {
+        credits: null,
+        allowImagePreview: true,
+        allowImageFilter: false,
+        allowImageExifOrientation: false,
+        allowImageCrop: false,
+        acceptedFileTypes: ["image/png", "image/jpg", "image/jpeg"],
+        fileValidateTypeDetectType: (source, type) =>
+            new Promise((resolve, reject) => {
+            // Do custom type detection here and return with promise
+            resolve(type)
+            }),
+        storeAsFile: true,
+    })
+    FilePond.create(document.querySelector(".edit-image"), {
         credits: null,
         allowImagePreview: true,
         allowImageFilter: false,
@@ -127,6 +211,34 @@
     for (let i = 0; i < choices.length; i++) {
         new Choices(choices[i]);
     }
+</script>
+<script>
+    $(document).on('click', '.btn-change', function() {
+        const item = $(this).data('data');
+        const student = $(this).data('student');
+        let action = "{{ route('attendance.presence.create-permit') }}";
+        // action = action.replace('updated_id', item.id)
+        
+        let date = new Date(item.present_at)
+        let formated_date = item.present_at.split(' ')[0]
+        let img = "{{ asset(Storage::url('')) }}";
+        img = img+item['permit_file'];
+
+        $('#form-edit').attr('action', action)
+        $('#form-edit #student_id').val(student['id'])
+        $('#form-edit #student_name').val(student['full_name'])
+        $('#form-edit #date').val(formated_date)
+        $('#form-edit #status option').each((index, el) => {
+            if(item.status == el.value) el.setAttribute('selected', true)
+            else el.removeAttribute('selected')
+        })
+        if($('#form-edit #status').val() == 'izin' || $('#form-edit #status').val() == 'sakit') $('#edit-img-container').show()
+        else $('#edit-img-container').hide()
+    })
+    $(document).on('change input', '#form-edit #status', function(){
+        if($('#form-edit #status').val() == 'izin' || $('#form-edit #status').val() == 'sakit') $('#edit-img-container').show()
+        else $('#edit-img-container').hide()
+    })
 </script>
 @endpush
 @push('custom-style')

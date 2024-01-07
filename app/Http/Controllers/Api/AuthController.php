@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\FcmToken;
 use App\Models\Pengguna;
 use App\Models\Role;
 use App\Models\User;
@@ -44,7 +45,23 @@ class AuthController extends Controller
             ], 401);
         }
 
-        if(!$user->device_token) $user->device_token = $request->device_token;
+        // for broadcasting notif
+        if($user->device_token){
+            if(!in_array($request->device_token, explode(",",$user->device_token))){
+                $accesstoken = $user->device_token. "," . $request->device_token ?? config('app.fcm_token');
+                $user->device_token = $accesstoken;
+                $user->save();
+            }
+        } else {
+            $accesstoken = $request->device_token ?? config('app.fcm_token');
+            $user->device_token = $accesstoken;
+            $user->save();
+        }
+        // $accesstoken = $request->device_token ?? config('app.fcm_token');
+        // $user->device_token = $accesstoken;
+        // FcmToken::create(["user_id"=>$user->id,"token"=>$accesstoken]);
+        // $user->save();
+
 
         // get detail data user
         $pengguna = Pengguna::where("user_id",$user->id)->first();
@@ -71,7 +88,14 @@ class AuthController extends Controller
         $id = Auth::guard("sanctum")->id();
         $user = User::find($id);
         $user->tokens()->delete();
-        // $user->update(['device_token' => null]);
+
+        $tokenaccess = ""; 
+        foreach(explode(",",$user->device_token) as $token){
+            if($token != $request->device_token){
+                $tokenaccess .= $token;
+            }
+        }
+        $user->update(['device_token' => $token]);
 
         return response()->json([
             'message' => 'logout success'

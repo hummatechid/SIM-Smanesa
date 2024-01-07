@@ -149,6 +149,7 @@ class PenggunaController extends Controller
 
         // check has data or not
         $pengguna = $this->penggunaRepository->getOneById($id);
+        $user = $this->userRepository->getOneById($pengguna->user_id);
 
         if(!$pengguna) return redirect()->back()->with('error', 'User tidak ditemukan')->withInput();
         
@@ -175,7 +176,7 @@ class PenggunaController extends Controller
             $this->penggunaRepository->update($id, $validateDataPengguna);
 
             // store data user
-            $user = $this->userRepository->update($pengguna->user_id, $validateDataUser);
+            $user->update($validateDataUser);
 
             // asign role user
             $user->assignRole($role->name);

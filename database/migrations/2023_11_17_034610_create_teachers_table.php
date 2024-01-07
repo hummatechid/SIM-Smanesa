@@ -16,8 +16,8 @@ return new class extends Migration
             $table->uuid('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('nip');
-            $table->string('nik');
-            $table->string('nuptk');
+            $table->string('nik')->nullable();
+            $table->string('nuptk')->nullable();
             $table->string('full_name');
             $table->enum('gender', ['Laki-laki', 'Perempuan']);
             $table->string('phone_number');

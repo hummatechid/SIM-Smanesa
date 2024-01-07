@@ -12,7 +12,7 @@ class Datatable extends Component {
         public string $dataUrl, 
         public array $tableColumns,
         public string $tableId = 'table',
-        public int $defaultOrder = 1,
+        public int $defaultOrder = 0,
         public string $arrangeOrder = 'asc',
         public string|null $dataAddUrl = null,
         public string|array|null $deleteOption = null,
@@ -29,6 +29,7 @@ class Datatable extends Component {
         public array $withCustomGroups = [],
         public array $customExportButton = [],
         public string $customExportTitle = "",
+        public bool $orderable = true,
     ) { }
 
     public function render() :View

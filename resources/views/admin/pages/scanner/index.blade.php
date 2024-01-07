@@ -84,6 +84,12 @@
         }
         #tb { grid-area: tb;}
         #howto {grid-area: howto;}
+        #back-button {
+            position: fixed;
+            bottom: 25px;
+            left: 30px;
+        }
+
 
         @media only screen and (max-width: 720px) {
             html {
@@ -103,7 +109,7 @@
         <div id="main-container">
             <div id="tb">
                 @php
-                    $data_column = ["student" => "Siswa", "present_at" => "Waktu Kehadiran", "status" => "Status"];
+                    $data_column = ["student" => "Siswa", "class" => "Kelas", "present_at" => "Waktu Kehadiran", "status" => "Status"];
                 @endphp
                 <x-datatable
                     card-title="Data Kehadiran Terbaru"
@@ -137,6 +143,8 @@
             </div>
         </div>
     </div>
+
+    <a href="{{ route('landing-page') }}" id="back-button" class="btn btn-lg btn-primary"><i class="bi bi-house-fill"></i></a>
     
 
     <script src="{{ asset('assets/static/js/initTheme.js') }}"></script>

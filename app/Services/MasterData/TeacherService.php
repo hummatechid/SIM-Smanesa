@@ -36,7 +36,11 @@ class TeacherService extends BaseService
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('full_name', function ($item) {
-                return $item->full_name;
+                $fullname = '<div>';
+                if($item->is_dapodik) $fullname .= '<span class="text-primary" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Tersinkronisasi dengan dapodik" data-bs-placement="top"><i class="bi bi-patch-check-fill"></i></span> ';
+                $fullname .= $item->full_name;
+                $fullname .= '</div>';
+                return $fullname;
             })->addColumn('email', function ($item) {
                 return $item->user->email;
             })->addColumn('phone_number', function ($item) {
@@ -44,13 +48,13 @@ class TeacherService extends BaseService
             })->addColumn('action', function ($item) {
                 $button = '<div class="d-flex gap-2 justify-content-start align-items-center">
                     <a href="' . route('teacher.show', $item->id) . '" class="btn btn-sm btn-primary">Detail</a>';
-                if(auth()->user()->hasRole('superadmin')) {
+                if(auth()->user()->hasRole('superadmin') && !$item->is_dapodik) {
                     $button .= '<button class="btn btn-sm btn-danger delete-data" data-id="' . $item->id . '">Hapus</button>';
                 }
                 $button .= '</div>';
 
                 return $button;
-            })->rawColumns(['action'])
+            })->rawColumns(['action', 'full_name'])
             ->make(true);
     }
 

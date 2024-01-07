@@ -60,8 +60,14 @@ class User extends Authenticatable
         return $this->hasOne(Pengguna::class, 'user_id', 'id');
     }
 
+    public function fcm()
+    {
+        return $this->HasMany(FcmToken::class, 'user_id', 'id');
+    }
+
     public function routeNotificationForFcm()
     {
-        return $this->device_token;
+        return explode(",",$this->device_token);
+        // return $this->fcm->pluck('token')->toArray();
     }
 }

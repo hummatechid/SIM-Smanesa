@@ -112,7 +112,24 @@
                 var str = text.toString();
                 return str.replace(/[^0-9.]/g, "");
             }
-        </script>
-        @stack("custom-script")
-    </body>
+        });
+    });
+</script>
+<script>
+    $('.only-number').on('input', function() {
+        $(this).val(toNumber($(this).val()))
+    })
+    function toNumber(text) {
+        var str = text.toString()
+        return str.replace(/[^0-9.]/g, '')
+    }
+
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl)
+    })
+</script>
+@stack("custom-script")
+
+</body>
 </html>

@@ -13,6 +13,7 @@ use App\Repositories\UserRepository;
 use App\Services\MasterTransaction\PermitService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use NotificationChannels\Fcm\FcmMessage;
 
 class PermitController extends Controller
@@ -85,45 +86,31 @@ class PermitController extends Controller
 
         $pimpinan = $this->userRepository->getAllUserInOneRole("pimpinan", "mobile");
 
-        // try {
-        // set message notification
-        $title = "Pengajuan Izin Keluar";
-        $message = "Siswa / siswi anda mengajukan permintaan untuk keluar dari lingkungan sekolah !";
-        $type = "basic";
+        try {
+            // store data 
+            $students = [];
+            foreach($request->student_id as $student_id){
+                $validateData["student_id"] = $student_id;
+                $selected = $this->studentRepository->getOneById($student_id);
+                $students[] = $selected->full_name. " | " . $selected->nama_rombel;
+                $this->permitRepository->create($validateData);
+            }
 
-        // store data 
-        // foreach($request->student_id as $student_id){
-        //     $validateData["student_id"] = $student_id;
-        //     $this->permitRepository->create($validateData);
-        // }
+            // send message
+            $token_success = [];
+            foreach($pimpinan as $pimpin){
+                foreach(explode(",",$pimpin->device_token) as $device_token){
+                    if(!in_array($device_token, $token_success)){
+                        foreach($students as $student) $pimpin->notify(new PermitNotification($student));
+                        $token_success[] = $device_token;
+                    } 
+                }
+            }
 
-        // send message
-        foreach ($pimpinan as $pimpin) {
-            $pimpin->notify(new PermitNotification("Gembes"));
-            // while (count($request->student_id)) {
-            //     $notification_id = $pimpin->device_token;
-            //     $id = $pimpin->id;
-            // dd($pimpinan);
-
-
-            // Membuat objek FcmMessage
-            // $fcmMessage = FcmMessage::create()
-            //     ->token($notification_id)
-            //     ->data(['title' => $title, 'body' => $message, 'id' => $id, 'type' => $type]);
-
-            // Membuat notifikasi dan mengirimnya
-            // $permitNotification = new PermitNotification();
-            // $permitNotification->toFcm(null);
-
-            // Menggunakan laravel-firebase:^3.0, menyertakan proyek Firebase (optional)
-            // $permitNotification->fcmProject(null, $fcmMessage);
-            // }
+            return redirect()->route('permit.index')->with('success', "Berhasil membuat surat izin");
+        } catch (\Throwable $th) {
+            return redirect()->back()->with("error", $th->getMessage())->withInput();
         }
-
-        return redirect()->route('permit.index')->with('success', "Berhasil membuat surat izin");
-        // } catch (\Throwable $th) {
-        //     return redirect()->back()->with("error", $th->getMessage())->withInput();
-        // }
     }
 
     /**

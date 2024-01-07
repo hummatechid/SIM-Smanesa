@@ -17,7 +17,10 @@
     <header class="sticky-top top-0 bg-body">
         <nav class="navbar py-3 border-bottom shadow">
             <div class="container-fluid">
-                <img src="{{ asset('assets/compiled/logos/logo-sm.png') }}" alt="Smanesa" height="50">
+                <div class="d-flex align-items-center gap-3">
+                    <img src="{{ asset('assets/compiled/logos/logo-sm.png') }}" alt="Smanesa" height="50">
+                    <h4 class="mb-0">SMAN 1 Purwosari</h4>
+                </div>
                 <div class="d-flex gap-2">
                     <a href="{{ route('scan.index') }}" class="btn btn-primary">Scan Kehadiran</a>
                     @if(Auth::check())

@@ -53,8 +53,8 @@ class ViolationController extends Controller
                     $date_from = date('Y-m-d');
                     $date_to = date('Y-m-d');
                 }else {
-                    $date_from = str_split("-",$request->date)[0];
-                    $date_to = str_split("-",$request->date)[1];
+                    $date_from = explode("-",$request->date)[0];
+                    $date_to = explode("-",$request->date)[1];
                 }
                 $data = $this->violationRepository->getDataCustomDate($date_from,$date_to,["violationType","student"]);
             default:
@@ -76,7 +76,7 @@ class ViolationController extends Controller
             });
         }
 
-        return $this->violationService->getReportDataDatatable($data);
+        return $this->violationService->getReportDataDatatableV2($data);
     }
 
     /**
@@ -159,7 +159,15 @@ class ViolationController extends Controller
 
     public function report()
     {
-        $data = $this->violationService->getPageData('violation-report', 'Laporan Pelanggaran',[], [], "Laporan Presensi");
+        $tahun = \App\Models\Violation::selectRaw('YEAR(created_at) as tahun')->orderBy('tahun','ASC')->groupBy('tahun')->get();
+        if(count($tahun) == 0) $tahun = [date('Y')];
+        $group_data = [
+            'years' => $tahun,
+            'months' => $this->months,
+            'grades' => $this->grades,
+            'classes' => \App\Models\Student::select('nama_rombel')->orderBy('nama_rombel',"ASC")->groupBy('nama_rombel')->get()
+        ];
+        $data = $this->violationService->getPageData('violation-report', 'Laporan Pelanggaran',$group_data, [], "Laporan Presensi");
         return view('admin.pages.violation.report', $data);
     }
 

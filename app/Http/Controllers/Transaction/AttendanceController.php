@@ -61,21 +61,34 @@ class AttendanceController extends Controller
 
     public function report()
     {
-        $data = $this->attendanceService->getPageData('attendance-report', 'Laporan Presensi', [], [], "Laporan Presensi");
+        $tahun = \App\Models\Attendance::selectRaw('YEAR(created_at) as tahun')->orderBy('tahun','ASC')->groupBy('tahun')->get();
+        if(count($tahun) == 0) $tahun = [date('Y')];
+        $group_data = [
+            'years' => $tahun,
+            'months' => $this->months,
+            'grades' => $this->grades,
+            'classes' => \App\Models\Student::select('nama_rombel')->orderBy('nama_rombel',"ASC")->groupBy('nama_rombel')->get()
+        ];
+        $data = $this->attendanceService->getPageData('attendance-report', 'Laporan Presensi', $group_data, [], "Laporan Presensi");
         return view('admin.pages.attendance.report', $data);
     }
 
-    public function getDatatablesData()
+    public function getDatatablesData(Request $request)
     {
-        $data = $this->attendanceRepository->getDataDate(today());
+        if($request->date) $date = $request->date;
+        else $date = today();
+
+        $data = $this->attendanceRepository->getDataDate($date);
         $data = $data->filter(function($item){
             return $item->present_at;
-        });
+        })->sortBy('present_at');
 
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('student', function($item) {
                 return $item->student->full_name;
+            })->addColumn('class', function($item) {
+                return $item->student->nama_rombel;
             })->addColumn('present_at', function($item) {
                 return Carbon::parse($item->present_at)->format('H:i');
             })->addColumn('status', function($item) {
@@ -85,7 +98,7 @@ class AttendanceController extends Controller
                     if($masuk < '07:00') {
                         return '<span class="badge bg-success">Tepat Waktu</span>';
                     } else {
-                        return '<span class="badge bg-danger">Terlambat</span>';
+                        return '<span class="badge bg-secondary">Terlambat</span>';
                     } 
                 } else if($item->status == "izin"){
                     return '<span class="badge bg-warning">Izin</span>';
@@ -94,8 +107,10 @@ class AttendanceController extends Controller
                 } else {
                     return '<span class="badge bg-danger">Tanpa Keterangan</span>';
                 }
+            })->addColumn('action', function($item) {
+                return view('admin.pages.attendance.datatable-presence', ['item' => $item, 'student' => $item->student]);
             })
-            ->rawColumns(['status'])
+            ->rawColumns(['status', 'action'])
             ->make(true);
     }
 
@@ -107,16 +122,28 @@ class AttendanceController extends Controller
             ->addIndexColumn()
             ->addColumn('student', function($item) {
                 return $item->student->full_name;
+            })->addColumn('class', function($item) {
+                return $item->student->nama_rombel;
             })->addColumn('present_at', function($item) {
                 return Carbon::parse($item->present_at)->format('H:i');
             })->addColumn('status', function($item) {
                 $masuk = Carbon::parse($item->present_at)->format('H:i');
                 // return $item->status;
-                if($masuk < '07:00') {
-                    return '<span class="badge bg-success">Tepat Waktu</span>';
+                if($item->status == "masuk"){
+                    if($masuk < '07:00') {
+                        return '<span class="badge bg-success">Tepat Waktu</span>';
+                    } else {
+                        return '<span class="badge bg-secondary">Terlambat</span>';
+                    } 
+                } else if($item->status == "izin"){
+                    return '<span class="badge bg-warning">Izin</span>';
+                } else if($item->status == "sakit"){
+                    return '<span class="badge bg-info">Sakit</span>';
                 } else {
-                    return '<span class="badge bg-danger">Terlambat</span>';
-                } 
+                    return '<span class="badge bg-danger">Tanpa Keterangan</span>';
+                }
+            })->addColumn('action', function($item) {
+                return view('admin.pages.attendance.datatable-presence', ['item' => $item, 'student' => $item->student]);
             })
             ->rawColumns(['status'])
             ->make(true);
@@ -155,6 +182,7 @@ class AttendanceController extends Controller
             case "monthly":
                 if(!$request->year) $year = date('Y');
                 else $year = $request->year;
+        
                 $data = $this->attendanceRepository->getDataMonth($year,$request->month,["student"]);
             case "yearly":
                 $data = $this->attendanceRepository->getDataYears($request->year,["student"]);
@@ -163,8 +191,8 @@ class AttendanceController extends Controller
                     $date_from = date('Y-m-d');
                     $date_to = date('Y-m-d');
                 }else {
-                    $date_from = str_split("-",$request->date)[0];
-                    $date_to = str_split("-",$request->date)[1];
+                    $date_from = explode("-",$request->date)[0];
+                    $date_to = explode("-",$request->date)[1];
                 }
                 $data = $this->attendanceRepository->getDataCustomDate($date_from,$date_to,["student"]);
             default:
@@ -185,7 +213,7 @@ class AttendanceController extends Controller
                 return $item->student->tingkat_pendidikan == $grade;
             });
         }
-
+        
         return $this->attendanceService->getReportDataDatatableV2($data);
     }
 
@@ -217,39 +245,72 @@ class AttendanceController extends Controller
      */
     public function createPermit(Request $request)
     {
-        if($request->status != "izin" || $request->status != "masuk") $status = "izin";
-        else $status = $request->status;
+        if($request->status) $status = $request->status;
+        else $status = "izin";
 
-        $now = now();
+        if($request->date) $now = $request->date;
+        else $now = now();
+
         $year = date('Y');
         $data = $this->attendanceRepository->getDataDateWithCondition($now, ["student"], "student_id", $request->student_id, "first");
         
         if(!$data) return redirect()->back()->with("error","Data absensi siswa ini tidak ada");
-        
-        if($data->present_at) return redirect()->back()->with("error","Siswa ini sudah melakukan absensi");
 
         // set image
         $path = 'images/permit/'.$year.'/'.$data->student->tingkat_pendidikan.'/'.$data->student->nama_rombel;
         !is_dir($path) && mkdir($path, 0777, true);
         
-        if($data->present_at) return redirect()->back()->with("error","Siswa ini telah absensi");
         
-        if($request->permit_file) {
+        if($request->file('permit_file')) {
             $file = $request->file('permit_file');
             $fileData = $this->uploads($file,$path);
             $photo = $fileData["filePath"].".".$fileData["fileType"];
+            
+            // type data update or create
+            if($data->present_at) $type = "update";
+            else $type = "create";
         } else {
-            $photo = "";
+            $photo = null;
+
+            // type data update or create
+            $type = "update";
         }
 
-
-        $data->update([
-            "present_at" => $now,
+        $dataChange = [
             "status" => $status,
-            "permit_file" => $photo
-        ]);
+        ];
 
-        return redirect()->back()->with("success","Berhasil absensi izin untuk ". $data->student->full_name);
+        // make data for change data
+        if($type == "create") $dataChange["present_at"] = $now;
+        if($photo) $dataChange["permit_file"] = $photo;
+        if($type == "update" && $status == "alpha") $dataChange["present_at"] = null;
+        
+        if($type == "create" && $data->present_at) return redirect()->back()->with("error","Siswa ini telah absensi");
+        
+        $data->update($dataChange);
+
+        if($type == "create") $message = "Berhasil absensi izin untuk ". $data->student->full_name;
+        else $message = "Berhasil merubah data absensi untuk ". $data->student->full_name; 
+
+        return redirect()->back()->with("success",$message);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function syncAttendanceToday(Request $request)
+    {
+        $checkData = $this->attendanceRepository->getDataDate(today());
+        if(count($checkData) > 0){
+            return redirect()->back()->with("error","Data absensi hari ini sudah tersedia, tidak bisa melakukan sinkronisasi lagi!");
+        }
+
+        $students = $this->studentRepository->getAll();
+        foreach($students as $student) $this->attendanceRepository->create(
+            ["status" => "alpha", "student_id" => $student->id]
+        );
+
+        return redirect()->back()->with("success","Berhasil sinkron data absensi hari ini");
     }
 
     /**

@@ -231,7 +231,7 @@ class AttendanceService extends BaseService {
         if($attendance->present_at){
             return response()->json([
                 "status" => "error",
-                "message" => "Siswa telah melakukan absen"
+                "message" => "Siswa telah melakukan absensi"
             ], 400);
         }
 
