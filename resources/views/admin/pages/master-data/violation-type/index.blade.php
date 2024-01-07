@@ -26,7 +26,7 @@
         $data_settings = [
             "name" => [
                 "title" => "Pelanggaran",
-                "type" => "text",
+                "type" => "textarea",
                 "attr" => ["required" => "required"]
             ], "score" => [
                 "title" => "Poin",
@@ -44,6 +44,7 @@
         data-add-url="{{ route('violation-type.store') }}"
         data-add-type="modal"
         :data-add-settings="$data_settings"
+        default-order="2"
     />
     @else
     <x-datatable
@@ -100,7 +101,7 @@
             <div class="modal-body">
                 <div class="form-group mb-3">
                     <label for="name" class="form-label">Pelanggaran <span class="text-danger">*</span></label>
-                    <input type="text" name="name" id="name" class="form-control" placeholder="Pelanggaran" required>
+                    <textarea name="name" id="name" rows="5" class="form-control" placeholder="Pelanggaran" required></textarea>
                 </div>
                 <div class="form-group mb-3">
                     <label for="score" class="form-label">Poin <span class="text-danger">*</span></label>

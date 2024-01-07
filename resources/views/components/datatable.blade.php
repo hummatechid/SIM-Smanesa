@@ -22,7 +22,7 @@
                             @endforeach
                         </select>
                         @elseif($data['type'] == "textarea")
-                        <textarea name="{{ $key }}" id="{{ $key }}" class="form-control" placeholder="{{ $data['title'] }}" @foreach($data['attr'] as $attr => $value) {{ $attr.'='.$value }} @endforeach></textarea>
+                        <textarea name="{{ $key }}" id="{{ $key }}" class="form-control" rows="5" placeholder="{{ $data['title'] }}" @foreach($data['attr'] as $attr => $value) {{ $attr.'='.$value }} @endforeach></textarea>
                         @else
                         <input type="{{ $data['type'] }}" class="form-control" name="{{ $key }}" placeholder="{{ $data['title'] }}" @foreach($data['attr'] as $attr => $value) {{ $attr.'='.$value }} @endforeach>
                         @endif
