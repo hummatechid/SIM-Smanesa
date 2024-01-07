@@ -46,23 +46,38 @@ class ViolationController extends Controller
                 if(!$request->year) $year = date('Y');
                 else $year = $request->year;
                 $data = $this->violationRepository->getDataMonth($year,$request->month,["violationType","student"]);
+                break;
             case "yearly":
                 $data = $this->violationRepository->getDataYears($request->year,["violationType","student"]);
+                break;
             case "custom":
-                if(!$request->date){
-                    $date_from = date('Y-m-d');
-                    $date_to = date('Y-m-d');
-                }else {
-                    $date_from = explode("-",$request->date)[0];
-                    $date_to = explode("-",$request->date)[1];
+                $check_date = explode("-",$request->date);
+                if(count($check_date) > 3){
+                    if(!$request->date){
+                        $date_from = date('Y-m-d');
+                        $date_to = date('Y-m-d');
+                    }else {
+                        $date_from = $check_date[0]."-".$check_date[1]."-".$check_date[2];
+                        $date_to = $check_date[3]."-".$check_date[4]."-".$check_date[5];
+                    }
+                    $data = $this->violationRepository->getDataCustomDate($date_from,$date_to,["student"]);
+                }else if(count($check_date) == 3){
+                    $data = $this->violationRepository->getDataDate($request->date,["student"]);
+                } else {
+                    if(!$request->year) $year = date('Y');
+                    else $year = $request->year;
+                    if(!$request->month) $month = date('m');
+                    else $month = $request->month;
+                    $data = $this->violationRepository->getDataMonth($year,$month,["student"]);
                 }
-                $data = $this->violationRepository->getDataCustomDate($date_from,$date_to,["violationType","student"]);
+                break;
             default:
                 if(!$request->year) $year = date('Y');
                 else $year = $request->year;
                 if(!$request->month) $month = date('m');
                 else $month = $request->month;
                 $data = $this->violationRepository->getDataMonth($year,$month,["violationType","student"]);
+                break;
         }
         if($request->data == "per_class"){
             $class = $request->class;

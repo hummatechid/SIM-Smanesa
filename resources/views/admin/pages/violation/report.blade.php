@@ -193,7 +193,7 @@
             maxDate: 'today',
             locale: 'id',
             onChange: function(selectedDates, dateStr, instance) {
-                if(selectedDates.length > 1) reloadNewUrl();
+                reloadNewUrl();
             }
         })
     })
