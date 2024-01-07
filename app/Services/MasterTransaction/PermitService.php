@@ -27,9 +27,11 @@ class PermitService extends BaseService {
      */
     public function getDataDatatable(Request $request) :JsonResponse
     {
-
         if(!isset($request->status) || !$request->status || $request->status == "null") $data = $this->repository->getAll();
-        else $data = $this->repository->whereOneCondition('status', $request->status);
+        else {
+            $status = str_replace("?","",$request->status);
+            $data = $this->repository->whereOneCondition('status', $status);
+        } 
 
         $data = $data->sortByDesc("created_at");
 
