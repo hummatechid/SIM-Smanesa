@@ -184,23 +184,38 @@ class AttendanceController extends Controller
                 else $year = $request->year;
         
                 $data = $this->attendanceRepository->getDataMonth($year,$request->month,["student"]);
+                break;
             case "yearly":
                 $data = $this->attendanceRepository->getDataYears($request->year,["student"]);
+                break;
             case "custom":
-                if(!$request->date){
-                    $date_from = date('Y-m-d');
-                    $date_to = date('Y-m-d');
-                }else {
-                    $date_from = explode("-",$request->date)[0];
-                    $date_to = explode("-",$request->date)[1];
+                $check_date = explode("-",$request->date);
+                if(count($check_date) > 3){
+                    if(!$request->date){
+                        $date_from = date('Y-m-d');
+                        $date_to = date('Y-m-d');
+                    }else {
+                        $date_from = $check_date[0]."-".$check_date[1]."-".$check_date[2];
+                        $date_to = $check_date[3]."-".$check_date[4]."-".$check_date[5];
+                    }
+                    $data = $this->attendanceRepository->getDataCustomDate($date_from,$date_to,["student"]);
+                }else if(count($check_date) == 3){
+                    $data = $this->attendanceRepository->getDataDate($request->date,["student"]);
+                } else {
+                    if(!$request->year) $year = date('Y');
+                    else $year = $request->year;
+                    if(!$request->month) $month = date('m');
+                    else $month = $request->month;
+                    $data = $this->attendanceRepository->getDataMonth($year,$month,["student"]);
                 }
-                $data = $this->attendanceRepository->getDataCustomDate($date_from,$date_to,["student"]);
+                break;
             default:
                 if(!$request->year) $year = date('Y');
                 else $year = $request->year;
                 if(!$request->month) $month = date('m');
                 else $month = $request->month;
                 $data = $this->attendanceRepository->getDataMonth($year,$month,["student"]);
+                break;
         }
         if($request->data == "per_class"){
             $class = $request->class;
