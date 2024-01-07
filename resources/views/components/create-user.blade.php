@@ -11,6 +11,11 @@
         </div>
         <div class="card-body">
             <x-session-alert/>
+            @if($formFor == 'guru')
+            <div class=" bg-warning text-dark rounded p-3 alert-email w-100 mb-3" style="display: none;">
+                Format penulisan email salah. Contoh: emailguru@gmail.com
+            </div>
+            @endif
             <div class="form-group mb-3">
                 <label for="photo">Foto</label>
                 <div class="d-flex mt-3 gap-3 justify-content-stretch">
@@ -310,5 +315,16 @@
             let id = e.target.getAttribute('id')
             if(id) $('#'+id).parsley().validate()
         })
+
+        $(document).on('input change mourseenter mouseleave focus', 'input#email', function(e) {
+            let error_obj = $(this).parsley().validate()
+
+            if(error_obj !== true && error_obj[0].assert.requirements == "email") {
+                $(".alert-email").show()
+            } else {
+                $(".alert-email").hide()
+            }
+        })
+        $('.alert-email').slideUp(0)
     </script>
 @endpush
