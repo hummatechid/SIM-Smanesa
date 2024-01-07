@@ -39,7 +39,10 @@ class ViolationService extends BaseService {
                 return $item->score;
             })->addColumn('date', function($item) {
                 return Carbon::parse($item->created_at)->isoFormat('DD-MM-YYYY');
+            })->addColumn('action', function($item) {
+                return view('admin.pages.violation.datatables-action', ['item' => $item]);
             })
+            ->rawColumns(['action'])
             ->make(true);
     }
 

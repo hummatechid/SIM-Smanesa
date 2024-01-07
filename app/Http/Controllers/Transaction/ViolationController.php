@@ -30,7 +30,9 @@ class ViolationController extends Controller
      */
     public function index()
     {
-        $data = $this->violationService->getPageData('violation', '', [], null, "Pelanggaran");
+        $user = $this->studentRepository->getAll();
+        $violation_types = $this->violationTypeRepository->getAll();
+        $data = $this->violationService->getPageData('violation', '', ['users' => $user, 'violation_types' => $violation_types], null, "Pelanggaran");
         return view('admin.pages.violation.index', $data);
     }
 
