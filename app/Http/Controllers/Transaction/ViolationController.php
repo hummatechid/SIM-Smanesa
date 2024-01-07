@@ -207,7 +207,30 @@ class ViolationController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        if(!$request->violation_type_id) return redirect()->back()->with("error","Pilih pelanggaran terlebih dahulu");
+
+        $violation = $this->violationRepository->getOneById($id);      
+        if(!$violation) return redirect()->back()->with("error","Pelanggaran tidak ditemukan");
+        
+        $student = $this->studentRepository->getOneById($violation->student_id);
+        if(!$student) return redirect()->back()->with("error","Siswa tidak ditemukan");
+
+        // update new score
+        $student->score -= $violation->score;
+        
+        // update violation
+        $selected_violation = $this->violationTypeRepository->getOneById($request->violation_type_id);
+        $violation->violation_type_id = $request->violation_type_id;
+        $violation->score = $selected_violation->score;
+        
+        // update score student
+        $student->score += $selected_violation->score;
+
+        // save data
+        $student->save();
+        $violation->save();
+
+        return redirect()->back()->with("success","Data pelanggaran berhasil dirubah");
     }
 
     /**
@@ -215,7 +238,40 @@ class ViolationController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $violation = $this->violationRepository->getOneById($id);      
+        if(!$violation) return redirect()->back()->with("error","Pelanggaran tidak ditemukan");
+
+        $student = $this->studentRepository->getOneById($violation->student_id);
+        if(!$student) return redirect()->back()->with("error","Siswa tidak ditemukan");
+
+        // update new score
+        $student->score -= $violation->score;
+        $student->save();
+        
+        $violation->delete();
+
+        return redirect()->back()->with("success","Data pelanggaran berhasil dihapus permanen");
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function softDestroy(string $id)
+    {
+        $violation = $this->violationRepository->getOneById($id);      
+        if(!$violation) return redirect()->back()->with("error","Pelanggaran tidak ditemukan");
+
+        $student = $this->studentRepository->getOneById($violation->student_id);
+        if(!$student) return redirect()->back()->with("error","Siswa tidak ditemukan");
+
+        // update new score
+        $student->score -= $violation->score;
+        $student->save();
+        
+        $violation->deleted_at = now();
+        $violation->save();
+
+        return redirect()->back()->with("success","Data pelanggaran berhasil dihapus");
     }
 
     /**
