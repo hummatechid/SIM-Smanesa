@@ -76,8 +76,29 @@
         </div>
     </div>
 
-    @php $data_column = [ "full_name" => "Nama", "email" => "Email / NIK",
-    "phone_number" => "Nomor", "action" => "Aksi" ]; @endphp
+    @php
+        $data_column = [ "full_name" => "Nama", "email" => "Email / NIK",
+        "phone_number" => "Nomor", "action" => "Aksi" ];
+
+        $custom_group = [
+            "status" => [
+                "title" => "Status",
+                "options" => [
+                    "" => "Semua",
+                    "dapodik" => "Dari Dapodik",
+                    "non-dapodik" => "Luar Dapodik",
+                ]
+            ],
+            "role" => [
+                "title" => "Role",
+                "options" => [
+                    "" => "Semua",
+                    "pimpinan" => "Pimpinan",
+                    "non-pimpinan" => "Bukan Pimpinan",
+                ]
+            ]
+        ]
+    @endphp
     @hasrole('superadmin')
     <x-datatable
         card-title="Tabel Guru"
@@ -85,12 +106,14 @@
         :table-columns="$data_column"
         delete-option="teacher/soft-delete/deleted_id"
         data-add-url="{{ url('teacher/create') }}"
+        :with-custom-groups="$custom_group"
     />
     @else
     <x-datatable
         card-title="Tabel Guru"
         data-url="{{ route('teacher.get-main-datatables') }}"
         :table-columns="$data_column"
+        :with-custom-groups="$custom_group"
     />
     @endhasrole
 </div>
