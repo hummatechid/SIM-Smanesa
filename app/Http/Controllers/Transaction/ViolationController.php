@@ -230,7 +230,7 @@ class ViolationController extends Controller
         $student->save();
         $violation->save();
 
-        return redirect()->back()->with("success","Data pelanggaran berhasil dirubah");
+        return redirect()->route('violation.index')->with("success","Data pelanggaran berhasil dirubah");
     }
 
     /**
@@ -239,10 +239,21 @@ class ViolationController extends Controller
     public function destroy(string $id)
     {
         $violation = $this->violationRepository->getOneById($id);      
-        if(!$violation) return redirect()->back()->with("error","Pelanggaran tidak ditemukan");
+        if(!$violation){
+            return response()->json([
+                "status" => "error",
+                "message" => "Pelanggaran tidak ditemukan"
+            ], 404);
+        }
 
         $student = $this->studentRepository->getOneById($violation->student_id);
-        if(!$student) return redirect()->back()->with("error","Siswa tidak ditemukan");
+        if(!$student) {
+                return response()->json([
+                "status" => "error",
+                "message" => "Siswa tidak ditemukan"
+            ], 404);
+
+        }
 
         // update new score
         $student->score -= $violation->score;
@@ -250,7 +261,10 @@ class ViolationController extends Controller
         
         $violation->delete();
 
-        return redirect()->back()->with("success","Data pelanggaran berhasil dihapus permanen");
+        return response()->json([
+            "status" => "error",
+            "message" => "Data pelanggaran berhasil dihapus permanent"
+        ], 200);
     }
 
     /**
@@ -259,10 +273,20 @@ class ViolationController extends Controller
     public function softDestroy(string $id)
     {
         $violation = $this->violationRepository->getOneById($id);      
-        if(!$violation) return redirect()->back()->with("error","Pelanggaran tidak ditemukan");
+        if(!$violation){
+            return response()->json([
+                "status" => "error",
+                "message" => "Pelanggaran tidak ditemukan"
+            ], 404);
+        }
 
         $student = $this->studentRepository->getOneById($violation->student_id);
-        if(!$student) return redirect()->back()->with("error","Siswa tidak ditemukan");
+        if(!$student) {
+            return response()->json([
+                "status" => "error",
+                "message" => "Siswa tidak ditemukan"
+            ], 404);
+        }
 
         // update new score
         $student->score -= $violation->score;
@@ -271,7 +295,10 @@ class ViolationController extends Controller
         $violation->deleted_at = now();
         $violation->save();
 
-        return redirect()->back()->with("success","Data pelanggaran berhasil dihapus");
+        return response()->json([
+            "status" => "error",
+            "message" => "Data pelanggaran berhasil dihapus"
+        ], 200);
     }
 
     /**
