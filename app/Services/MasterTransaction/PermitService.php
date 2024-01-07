@@ -31,6 +31,8 @@ class PermitService extends BaseService {
         if(!isset($request->status) || !$request->status || $request->status == "null") $data = $this->repository->getAll();
         else $data = $this->repository->whereOneCondition('status', $request->status);
 
+        $data = $data->sortByDesc("created_at");
+
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('selection', function($item) {
