@@ -333,4 +333,30 @@ class TeacherController extends Controller
             'message' => 'success'
         ]);
     }
+
+    /**
+     * assign role for user teacher.
+     */
+    public function assignRole(Request $request, string $id)
+    {
+        $role = $request->role ?? "pimpinan";
+
+        $teacher = $this->teacherRepository->byIdWithRole($id);
+        $teacher->assignRole($role);
+
+        return redirect()->back()->with("success","Berhasil menambahkan ".$teacher->full_name." ke " . $role);
+    }
+
+    /**
+     * assign role for user teacher.
+     */
+    public function removeRole(Request $request, string $id)
+    {
+        $role = $request->role ?? "pimpinan";
+
+        $teacher = $this->teacherRepository->byIdWithRole($id);
+        $teacher->removeRole($role);
+
+        return redirect()->back()->with("success","Berhasil mengeluarkan ".$teacher->full_name." dari " . $role);
+    }
 }

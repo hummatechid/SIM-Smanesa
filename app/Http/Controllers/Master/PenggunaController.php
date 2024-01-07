@@ -154,9 +154,10 @@ class PenggunaController extends Controller
         if(!$pengguna) return redirect()->back()->with('error', 'User tidak ditemukan')->withInput();
         
         // check role has been has or not
-        $role = $this->userRepository->getRole('id',$userRequest->role_id);
+        $role_pertama = $this->userRepository->getRole('id',$user->role_id);
+        $role_kedua = $this->userRepository->getRole('id',$userRequest->role_id);
 
-        if(!$role) return redirect()->back()->with('error', 'Role tidak ditemukan')->withInput();
+        if(!$role_kedua) return redirect()->back()->with('error', 'Role tidak ditemukan')->withInput();
 
         try {
             DB::beginTransaction();
@@ -173,16 +174,18 @@ class PenggunaController extends Controller
             }
             
             // store data pengguna
-            $this->penggunaRepository->update($id, $validateDataPengguna);
+            $store = $this->penggunaRepository->update($id, $validateDataPengguna);
 
+            // asign role user
+            if($user->role_id != $validateDataUser["role_id"]){
+                $user->removeRole($role_pertama->name);
+                $user->assignRole($role_kedua->name);
+            }
             // store data user
             $user->update($validateDataUser);
 
-            // asign role user
-            $user->assignRole($role->name);
-
             DB::commit();
-            return redirect()->route('user.index')->with('success', "Data user berhasil di rubah");
+            return redirect()->route('user.show',$id)->with('success', "Data user berhasil di rubah");
         } catch(\Throwable $th){
             DB::rollBack();
             return redirect()->back()->with('error',$th->getMessage())->withInput();
