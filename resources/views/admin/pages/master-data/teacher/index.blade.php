@@ -76,9 +76,8 @@
         </div>
     </div>
 
-    @php
-        $data_column = [ "full_name" => "Nama", "email" => "Email / NIK", "phone_number" => "Nomor", "action" => "Aksi" ];
-    @endphp
+    @php $data_column = [ "full_name" => "Nama", "email" => "Email / NIK",
+    "phone_number" => "Nomor", "action" => "Aksi" ]; @endphp
     @hasrole('superadmin')
     <x-datatable
         card-title="Tabel Guru"
@@ -111,7 +110,15 @@
                 },
                 error: function (err) {
                     console.log(err);
-                    location.reload();
+                    $("#staticBackdrop").modal("hide");
+                    Toastify({
+                        text: "Gagal sinkronisasi dapodik!",
+                        duration: 3000,
+                        backgroundColor: "#DD3B4B",
+                    }).showToast();
+                    setTimeout(function () {
+                        location.reload();
+                    }, 3000);
                 },
             });
         });
