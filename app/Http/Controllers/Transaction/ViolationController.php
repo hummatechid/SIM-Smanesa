@@ -208,6 +208,7 @@ class ViolationController extends Controller
     public function update(Request $request, string $id)
     {
         if(!$request->violation_type_id) return redirect()->back()->with("error","Pilih pelanggaran terlebih dahulu");
+        if(!$request->student_id) return redirect()->back()->with("error","Pilih siswa terlebih dahulu");
 
         $violation = $this->violationRepository->getOneById($id);      
         if(!$violation) return redirect()->back()->with("error","Pelanggaran tidak ditemukan");
@@ -217,17 +218,21 @@ class ViolationController extends Controller
 
         // update new score
         $student->score -= $violation->score;
+        $student->save();
+        
+        // get data selected
+        $selected_violation = $this->violationTypeRepository->getOneById($request->violation_type_id);
+        $selected_student = $this->studentRepository->getOneById($request->student_id);
         
         // update violation
-        $selected_violation = $this->violationTypeRepository->getOneById($request->violation_type_id);
         $violation->violation_type_id = $request->violation_type_id;
         $violation->score = $selected_violation->score;
         
-        // update score student
-        $student->score += $selected_violation->score;
+        // update score new student
+        $selected_student->score += $selected_violation->score;
 
         // save data
-        $student->save();
+        $selected_student->save();
         $violation->save();
 
         return redirect()->route('violation.index')->with("success","Data pelanggaran berhasil dirubah");
