@@ -33,8 +33,17 @@ class PenggunaService extends BaseService {
                 return $item->full_name;
             })->addColumn('email', function($item) {
                 return $item->user->email;
+            })->addColumn('role', function($item) {
+                $roles = $item->user->roles;
+                $new_roles = [];
+                
+                foreach($roles as $role) {
+                    $new_roles[] = $role->name;
+                }
+
+                return implode(', ', $new_roles);
             })->addColumn('phone_number', function($item) {
-                return $item->phone_number;
+                return ($item->phone_number || !$item->phone_number == "" ? $item->phone_number : '-');
             })->addColumn('action', function($item) {
                 $button = '<div class="d-flex gap-2 justify-content-start align-items-center">
                     <a href="'.route('user.show',$item->id).'" class="btn btn-sm btn-primary">Detail</a>';
