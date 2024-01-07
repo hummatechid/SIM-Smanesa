@@ -228,6 +228,7 @@ class ViolationController extends Controller
         
         // update violation
         $violation->violation_type_id = $request->violation_type_id;
+        $violation->student_id = $request->student_id;
         $violation->score = $selected_violation->score;
         
         // update score new student
