@@ -163,6 +163,22 @@
         </form>
     </div>
 </div>
+<div class="modal modal-lg fade" id="modal-image">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Foto Surat Izin</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <img src="" alt="" id="show-img" class="w-100">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('custom-script')
@@ -245,6 +261,11 @@
     $(document).on('change input', '#form-edit #status', function(){
         if($('#form-edit #status').val() == 'izin' || $('#form-edit #status').val() == 'sakit') $('#edit-img-container').show()
         else $('#edit-img-container').hide()
+    })
+
+    $(document).on('click', '.btn-image', function() {
+        let img_url = $(this).data('image');
+        $('#show-img').attr('src', img_url)
     })
 </script>
 @endpush
