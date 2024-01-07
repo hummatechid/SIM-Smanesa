@@ -25,6 +25,7 @@
         $data_column = [
             "full_name" => "Nama",
             "email" => "Email",
+            "role" => "Role",
             "phone_number" => "Nomor",
             "action" => "Aksi"
         ];

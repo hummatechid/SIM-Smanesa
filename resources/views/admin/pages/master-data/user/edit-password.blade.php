@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    <x-edit-password card-title="Ubah Password" back-url="{{ url($main_url) }}" update-url="{{ route('user.updatePassword', $user->id) }}" :data-user="$user"/>
+    <x-edit-password card-title="Ubah Password" back-url="{{ route('user.show', $user->id) }}" update-url="{{ route('user.updatePassword', $user->id) }}" :data-user="$user"/>
 
 </div>
 @endsection
