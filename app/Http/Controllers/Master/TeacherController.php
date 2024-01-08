@@ -363,8 +363,9 @@ class TeacherController extends Controller
     {
         $role = $request->role ?? "pimpinan";
 
-        $teacher = $this->teacherRepository->byIdWithRole($id);
-        $teacher->assignRole($role);
+        $teacher = $this->teacherRepository->getOneById($id);
+        $user = $this->userRepository->getOneById($teacher->user_id);
+        $user->assignRole($role);
 
         return redirect()->back()->with("success","Berhasil menambahkan ".$teacher->full_name." ke " . $role);
     }
@@ -376,8 +377,10 @@ class TeacherController extends Controller
     {
         $role = $request->role ?? "pimpinan";
 
-        $teacher = $this->teacherRepository->byIdWithRole($id);
-        $teacher->removeRole($role);
+        $teacher = $this->teacherRepository->getOneById($id);
+        $user = $this->userRepository->getOneById($teacher->user_id);
+        $user->removeRole($role);
+
 
         return redirect()->back()->with("success","Berhasil mengeluarkan ".$teacher->full_name." dari " . $role);
     }
