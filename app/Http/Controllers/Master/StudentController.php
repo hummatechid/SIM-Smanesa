@@ -33,7 +33,10 @@ class StudentController extends Controller
 
     public function show(string $id): View
     {
-        $student_data = ['student' => $this->repository->getOneById($id)];
+        $student_data = [
+            'student' => $this->repository->getOneById($id),
+            'violation_score' => 100,
+        ];
         $data = $this->service->getPageData('null', '', $student_data, [], "Detail Siswa");
 
         return view('admin.pages.master-data.student.show', $data);

@@ -42,6 +42,7 @@
                             <div class="fw-bold">{{ $student->nama_rombel ? $student->nama_rombel : '-' }} / {{ $student->nisn ? $student->nisn : '-' }}</div>
                         </div>
                         <div class="d-flex flex-column align-items-center gap-2">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#violation-modal">Poin Pelanggaran : {{ $violation_score }}</button>
                             <div class="d-flex justify-content-center  gap-2">
                                 <a href="{{ route('student.index') }}" class="btn btn-secondary">Kembali</a>
                             </div>
@@ -113,7 +114,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-8 order-md-3 mb-3">
+            <div class="col-12 order-md-3 col-md-8 mb-3">
                 <div class="card h-100">
                     <div class="card-header">
                         <h5>Data Orang Tua & Wali</h5>
@@ -153,4 +154,41 @@
     </section>
 
 </div>
+
+<div class="modal fade modal-lg" id="violation-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Data Pelanggaran</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                @php
+                    $data_columns = ['date' => "Tanggal", 'violation' => "Pelanggaran", 'score' => 'Poin'];
+                @endphp
+                <x-datatable
+                    card-title=""
+                    data-url="{{ route('violation.student', $student->id) }}"
+                    :table-columns="$data_columns"
+                    default-order="1"
+                    arrange-order="desc"
+                />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
+
+@push('custom-style')
+    <style>
+        .modal-body .card-header {
+            display: none;
+        }
+        .modal-body .card {
+            margin-bottom: 0!important;
+        }
+    </style>
+@endpush
