@@ -27,6 +27,17 @@
                         @if(auth()->user()->hasRole('superadmin') || $dataUser->user->id === auth()->id())
                         <a href="{{ $editPasswordUrl }}" class="btn btn-primary">Ubah Password</a>
                         @endif
+                        @if(auth()->user()->hasRole('superadmin') && $formFor == 'guru' && !$dataUser->user->hasRole('pimpinan'))
+                        <form action="{{ route('teacher.assign-role', $dataUser->id) }}" method="post">
+                            @csrf
+                            <button type="submit" class="btn btn-primary">Jadikan Pimpinan</button>
+                        </form>
+                        @elseif(auth()->user()->hasRole('superadmin') && $formFor == 'guru' && $dataUser->user->hasRole('pimpinan'))
+                        <form action="{{ route('teacher.remove-role', $dataUser->id) }}" method="post">
+                            @csrf
+                            <button type="submit" class="btn btn-primary">Hapus Pimpinan</button>
+                        </form>
+                        @endif
                     </div>
                 </div>
             </div>
