@@ -92,7 +92,7 @@ class AuthController extends Controller
         $tokenaccess = ""; 
         foreach(explode(",",$user->device_token) as $token){
             if($token != $request->device_token){
-                $tokenaccess .= $token;
+                $tokenaccess .= ",".$token;
             }
         }
         $user->update(['device_token' => $token]);
