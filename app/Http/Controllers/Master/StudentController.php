@@ -64,7 +64,7 @@ class StudentController extends Controller
         if ($students == null) {
             return response()->json([
                 'message' => $students
-            ]);
+            ], 500);
         }
 
         // dd($students['rows']);
