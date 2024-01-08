@@ -29,10 +29,8 @@ class TeacherService extends BaseService
      *
      * @return DataTables
      */
-    public function getDataDatatable(): JsonResponse
+    public function getDataDatatable(array|object $data): JsonResponse
     {
-        $data = $this->repository->getAll();
-
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('full_name', function ($item) {

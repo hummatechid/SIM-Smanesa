@@ -45,9 +45,31 @@ class TeacherController extends Controller
         return view('admin.pages.master-data.teacher.index', $data);
     }
 
-    public function getDatatablesData()
+    public function getDatatablesData(Request $request)
     {
-        return $this->teacherService->getDataDatatable();
+
+        if($request->group_status){
+            $data = $this->teacherRepository->OneConditionOneRelation("is_dapodik",$request->group_status,["user" => function($q){
+                $q->with("role");
+            }]);
+        } else {
+            $data = $this->teacherRepository->relationship(["user" => function($q){
+                $q->with("role");
+            }]);
+        }
+
+        if($request->group_role == "pimpinan"){
+            $data = $data->filter(function ($item){
+                $check = $item->user->roles->filter(fn($item) => $item->name == "pimpinan");
+                return count($check) > 1;
+            });
+        } else if ($request->group_role == "non-pimpinan"){
+            $data = $data->filter(function ($item){
+                return count($item->user->roles) == 1;
+            });
+        }
+
+        return $this->teacherService->getDataDatatable($data);
     }
 
     /**

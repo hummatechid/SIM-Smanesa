@@ -85,8 +85,8 @@
                 "title" => "Status",
                 "options" => [
                     "" => "Semua",
-                    "dapodik" => "Dari Dapodik",
-                    "non-dapodik" => "Luar Dapodik",
+                    1 => "Dari Dapodik",
+                    0 => "Luar Dapodik",
                 ]
             ],
             "role" => [
