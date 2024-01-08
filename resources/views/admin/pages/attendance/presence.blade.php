@@ -22,7 +22,21 @@
     </div>
 
     @php
-        $data_column = ["student" => "Siswa", "class" => "Kelas", "present_at" => "Waktu Kehadiran", "status" => "Status", "action" => "Aksi"];
+        $data_column = [
+            "student" => [
+                "title" => "Nama Siswa"
+            ],
+            "class" => "Kelas",
+            "present_at" => [
+                "title" => "Waktu Kehadiran",
+                "width" => "190"
+            ],
+            "status" => "Status",
+            "action" => [
+                "title" => "Aksi",
+                "width" => "200"
+            ]
+        ];
         if(auth()->user()->hasExactRoles('satpam')) {
             $btn_add = '
             <div class="d-flex gap-3">
