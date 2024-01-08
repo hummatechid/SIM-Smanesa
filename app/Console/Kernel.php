@@ -15,15 +15,12 @@ class Kernel extends ConsoleKernel
         $schedule->command('app:make-attendences')->daily()->onFailureWithOutput(function($item){
             var_dump("failed : ". $item);
         });
-        $schedule->command('app:make-attendences')->everyFiveMinutes()->onFailureWithOutput(function($item){
+        // $schedule->command('app:make-attendences')->everyFiveMinutes()->onFailureWithOutput(function($item){
+        //     var_dump("failed : ". $item);
+        // });
+        $schedule->command('app:make-attendences')->hourly()->between("1:00","6:00")->onFailureWithOutput(function($item){
             var_dump("failed : ". $item);
         });
-        // $hours = ["01:00","02:00","03:00","04:00","05:00","05:30"];
-        // foreach($hours as $hour){
-            $schedule->command('app:make-attendences')->hourly()->between("1:00","6:00")->onFailureWithOutput(function($item){
-                var_dump("failed : ". $item);
-            });
-        // }
     }
 
     /**
