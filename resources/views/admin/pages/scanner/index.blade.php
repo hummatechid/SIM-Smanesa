@@ -90,6 +90,7 @@
             position: fixed;
             bottom: 25px;
             left: 30px;
+            z-index: 999;
         }
 
 
