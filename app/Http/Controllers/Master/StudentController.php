@@ -35,7 +35,6 @@ class StudentController extends Controller
     {
         $student_data = [
             'student' => $this->repository->getOneById($id),
-            'violation_score' => 100,
         ];
         $data = $this->service->getPageData('null', '', $student_data, [], "Detail Siswa");
 
