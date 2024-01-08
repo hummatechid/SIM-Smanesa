@@ -34,6 +34,7 @@
             card-title="Tabel Izin"
             data-url="{{ route('permit.get-main-datatables',).'?status=accepted' }}"
             :table-columns="$data_column"
+            default-order="1"
             arrange-order="desc"
         />
     @elseif(auth()->user()->hasRole(['guru', 'staf']))
@@ -49,6 +50,7 @@
             card-title="Tabel Izin"
             data-url="{{ route('permit.get-main-datatables') }}"
             :table-columns="$data_column"
+            default-order="1"
             arrange-order="desc"
         />
     @else
@@ -77,6 +79,8 @@
         <x-datatable
             card-title="Tabel Izin"
             data-url="{{ route('permit.get-main-datatables') }}"
+            default-order="1"
+            arrange-order="desc"
             :table-columns="$data_column"
             delete-option="permit/soft-delete/deleted_id"
             data-add-url="{{ url('permit/create') }}"

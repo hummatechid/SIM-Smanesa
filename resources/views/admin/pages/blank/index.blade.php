@@ -36,6 +36,25 @@
     </div>
 
     <div class="row">
+        @if(auth()->user()->hasExactRoles('satpam'))
+        @php
+            $permit_column = [
+                "date" => "Waktu",
+                "student" => "Siswa",
+                "reason" => "Alasan",
+                "status" => "Status",
+            ];
+        @endphp
+        <div class="col-12">
+            <x-datatable
+                card-title="Tabel Izin Terbaru"
+                data-url="{{ route('permit.get-main-datatables',).'?status=accepted&limit=5' }}"
+                :table-columns="$permit_column"
+                arrange-order="desc"
+                default-order="1"
+            />
+        </div>
+        @else
         <div class="col-md-6 col-12 mb-4">
             <x-datatable
                 card-title="Siswa Sering Melanggar"
@@ -77,6 +96,7 @@
                 :info-table="false"
             />
         </div>
+        @endif
     </div>
 
 </div>
