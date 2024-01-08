@@ -12,7 +12,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('app:make-attendances')->daily();
+        $schedule->command('app:make-attendences')->daily()->onFailureWithOutput(function($item){
+            var_dump("failed : ". $item);
+        });
+        $schedule->command('app:make-attendences')->cron('0 0 1,2,3,4,5 ? * * *')->onFailureWithOutput(function($item){
+            var_dump("failed : ". $item);
+        });
     }
 
     /**

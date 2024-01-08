@@ -28,11 +28,16 @@ class MakeAttendences extends Command
     public function handle()
     {
         $students = Student::all();
-        foreach($students as $student){
-            Attendance::create([
-                "student_id" => $student->id,
-                "status" => "alpha"
-            ]);
+
+        $attendance = Attendance::whereDate("created_at",today())->count();
+
+        if($attendance == 0 ){
+            foreach($students as $student){
+                Attendance::create([
+                    "student_id" => $student->id,
+                    "status" => "alpha"
+                ]);
+            }
         }
     }
 }
