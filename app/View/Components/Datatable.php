@@ -31,6 +31,7 @@ class Datatable extends Component {
         public string $customExportTitle = "",
         public bool $orderable = true,
         public bool $isResponsive = true,
+        public string $customExportSettings = "",
     ) { }
 
     public function render() :View

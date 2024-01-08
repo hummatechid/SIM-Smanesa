@@ -87,7 +87,7 @@
     
     @php
         // $data_column = ["name" => "Siswa", "violation" => "Pelanggaran", "score" => "Poin Pelanggaran", "date" => "Tanggal"];
-        $data_column = ["name" => "Siswa", "class" => "Kelas", "violation_score" => "Poin Pelanggaran", "violation_total" => "Jumlah Pelanggaran"];
+        $data_column = ["name" => "Siswa", "class" => "Kelas", "violation_score" => "Poin Pelanggaran", "violation_total" => "Jumlah Pelanggaran", "action" => "Aksi"];
     @endphp
     <x-datatable
         card-title="Tabel Data Pelanggaran"
@@ -102,7 +102,35 @@
         :pagging-table="false"
         :is-report="true"
         :orderable="false"
+        custom-export-settings="exportOptions: {columns: 'th:not(:last-child)'}"
     />
+</div>
+
+<div class="modal fade modal-lg" id="violation-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Data Pelanggaran <span id="student_name"></span></h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                @php
+                    $detail_columns = ['date' => "Tanggal", 'violation' => "Pelanggaran", 'score' => 'Poin'];
+                @endphp
+                <x-datatable
+                    table-id="violation_table"
+                    card-title=""
+                    data-url="{{ route('violation.student', 'student_id') }}"
+                    :table-columns="$detail_columns"
+                    default-order="1"
+                    arrange-order="desc"
+                />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 @endsection
@@ -172,7 +200,7 @@
         $(document).on('input change', '.input-data', function() {
             reloadNewUrl()
         })
-
+        reloadNewUrl()
         function reloadNewUrl()
         {
             let main_url = "{{ route('violation.get-report-datatables') }}"
@@ -187,7 +215,6 @@
 
             table.ajax.url(main_url+params).load()
         }
-        
         $('#date').flatpickr({
             mode: 'range',
             maxDate: 'today',
@@ -195,6 +222,19 @@
             onChange: function(selectedDates, dateStr, instance) {
                 reloadNewUrl();
             }
+        })
+
+
+        $(document).on('click', '.btn-detail', function() {
+            let data = $(this).data('data')
+            let student_id = data.student_id
+            let student_name = data.student.full_name
+
+            let url = "{{ route('violation.student', 'student_id') }}"
+            url = url.replace('student_id', student_id)
+
+            $('#student_name').html(student_name)
+            violation_table.ajax.url(url).load()
         })
     })
 </script>
@@ -205,6 +245,12 @@
 {{-- <link rel="stylesheet" href="{{ asset('assets/extensions/flatpickr/themes/dark.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/extensions/flatpickr/themes/light.css') }}"> --}}
 <style>
+    .modal-body .card-header {
+        display: none;
+    }
+    .modal-body .card {
+        margin-bottom: 0!important;
+    }
     .choices__inner {
         padding: 3.5px 7.5px 3.75px;
         background: white;

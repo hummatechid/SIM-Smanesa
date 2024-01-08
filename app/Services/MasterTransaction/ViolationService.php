@@ -89,7 +89,9 @@ class ViolationService extends BaseService {
                 return collect($item)->sum("score");
             })->addColumn('violation_total', function($item) {
                 return count($item);
-            })
+            })->addColumn('action', function($item) {
+                return view('admin.pages.violation.datatables-report-action', ['item' => $item[0]]);
+            })->rawColumns(['action'])
             ->make(true);
     }
 

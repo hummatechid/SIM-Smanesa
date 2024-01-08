@@ -169,6 +169,7 @@
                     let str = export_title.replace(/\s/g, "_");
                     return str + n;
                 },
+                {!! $customExportSettings !!}
             },
             @endforeach
         ],
