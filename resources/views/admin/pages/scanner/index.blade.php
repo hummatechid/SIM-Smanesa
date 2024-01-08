@@ -145,7 +145,10 @@
         </div>
     </div>
 
-    <a href="{{ route('landing-page') }}" id="back-button" class="btn btn-lg btn-primary"><i class="bi bi-house-fill"></i></a>
+    <div id="back-button" class="btn-group">
+        <a href="{{ route('landing-page') }}" class="btn btn-lg btn-primary"><i class="bi bi-house-fill"></i></a>
+        <div id="clock" class="btn btn-lg bg-secondary text-white" style="cursor: default"></div>
+    </div>
     
 
     <script src="{{ asset('assets/static/js/initTheme.js') }}"></script>
@@ -209,6 +212,23 @@
                     title: message,
                     icon: type
                 });
+            }
+
+            startTime()
+            function startTime() {
+                const today = new Date();
+                let h = today.getHours();
+                let m = today.getMinutes();
+                let s = today.getSeconds();
+                m = checkTime(m);
+                s = checkTime(s);
+                document.getElementById('clock').innerHTML =  h + ":" + m + ":" + s;
+                setTimeout(startTime, 1000);
+            }
+
+            function checkTime(i) {
+                if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+                return i;
             }
         })
     </script>
