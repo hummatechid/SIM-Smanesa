@@ -164,11 +164,18 @@
             </div>
             <div class="modal-body">
                 @php
-                    $data_columns = ['date' => "Tanggal", 'violation' => "Pelanggaran", 'score' => 'Poin'];
+                    $data_columns = [
+                        'date' => "Tanggal",
+                        'violation' => [
+                            "title" => "Pelanggaran",
+                            "width" => "1000px"
+                        ],
+                        'score' => 'Poin'
+                    ];
                 @endphp
                 <x-datatable
                     card-title=""
-                    data-url="{{ route('violation.student',).'?student_id='.$student->id }}"
+                    data-url="{{ route('violation.student', 'student_id='.$student->id) }}"
                     :table-columns="$data_columns"
                     default-order="1"
                     arrange-order="desc"

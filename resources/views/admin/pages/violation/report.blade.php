@@ -115,12 +115,17 @@
             </div>
             <div class="modal-body">
                 @php
-                    $detail_columns = ['date' => "Tanggal", 'violation' => "Pelanggaran", 'score' => 'Poin'];
+                    $detail_columns = [
+                        'date' => "Tanggal",
+                        'violation' => [
+                            "title" => "Pelanggaran"
+                        ], 'score' => 'Poin'
+                    ];
                 @endphp
                 <x-datatable
                     table-id="violation_table"
                     card-title=""
-                    data-url="{{ route('violation.student', 'student_id') }}"
+                    data-url="{{ route('violation.student', 'student_id=student_id') }}"
                     :table-columns="$detail_columns"
                     default-order="1"
                     arrange-order="desc"
@@ -230,8 +235,10 @@
             let student_id = data.student_id
             let student_name = data.student.full_name
 
-            let url = "{{ route('violation.student', 'student_id') }}"
-            url = url.replace('student_id', student_id)
+            let url = "{{ route('violation.student', 'student_id=siswa_id') }}"
+            url = url.replace('siswa_id', student_id)
+
+            console.log(url)
 
             $('#student_name').html(student_name)
             violation_table.ajax.url(url).load()
