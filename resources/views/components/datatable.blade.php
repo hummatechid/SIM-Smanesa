@@ -43,7 +43,7 @@
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <h5 class="card-title">
-                    {{ $cardTitle }}
+                    {!! $cardTitle !!}
                 </h5>
                 @if($dataAddUrl && $dataAddType == "new_page")
                 <a href="{{ $dataAddUrl }}" class="btn btn-primary">+Tambah</a>
@@ -190,18 +190,38 @@
             },
             @endif
             @foreach($tableColumns as $column => $value)
-                @if($column === "action" || $column === "selection")
-                {
-                    data: "{{ $column }}",
-                    title: "{{ $value }}",
-                    orderable: false,
-                    searchable: false
-                },
+                @if(getType($value) == 'string')
+                    @if($column === "action" || $column === "selection")
+                    {
+                        data: "{{ $column }}",
+                        title: "{{ $value }}",
+                        orderable: false,
+                        searchable: false,
+                    },
+                    @else
+                    {
+                        data: "{{ $column }}",
+                        title: "{{ $value }}",
+                    },
+                    @endif
                 @else
-                {
-                    data: "{{ $column }}",
-                    title: "{{ $value }}",
-                },
+                    @if($column === "action" || $column === "selection")
+                    {
+                        data: "{{ $column }}",
+                        @foreach($value as $setting => $value_setting)
+                        {!! $setting !!}: "{{ $value_setting }}",
+                        @endforeach
+                        orderable: false,
+                        searchable: false,
+                    },
+                    @else
+                    {
+                        data: "{{ $column }}",
+                        @foreach($value as $setting => $value_setting)
+                        {!! $setting !!}: "{{ $value_setting }}",
+                        @endforeach
+                    },
+                    @endif
                 @endif
             @endforeach
         ],

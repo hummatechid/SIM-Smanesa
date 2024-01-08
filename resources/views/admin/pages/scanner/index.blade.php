@@ -1,3 +1,5 @@
+@inject('carbon', 'Carbon\Carbon')
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -88,6 +90,7 @@
             position: fixed;
             bottom: 25px;
             left: 30px;
+            z-index: 999;
         }
 
 
@@ -110,9 +113,10 @@
             <div id="tb">
                 @php
                     $data_column = ["student" => "Siswa", "class" => "Kelas", "present_at" => "Waktu Kehadiran", "status" => "Status"];
+                    $card_title = 'Data Kehadiran Terbaru <span class="badge bg-primary">'.$carbon::parse(now())->locale('id_ID')->isoFormat('DD MMMM YYYY').'</span>';
                 @endphp
                 <x-datatable
-                    card-title="{{'Data Kehadiran Terbaru | '. date('d-m-Y')}}"
+                    :card-title="$card_title"
                     data-url="{{ route('attendance.get-main-datatables') }}"
                     :table-columns="$data_column"
                     default-order="2"

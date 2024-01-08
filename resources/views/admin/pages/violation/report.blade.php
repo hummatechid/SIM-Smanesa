@@ -87,7 +87,22 @@
     
     @php
         // $data_column = ["name" => "Siswa", "violation" => "Pelanggaran", "score" => "Poin Pelanggaran", "date" => "Tanggal"];
-        $data_column = ["name" => "Siswa", "class" => "Kelas", "violation_score" => "Poin Pelanggaran", "violation_total" => "Jumlah Pelanggaran", "action" => "Aksi"];
+        $data_column = [
+            "name" => [
+                "title" => "Siswa",
+                "width" => "300px"
+            ],
+            "class" => "Kelas",
+            "violation_score" => [
+                "title" => "Poin Pelanggaran",
+                "width" => "150px"
+            ],
+            "violation_total" => [
+                "title" => "Jumlah Pelanggaran",
+                "width" => "170px"
+            ],
+            "action" => "Aksi"
+        ];
     @endphp
     <x-datatable
         card-title="Tabel Data Pelanggaran"
@@ -115,12 +130,17 @@
             </div>
             <div class="modal-body">
                 @php
-                    $detail_columns = ['date' => "Tanggal", 'violation' => "Pelanggaran", 'score' => 'Poin'];
+                    $detail_columns = [
+                        'date' => "Tanggal",
+                        'violation' => [
+                            "title" => "Pelanggaran"
+                        ], 'score' => 'Poin'
+                    ];
                 @endphp
                 <x-datatable
                     table-id="violation_table"
                     card-title=""
-                    data-url="{{ route('violation.student', 'student_id') }}"
+                    data-url="{{ route('violation.student', 'student_id=student_id') }}"
                     :table-columns="$detail_columns"
                     default-order="1"
                     arrange-order="desc"
@@ -230,8 +250,10 @@
             let student_id = data.student_id
             let student_name = data.student.full_name
 
-            let url = "{{ route('violation.student', 'student_id') }}"
-            url = url.replace('student_id', student_id)
+            let url = "{{ route('violation.student', 'student_id=siswa_id') }}"
+            url = url.replace('siswa_id', student_id)
+
+            console.log(url)
 
             $('#student_name').html(student_name)
             violation_table.ajax.url(url).load()
