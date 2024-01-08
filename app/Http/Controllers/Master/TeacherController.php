@@ -28,8 +28,7 @@ class TeacherController extends Controller
         TeacherRepository $teacherRepository,
         UserRepository $userRepository,
         RoleRepository $roleRepository
-    )
-    {
+    ) {
         $this->teacherService = $teacherService;
         $this->userService = $userService;
         $this->teacherRepository = $teacherRepository;
@@ -48,23 +47,23 @@ class TeacherController extends Controller
     public function getDatatablesData(Request $request)
     {
 
-        if($request->status){
-            $data = $this->teacherRepository->OneConditionOneRelation("is_dapodik",$request->status,["user" => function($q){
+        if ($request->status) {
+            $data = $this->teacherRepository->OneConditionOneRelation("is_dapodik", $request->status, ["user" => function ($q) {
                 $q->with("roles");
             }]);
         } else {
-            $data = $this->teacherRepository->relationship(["user" => function($q){
+            $data = $this->teacherRepository->relationship(["user" => function ($q) {
                 $q->with("roles");
             }]);
         }
 
-        if($request->role == "pimpinan"){
-            $data = $data->filter(function ($item){
-                $check = $item->user->roles->filter(fn($item) => $item->name == "pimpinan");
+        if ($request->role == "pimpinan") {
+            $data = $data->filter(function ($item) {
+                $check = $item->user->roles->filter(fn ($item) => $item->name == "pimpinan");
                 return count($check) > 1;
             });
-        } else if ($request->role == "non-pimpinan"){
-            $data = $data->filter(function ($item){
+        } else if ($request->role == "non-pimpinan") {
+            $data = $data->filter(function ($item) {
                 return count($item->user->roles) == 1;
             });
         }
@@ -90,29 +89,29 @@ class TeacherController extends Controller
     {
         // validate data request pengguna
         $validateDataTeacher = $teacherRequest->validated();
-        
+
         // validate data request user
         $validateDataUser = $userRequest->validated();
-        
+
         try {
             DB::beginTransaction();
 
             // set image
             $path = 'images/teacher/';
             !is_dir($path) && mkdir($path, 0777, true);
-            
-            if($teacherRequest->photo) {
+
+            if ($teacherRequest->photo) {
                 $file = $teacherRequest->file('photo');
-                $fileData = $this->uploads($file,$path);
-                $validateDataTeacher["photo"] = $fileData["filePath"].".".$fileData["fileType"];
+                $fileData = $this->uploads($file, $path);
+                $validateDataTeacher["photo"] = $fileData["filePath"] . "." . $fileData["fileType"];
             }
 
             // get roles guru
-            $roles = $this->userRepository->getRole("name","guru");
+            $roles = $this->userRepository->getRole("name", "guru");
 
             // store data user
-            $validateDataUser["password"] = bcrypt($validateDataUser["password"]); 
-            $validateDataUser["role_id"] = $roles->id; 
+            $validateDataUser["password"] = bcrypt($validateDataUser["password"]);
+            $validateDataUser["role_id"] = $roles->id;
             $user = $this->userRepository->create($validateDataUser);
 
             // set user_id
@@ -127,9 +126,9 @@ class TeacherController extends Controller
 
             DB::commit();
             return redirect()->route('teacher.index')->with('success', "Data guru berhasil dibuat");
-        } catch(\Throwable $th){
+        } catch (\Throwable $th) {
             DB::rollBack();
-            return redirect()->back()->with('error',$th->getMessage())->withInput();
+            return redirect()->back()->with('error', $th->getMessage())->withInput();
         }
     }
 
@@ -168,14 +167,14 @@ class TeacherController extends Controller
     {
         // validate data request teacher
         $validateDataPengguna = $teacherRequest->validated();
-        
+
         // validate data request user
         $validateDataUser = $userRequest->validated();
 
         // check has data or not
         $pengguna = $this->teacherRepository->getOneById($id);
 
-        if(!$pengguna) return redirect()->back()->with('error', 'Teacher tidak ditemukan');
+        if (!$pengguna) return redirect()->back()->with('error', 'Teacher tidak ditemukan');
 
         try {
             DB::beginTransaction();
@@ -183,12 +182,12 @@ class TeacherController extends Controller
             // set image
             $path = 'images/teacher/';
             !is_dir($path) &&
-            mkdir($path, 0777, true);
-            if($teacherRequest->photo) {
-                if($pengguna->photo) $this->deleteImage($pengguna->photo);
+                mkdir($path, 0777, true);
+            if ($teacherRequest->photo) {
+                if ($pengguna->photo) $this->deleteImage($pengguna->photo);
                 $file = $teacherRequest->file('photo');
-                $fileData = $this->uploads($file,$path);
-                $validateDataPengguna["photo"] = $fileData["filePath"].".".$fileData["fileType"];
+                $fileData = $this->uploads($file, $path);
+                $validateDataPengguna["photo"] = $fileData["filePath"] . "." . $fileData["fileType"];
             }
 
             // store data pengguna
@@ -199,9 +198,9 @@ class TeacherController extends Controller
 
             DB::commit();
             return redirect()->route('teacher.index')->with('success', "Data guru berhasil di rubah");
-        } catch(\Throwable $th){
+        } catch (\Throwable $th) {
             DB::rollBack();
-            return redirect()->back()->with('error',$th->getMessage())->withInput();
+            return redirect()->back()->with('error', $th->getMessage())->withInput();
         }
     }
 
@@ -235,10 +234,10 @@ class TeacherController extends Controller
             $request->password_confirmation
         );
 
-        if($request->type == "api"){
+        if ($request->type == "api") {
             return response()->json($update);
         } else {
-            if($update["success"] == true){
+            if ($update["success"] == true) {
                 return redirect()->route('teacher.show', $id)->with("success", $update["message"]);
             } else {
                 return redirect()->back()->with("error", $update["message"]);
@@ -255,7 +254,7 @@ class TeacherController extends Controller
         // check data pengguna
         $teacher = $this->teacherRepository->getOneById($id);
 
-        if(!$teacher) {
+        if (!$teacher) {
             return response()->json([
                 "success" => false,
                 "message" => "Data guru tidak ditemukan"
@@ -265,13 +264,13 @@ class TeacherController extends Controller
         // check data user
         $user = $this->userRepository->getOneById($teacher->user_id);
 
-        if(!$user) {
+        if (!$user) {
             return response()->json([
                 "success" => false,
                 "message" => "Data user tidak ditemukan"
             ], 404);
         }
-        
+
         try {
             // delete data
             $this->teacherRepository->softDelete($id);
@@ -280,7 +279,7 @@ class TeacherController extends Controller
                 "success" => true,
                 "message" => "Data guru berhasil di hapus"
             ], 201);
-        } catch(\Throwable $th){
+        } catch (\Throwable $th) {
             return response()->json([
                 "success" => false,
                 "message" => $th->getMessage()
@@ -296,7 +295,7 @@ class TeacherController extends Controller
         // check data pengguna
         $teacher = $this->teacherRepository->getOneById($id);
 
-        if(!$teacher) {
+        if (!$teacher) {
             return response()->json([
                 "success" => false,
                 "message" => "Data guru tidak ditemukan"
@@ -306,16 +305,16 @@ class TeacherController extends Controller
         // check data user
         $user = $this->userRepository->getOneById($teacher->user_id);
 
-        if(!$user) {
+        if (!$user) {
             return response()->json([
                 "success" => false,
                 "message" => "Data user tidak ditemukan"
             ], 404);
         }
-        
+
         try {
             // delete image
-            if($teacher->photo) $this->deleteImage($teacher->photo);
+            if ($teacher->photo) $this->deleteImage($teacher->photo);
 
             // delete data
             $this->teacherRepository->delete($id);
@@ -324,7 +323,7 @@ class TeacherController extends Controller
                 "success" => true,
                 "message" => "Data guru berhasil di hapus permnanent"
             ], 201);
-        } catch(\Throwable $th){
+        } catch (\Throwable $th) {
             return response()->json([
                 "success" => false,
                 "message" => $th->getMessage()
@@ -343,10 +342,10 @@ class TeacherController extends Controller
         $key = config('app.web_service_key');
         $teachers = $this->teacherService->fetchTeacherFromDapodik($npsn, $key);
 
-        if($teachers == null) {
+        if ($teachers == null) {
             return response()->json([
                 'message' => $teachers
-            ]);
+            ], 500);
         }
 
         $this->teacherService->handleSyncTeacher($teachers['rows']);
@@ -363,10 +362,11 @@ class TeacherController extends Controller
     {
         $role = $request->role ?? "pimpinan";
 
-        $teacher = $this->teacherRepository->byIdWithRole($id);
-        $teacher->assignRole($role);
+        $teacher = $this->teacherRepository->getOneById($id);
+        $user = $this->userRepository->getOneById($teacher->user_id);
+        $user->assignRole($role);
 
-        return redirect()->back()->with("success","Berhasil menambahkan ".$teacher->full_name." ke " . $role);
+        return redirect()->back()->with("success", "Berhasil menambahkan " . $teacher->full_name . " ke " . $role);
     }
 
     /**
@@ -376,9 +376,11 @@ class TeacherController extends Controller
     {
         $role = $request->role ?? "pimpinan";
 
-        $teacher = $this->teacherRepository->byIdWithRole($id);
-        $teacher->removeRole($role);
+        $teacher = $this->teacherRepository->getOneById($id);
+        $user = $this->userRepository->getOneById($teacher->user_id);
+        $user->removeRole($role);
 
-        return redirect()->back()->with("success","Berhasil mengeluarkan ".$teacher->full_name." dari " . $role);
+
+        return redirect()->back()->with("success", "Berhasil mengeluarkan " . $teacher->full_name . " dari " . $role);
     }
 }

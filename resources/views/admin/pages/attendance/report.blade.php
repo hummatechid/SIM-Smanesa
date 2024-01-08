@@ -77,7 +77,7 @@
                     <label for="class">Kelas</label>
                     <select name="class" id="class" class="form-select input-data">
                         @foreach($classes as $kls)
-                        <option value="{{ $kls->nama_rombel }}">{{ $kls->nama_rombel }} A</option>
+                        <option value="{{ $kls->nama_rombel }}">{{ $kls->nama_rombel }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -87,7 +87,7 @@
     
     @php
         // $data_column = ["student" => "Siswa", "class" => "Kelas", "present" => "Kehadiran", "date" => "Tanggal"];
-        $data_column = ["student" => "Siswa", "class" => "Kelas", "present" => "Masuk", "permit" => "Izin","sick" => "Sakit","alpa" => "Tanpa keterangan",];
+        $data_column = ["student" => "Siswa", "class" => "Kelas", "present" => "Hadir", "permit" => "Izin","sick" => "Sakit","alpa" => "Tanpa keterangan",];
     @endphp
     <x-datatable
         card-title="Tabel Data Kehadiran"

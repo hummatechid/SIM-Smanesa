@@ -77,7 +77,7 @@
                     <label for="class">Kelas</label>
                     <select name="class" id="class" class="form-select input-data">
                         @foreach($classes as $kls)
-                        <option value="{{ $kls->nama_rombel }}">{{ $kls->nama_rombel }} A</option>
+                        <option value="{{ $kls->nama_rombel }}">{{ $kls->nama_rombel }}</option>
                         @endforeach
                     </select>
                 </div>

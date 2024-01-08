@@ -42,7 +42,7 @@
                             <div class="fw-bold">{{ $student->nama_rombel ? $student->nama_rombel : '-' }} / {{ $student->nisn ? $student->nisn : '-' }}</div>
                         </div>
                         <div class="d-flex flex-column align-items-center gap-2">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#violation-modal">Poin Pelanggaran : {{ $student->violation_score }}</button>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#violation-modal">Poin Pelanggaran : {{ $student->score }}</button>
                             <div class="d-flex justify-content-center  gap-2">
                                 <a href="{{ route('student.index') }}" class="btn btn-secondary">Kembali</a>
                             </div>
@@ -168,7 +168,7 @@
                 @endphp
                 <x-datatable
                     card-title=""
-                    data-url="{{ route('violation.student', $student->id) }}"
+                    data-url="{{ route('violation.student',).'?student_id='.$student->id }}"
                     :table-columns="$data_columns"
                     default-order="1"
                     arrange-order="desc"

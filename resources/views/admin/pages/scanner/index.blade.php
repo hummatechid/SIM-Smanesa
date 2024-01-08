@@ -112,7 +112,7 @@
                     $data_column = ["student" => "Siswa", "class" => "Kelas", "present_at" => "Waktu Kehadiran", "status" => "Status"];
                 @endphp
                 <x-datatable
-                    card-title="Data Kehadiran Terbaru"
+                    card-title="{{'Data Kehadiran Terbaru '. date('d-m-Y')}}"
                     data-url="{{ route('attendance.get-main-datatables') }}"
                     :table-columns="$data_column"
                     default-order="2"
