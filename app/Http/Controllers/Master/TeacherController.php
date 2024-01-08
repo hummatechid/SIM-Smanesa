@@ -48,22 +48,22 @@ class TeacherController extends Controller
     public function getDatatablesData(Request $request)
     {
 
-        if($request->group_status){
-            $data = $this->teacherRepository->OneConditionOneRelation("is_dapodik",$request->group_status,["user" => function($q){
-                $q->with("role");
+        if($request->status){
+            $data = $this->teacherRepository->OneConditionOneRelation("is_dapodik",$request->status,["user" => function($q){
+                $q->with("roles");
             }]);
         } else {
             $data = $this->teacherRepository->relationship(["user" => function($q){
-                $q->with("role");
+                $q->with("roles");
             }]);
         }
 
-        if($request->group_role == "pimpinan"){
+        if($request->role == "pimpinan"){
             $data = $data->filter(function ($item){
                 $check = $item->user->roles->filter(fn($item) => $item->name == "pimpinan");
                 return count($check) > 1;
             });
-        } else if ($request->group_role == "non-pimpinan"){
+        } else if ($request->role == "non-pimpinan"){
             $data = $data->filter(function ($item){
                 return count($item->user->roles) == 1;
             });
