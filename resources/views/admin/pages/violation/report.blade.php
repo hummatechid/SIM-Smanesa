@@ -87,7 +87,22 @@
     
     @php
         // $data_column = ["name" => "Siswa", "violation" => "Pelanggaran", "score" => "Poin Pelanggaran", "date" => "Tanggal"];
-        $data_column = ["name" => "Siswa", "class" => "Kelas", "violation_score" => "Poin Pelanggaran", "violation_total" => "Jumlah Pelanggaran", "action" => "Aksi"];
+        $data_column = [
+            "name" => [
+                "title" => "Siswa",
+                "width" => "300px"
+            ],
+            "class" => "Kelas",
+            "violation_score" => [
+                "title" => "Poin Pelanggaran",
+                "width" => "150px"
+            ],
+            "violation_total" => [
+                "title" => "Jumlah Pelanggaran",
+                "width" => "170px"
+            ],
+            "action" => "Aksi"
+        ];
     @endphp
     <x-datatable
         card-title="Tabel Data Pelanggaran"
