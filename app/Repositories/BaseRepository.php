@@ -203,33 +203,57 @@ class BaseRepository implements RepositoryInterface {
         }
     }
 
-    public function oneConditionOneRelation(string $column, string $value, array $relation, string $method = 'get')
+    public function oneConditionOneRelation(string $column, string $value, array $relation, string $method = 'get', bool $history = false)
     {
         switch($method) {
             case 'first' :
-                return $this->model->where($column, $value)->with($relation)->first();
+                if($history){
+                    return $this->model->with($relation)->where($column, $value)->whereNotNull("deleted_at")->first();
+                } else {
+                    return $this->model->with($relation)->where($column, $value)->whereNull("deleted_at")->first();
+                }
             default :
-                return $this->model->where($column, $value)->with($relation)->get();
+                if($history){
+                    return $this->model->with($relation)->where($column, $value)->whereNotNull("deleted_at")->get();
+                } else {
+                    return $this->model->with($relation)->where($column, $value)->whereNull("deleted_at")->get();
+                }
         }
     }
 
-    public function oneNullConditionOneRelation(string $column, array $relation, string $method = 'get')
+    public function oneNullConditionOneRelation(string $column, array $relation, string $method = 'get', bool $history = false)
     {
         switch($method) {
             case 'first' :
-                return $this->model->whereNull($column)->with($relation)->first();
+                if($history){
+                    return $this->model->with($relation)->whereNull($column)->whereNotNull("deleted_at")->first();
+                } else {
+                    return $this->model->with($relation)->whereNull($column)->whereNull("deleted_at")->first();
+                }
             default :
-                return $this->model->whereNull($column)->with($relation)->get();
+                if($history){
+                    return $this->model->with($relation)->whereNull($column)->whereNotNull("deleted_at")->get();
+                } else {
+                    return $this->model->with($relation)->whereNull($column)->whereNull("deleted_at")->get();
+                }
         }
     }
 
-    public function oneNotNullConditionOneRelation(string $column, array $relation, string $method = 'get')
+    public function oneNotNullConditionOneRelation(string $column, array $relation, string $method = 'get', bool $history = false)
     {
         switch($method) {
             case 'first' :
-                return $this->model->whereNotNull($column)->with($relation)->first();
+                if($history){
+                    return $this->model->with($relation)->whereNotNull($column)->whereNotNull("deleted_at")->first();
+                } else {
+                    return $this->model->with($relation)->whereNotNull($column)->whereNull("deleted_at")->first();
+                }
             default :
-                return $this->model->whereNotNull($column)->with($relation)->get();
+                if($history){
+                    return $this->model->with($relation)->whereNotNull($column)->whereNotNull("deleted_at")->get();
+                } else {
+                    return $this->model->with($relation)->whereNotNull($column)->whereNull("deleted_at")->get();
+                }
         }
     }
 

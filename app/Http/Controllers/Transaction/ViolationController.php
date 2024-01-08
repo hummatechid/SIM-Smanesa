@@ -36,9 +36,12 @@ class ViolationController extends Controller
         return view('admin.pages.violation.index', $data);
     }
 
-    public function getDatatablesData()
+    public function getDatatablesData(Request $request)
     {
-        return $this->violationService->getDataDatatable();
+        if($request->student_id) $data = $this->violationRepository->OneConditionOneRelation("student_id",str_replace("?","",$request->student_id),["violationType","student"]);
+        else $data = $this->violationRepository->relationship(["student","violationType"]);
+
+        return $this->violationService->getDataDatatable($data);
     }
 
     public function getReportDatatablesData(Request $request)
