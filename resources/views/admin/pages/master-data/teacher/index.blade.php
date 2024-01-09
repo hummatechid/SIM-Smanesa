@@ -84,7 +84,7 @@
             "status" => [
                 "title" => "Status",
                 "options" => [
-                    "" => "Semua",
+                    "semua" => "Semua",
                     1 => "Dari Dapodik",
                     0 => "Luar Dapodik",
                 ]
