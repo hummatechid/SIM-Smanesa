@@ -239,7 +239,9 @@
             mode: 'range',
             maxDate: 'today',
             locale: 'id',
+            defaultDate: 'today',
             onChange: function(selectedDates, dateStr, instance) {
+                instance.element.value = dateStr.replace(' - ', ' s/d ')
                 reloadNewUrl();
             }
         })
