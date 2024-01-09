@@ -36,7 +36,7 @@ class StudentController extends Controller
         $student_data = [
             'student' => $this->repository->getOneById($id),
         ];
-        $data = $this->service->getPageData('null', '', $student_data, [], "Detail Siswa");
+        $data = $this->service->getPageData('null', '', $student_data, [], "Detail Peserta Didik");
 
         return view('admin.pages.master-data.student.show', $data);
     }

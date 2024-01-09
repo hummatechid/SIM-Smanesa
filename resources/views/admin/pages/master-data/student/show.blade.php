@@ -26,7 +26,7 @@
             <div class="col-12 order-md-1 mb-3">
                 <div class="card mb-0">
                     <h4 class="card-body text-center m-0 p-4">
-                        Detail Siswa
+                        Detail Peserta Didik
                     </h4>
                 </div>
             </div>
@@ -53,7 +53,7 @@
             <div class="col-12 order-md-4 mb-3">
                 <div class="card h-100">
                     <div class="card-header">
-                        <h5 class="fw-bold">Data Siswa</h5>
+                        <h5 class="fw-bold">Data Peserta Didik</h5>
                     </div>
                     <div class="card-body">
                         <x-session-alert :is-swal="true" />

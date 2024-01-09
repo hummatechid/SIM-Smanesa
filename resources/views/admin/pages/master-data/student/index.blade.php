@@ -14,7 +14,7 @@
                     data-bs-toggle="modal"
                     data-bs-target="#staticBackdrop"
                 >
-                    Sinkronisasi Siswa
+                    Sinkronisasi Peserta Didik
                 </button>
 
                 <!--Basic Modal -->
@@ -97,7 +97,7 @@
     "NIPD", "gender" => "Jenis Kelamin", "nama_rombel" => "Kelas", "action" =>
     "Aksi" ]; @endphp
     <x-datatable
-        card-title="Tabel Siswa"
+        card-title="Tabel Peserta Didik"
         data-url="{{ route('student.get-main-datatables') }}"
         :table-columns="$data_column"
         delete-option="student/soft-delete/deleted_id"

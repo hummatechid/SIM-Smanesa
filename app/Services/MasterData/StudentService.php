@@ -12,10 +12,10 @@ class StudentService extends BaseService
     public function __construct(StudentRepository $repository)
     {
         $this->repository = $repository;
-        $this->pageTitle = "Siswa";
+        $this->pageTitle = "Peserta Didik";
         $this->mainUrl = "student";
         $this->mainMenu = "student";
-        $this->breadCrumbs = ["Siswa" => route('student.index')];
+        $this->breadCrumbs = ["Peserta Didik" => route('student.index')];
     }
 
     /**
