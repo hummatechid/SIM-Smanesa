@@ -60,8 +60,7 @@ class TeacherController extends Controller
 
         if ($request->role == "pimpinan") {
             $data = $data->filter(function ($item) {
-                $check = $item->user->roles->filter(fn ($item) => $item->name == "pimpinan");
-                return count($check) > 1;
+                return count($item->user->roles) > 1;
             });
         } else if ($request->role == "non-pimpinan") {
             $data = $data->filter(function ($item) {
