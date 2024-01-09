@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    <x-create-user form-action="{{ route('teacher.update', $teacher->id) }}" card-title="Ubah Guru" back-url="{{ route('teacher.show', $teacher->id) }}" form-for="guru" :data-role="$data_role" :is-edit="true" :data-user="$teacher"/>
+    <x-create-user form-action="{{ route('teacher.update', $teacher->id) }}" card-title="Ubah GTK" back-url="{{ route('teacher.show', $teacher->id) }}" form-for="guru" :data-role="$data_role" :is-edit="true" :data-user="$teacher"/>
 
 </div>
 @endsection

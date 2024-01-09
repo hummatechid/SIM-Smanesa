@@ -17,10 +17,10 @@ class TeacherService extends BaseService
     public function __construct(TeacherRepository $teacherRepository, UserRepository $userRepository)
     {
         $this->repository = $teacherRepository;
-        $this->pageTitle = "Guru";
+        $this->pageTitle = "GTK";
         $this->mainUrl = "teacher";
         $this->mainMenu = "teacher";
-        $this->breadCrumbs = ["Guru" => route('teacher.index')];
+        $this->breadCrumbs = ["GTK" => route('teacher.index')];
         $this->userRepository = $userRepository;
     }
 

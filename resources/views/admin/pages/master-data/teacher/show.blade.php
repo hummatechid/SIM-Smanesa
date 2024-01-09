@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    <x-show-user card-title="Detail Guru" back-url="{{ url($main_url) }}" edit-url="{{ route('teacher.edit', $teacher->id) }}" edit-password-url="{{ route('teacher.editPassword', $teacher->id) }}" form-for="guru" :data-user="$teacher"/>
+    <x-show-user card-title="Detail GTK" back-url="{{ url($main_url) }}" edit-url="{{ route('teacher.edit', $teacher->id) }}" edit-password-url="{{ route('teacher.editPassword', $teacher->id) }}" form-for="guru" :data-user="$teacher"/>
 
 </div>
 @endsection

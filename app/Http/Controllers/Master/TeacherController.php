@@ -40,7 +40,7 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        $data = $this->teacherService->getPageData('teacher-list', "", [], null, "Guru");
+        $data = $this->teacherService->getPageData('teacher-list', "", [], null, "GTK");
         return view('admin.pages.master-data.teacher.index', $data);
     }
 
@@ -77,7 +77,7 @@ class TeacherController extends Controller
     public function create()
     {
         $data_role = $this->roleRepository->getCustomColumnValue('name', 'guru');
-        $data = $this->teacherService->getPageData('teacher-add', '', ['data_role' => $data_role], [], 'Tambah Guru');
+        $data = $this->teacherService->getPageData('teacher-add', '', ['data_role' => $data_role], [], 'Tambah GTK');
 
         return view('admin.pages.master-data.teacher.create', $data);
     }

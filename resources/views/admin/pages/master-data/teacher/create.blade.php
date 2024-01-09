@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    <x-create-user form-action="{{ url('teacher') }}" card-title="Tambah Guru" back-url="{{ url($main_url) }}" form-for="guru" :data-role="$data_role"/>
+    <x-create-user form-action="{{ url('teacher') }}" card-title="Tambah GTK" back-url="{{ url($main_url) }}" form-for="guru" :data-role="$data_role"/>
 
 </div>
 @endsection
