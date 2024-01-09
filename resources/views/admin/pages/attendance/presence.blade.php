@@ -42,7 +42,7 @@
             <div class="d-flex gap-3">
                 <form method="POST" action="'.route('attendance.sync').'">
                     <input type="hidden" name="_token" value="'.csrf_token().'" />
-                    <button type="submit" class="btn btn-sm btn-primary">Sinkronisasi Absensi</button>
+                    <button type="submit" class="btn btn-sm btn-primary">Aktifkan Presensi</button>
                 </form>
                 <a href="'.route("scan.index").'" class="btn btn-sm btn-primary">Scan Kehadiran</a>
             </div>';
@@ -51,7 +51,7 @@
             <div class="d-flex gap-3">
                 <form method="POST" action="'.route('attendance.sync').'">
                     <input type="hidden" name="_token" value="'.csrf_token().'" />
-                    <button type="submit" class="btn btn-sm btn-primary">Sinkronisasi Absensi</button>
+                    <button type="submit" class="btn btn-sm btn-primary">Aktifkan Presensi</button>
                 </form>
                 <a href="'.route("scan.index").'" class="btn btn-sm btn-primary">Scan Kehadiran</a>
                 <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-add-permit">+ Tambah Izin</button>
