@@ -20,13 +20,13 @@
         </ul>
     </div>
     @endif
-    {{-- @endhasrole
+    @endhasrole
     <form action="{{ route('permit.print') }}" method="post">
         @csrf
-        <input type="hidden" name="permit_id">
+        <input type="hidden" name="permit_id" value="{{ $item->id }}">
         <button type="submit" class="btn btn-sm btn-primary">Cetak</button>
     </form>
-    @hasrole('superadmin') --}}
+    @hasrole('superadmin')
     <button class="btn btn-sm btn-danger delete-data" data-id="{{ $item->id }}">Hapus</button>
     @endhasrole
 </div>
