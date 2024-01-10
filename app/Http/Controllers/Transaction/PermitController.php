@@ -420,7 +420,7 @@ class PermitController extends Controller
         }
 
         // check request status
-        $status = ["accepted", "rejected", "back"];
+        $status = ["pending","accepted", "rejected", "back"];
         if (!$request->status) {
             return response()->json([
                 "status" => "error",
@@ -454,6 +454,8 @@ class PermitController extends Controller
 
         if ($request->status == "accepted") $data["accepted_by"] = $request->user_id;
 
+        if ($request->status == "pending") $data["accepted_by"] = null;
+
         $permit = $this->permitRepository->getOneById($request->id);
 
         // check permit
@@ -463,6 +465,10 @@ class PermitController extends Controller
                 "messages" => "Surat izin tidak ditemukan",
                 "data" => null
             ], 404);
+        }
+
+        if($request->notes) {
+            $data["notes"] = $request->notes;
         }
 
         // update data
