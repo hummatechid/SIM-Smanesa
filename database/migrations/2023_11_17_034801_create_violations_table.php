@@ -19,6 +19,8 @@ return new class extends Migration
             $table->foreign('violation_type_id')->references('id')->on('violation_types');
             $table->integer('score');
             $table->dateTime('deleted_at')->nullable();
+            $table->uuid('created_by')->nullable();
+            $table->uuid('updated_by')->nullable();
             $table->timestamps();
         });
     }

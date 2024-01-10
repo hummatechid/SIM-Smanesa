@@ -131,8 +131,10 @@ class ViolationController extends Controller
             if(!$value) return redirect()->back()->with("error","Data pelanggaran tidak boleh ada yang kosong");
         }
 
-        DB::beginTransaction();
+        $user = auth()->user();
+
         try{
+            DB::beginTransaction();
             // foreach data student
             foreach($request->student_id as $student_id){
                 // set default score
@@ -153,7 +155,8 @@ class ViolationController extends Controller
                     $data = [
                         "student_id" => $student_id,
                         "violation_type_id" => $violation_type->id,
-                        "score" => $scoreViolation
+                        "score" => $scoreViolation,
+                        "created_by" => $user->id
                     ];
     
                     // save data violation
@@ -221,6 +224,8 @@ class ViolationController extends Controller
         $student = $this->studentRepository->getOneById($violation->student_id);
         if(!$student) return redirect()->back()->with("error","Siswa tidak ditemukan");
 
+        $user = auth()->user();
+
         // update new score
         $student->score -= $violation->score;
         $student->save();
@@ -233,6 +238,7 @@ class ViolationController extends Controller
         $violation->violation_type_id = $request->violation_type_id;
         $violation->student_id = $request->student_id;
         $violation->score = $selected_violation->score;
+        $violation->updated_by = $user->id;
         
         // update score new student
         $selected_student->score += $selected_violation->score;
