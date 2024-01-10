@@ -81,7 +81,7 @@ class AttendanceController extends Controller
         $data = $this->attendanceRepository->getDataDate($date);
         $data = $data->filter(function($item){
             return $item->present_at;
-        })->sortBy('present_at');
+        })->sortByDesc('present_at');
 
         return Datatables::of($data)
             ->addIndexColumn()
@@ -117,6 +117,7 @@ class AttendanceController extends Controller
     public function getDatatablesLimit()
     {
         $data = $this->attendanceRepository->getTodayAttendance(10);
+        $data = $data->sortByDesc("present_at");
 
         return Datatables::of($data)
             ->addIndexColumn()
@@ -152,6 +153,7 @@ class AttendanceController extends Controller
     public function getDatatablesPermit()
     {
         $data = $this->attendanceRepository->getTodayAbsent();
+        $data = $data->sortByDesc("present_at");
 
         return Datatables::of($data)
             ->addIndexColumn()
