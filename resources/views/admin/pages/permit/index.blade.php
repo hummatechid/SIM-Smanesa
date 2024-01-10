@@ -104,23 +104,32 @@
         />
     @endif
 
-    {{-- <div class="card">
-        <div class="card-body d-flex justify-content-start align-items-center gap-3">
-            <div class="input-group">
-                <input type="checkbox" name="select-all" id="select-all" class="me-2">
-                <label for="select-all">pilih semua data pending</label>
-            </div>
-            <div class="input-group">
-                <select name="select-action" id="select-action" class="form-select">
-                    <option value="">Pilih Aksi</option>
-                    <option value="accepted">Setujui</option>
-                    <option value="rejected">Tolak</option>
-                </select>
-            </div>
+</div>
 
-        </div>
-    </div> --}}
-
+<div class="modal fade" tabindex="-1" id="reject-one-modal">
+    <div class="modal-dialog">
+        <form class="modal-content" action="" method="post">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    Tolak Izin
+                </h4>
+                <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                @method('patch')
+                @csrf
+                <input type="hidden" name="status" value="rejected">
+                <div class="form-group">
+                    <label for="notes" id="form-labe">Catatan alasan <span class="text-danger">*</span></label>
+                    <textarea name="notes" id="notes" rows="5" class="form-control" placeholder="Alasan Penolakan"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Kirim</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </form>
+    </div>
 </div>
 @endsection
 @push('custom-style')
@@ -132,7 +141,7 @@
 @endpush
 @push('custom-script')
     <script>
-        $(function(){
+        $(window).on('load', function(){
 
             $('#select-all').on('click', function() {
                 $('input:checkbox[name=permit][data-response=pending]').prop('checked', $(this).prop('checked'))
@@ -141,45 +150,95 @@
 
             $('#select-action').on('change', function() {
                 var acc_text = $(this).val() == 'accepted' ? "disetujui" : "ditolak";
-                if($(this).val() == 'accepted' || $(this).val() == "rejected") {
+                var notes = null;
+                if($(this).val() == 'rejected') {
                     Swal.fire({
-                        title: 'Apakah anda yakin?',
-                        text: `Data izin akan ${acc_text}!`,
-                        icon: 'warning',
+                        title: "Berikan alasan penolakan",
+                        input: "textarea",
+                        inputAttributes: {
+                            required: true
+                        },
                         showCancelButton: true,
                         cancelButtonText: 'Batal',
-                        confirmButtonText: `Ya`,
+                        confirmButtonText: "Kirim",
                         confirmButtonColor: '#dc3545',
-                    }).then(result => {
-                        if (result.isConfirmed) {
-                            console.log("test")
-                            var all_id = [];
-                            $('input:checkbox[name=permit]:checked').each(function() {
-                                all_id.push($(this).val())
-                            })
-
-                            $.ajax({
-                                url: "{{ route('permit.updateManyData') }}",
-                                method: "PATCH",
-                                data: {
-                                    _token: "{{ csrf_token() }}",
-                                    status: $(this).val(),
-                                    selected_id: all_id,
-                                },
-                                success: function(res) {
-                                    jquery_datatable.ajax.reload()
-                                }
-                            })
-                            $(this).val("")
-                        } else {
-                            $(this).val("")
-                            Swal.fire({
-                                title: `Data izin batal ${acc_text}!`,
-                                icon: 'info',
-                            });
+                    }).then((result) => {
+                        if(result.isConfirmed) {
+                            notes = result.value
+                            sendAcception($(this).val())
                         }
                     })
+                } else sendAcception($(this).val())
+
+                function sendAcception(status) {
+                    if(status == 'accepted' || (status == "rejected" && notes !== null)) {
+                        Swal.fire({
+                            title: 'Apakah anda yakin?',
+                            text: `Data izin akan ${acc_text}!`,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            cancelButtonText: 'Batal',
+                            confirmButtonText: `Ya`,
+                            confirmButtonColor: '#dc3545',
+                        }).then(result => {
+                            if (result.isConfirmed) { 
+                                var all_id = [];
+                                $('input:checkbox[name=permit]:checked').each(function() {
+                                    all_id.push($(this).val())
+                                })
+    
+                                $.ajax({
+                                    url: "{{ route('permit.updateManyData') }}",
+                                    method: "PATCH",
+                                    data: {
+                                        _token: "{{ csrf_token() }}",
+                                        status: status,
+                                        selected_id: all_id,
+                                        notes: notes
+                                    },
+                                    success: function(res) {
+                                        jquery_datatable.ajax.reload()
+                                    }
+                                })
+                            } else {
+                                Swal.fire({
+                                    title: `Data izin batal ${acc_text}!`,
+                                    icon: 'info',
+                                });
+                            }
+                        })
+                    }
                 }
+            })
+
+            $(document).on('change input', 'input:checkbox[name=permit][data-response=pending]', function() {
+                checkIsAllCheck()
+            })
+            $(document).on('change input', 'input:checkbox[name=permit][data-response=""]', function() {
+                checkIsAllCheck()
+            })
+
+            function checkIsAllCheck() {
+                let pending1 = $('input:checkbox[name=permit][data-response=pending]');
+                let pending2 = $('input:checkbox[name=permit][data-response=""]');
+                let count_not_checked = 0;
+
+                pending1.each(function (index, item) {
+                    !item.checked ? count_not_checked++ : ''
+                })
+                pending1.each(function (index, item) {
+                    !item.checked ? count_not_checked++ : ''
+                })
+
+                if(count_not_checked > 0) $('#select-all').prop('checked', false)
+                else $('#select-all').prop('checked', true)
+            }
+
+            $(document).on('click', '.btn-reject', function() {
+                let id = $(this).data('id')
+                let action_url = "{{ route('permit.update', 'selected_id') }}"
+                action_url = action_url.replace('selected_id', id)
+                $('#reject-one-modal form').attr('action', action_url)
             })
 
         })
