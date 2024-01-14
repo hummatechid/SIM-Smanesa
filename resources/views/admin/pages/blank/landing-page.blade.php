@@ -11,27 +11,54 @@
 
     <link rel="stylesheet" href="{{ asset('assets/compiled/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/compiled/css/app-dark.css') }}">
+    <style>
+        @media only screen and (max-width: 768px) {
+            #btn-header-group > .btn-header {
+                display: block!important;
+                margin: 0;
+                background: transparent;
+                border:0;
+            }
+            #btn-header-group > .btn-header:hover,  #btn-header-group > .btn-header:focus, #btn-header-group > .btn-header:active{
+                display: block!important;
+                margin: 0;
+                background: #435ebe18;
+                border:0;
+            }
+            #btn-open-nav {
+                background: transparent;
+                border: 0;
+                outline: 0;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <header class="sticky-top top-0 bg-body">
         <nav class="navbar py-3 border-bottom shadow">
-            <div class="container-fluid">
-                <div class="d-flex align-items-center gap-3">
-                    <img src="{{ asset('assets/compiled/logos/logo-sm.png') }}" alt="Smanesa" height="50">
-                    <h4 class="mb-0">SMAN 1 Purwosari</h4>
+            <div class="container-fluid d-md-flex d-block">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="{{ asset('assets/compiled/logos/logo-sm.png') }}" alt="Smanesa" height="50">
+                        <h4 class="mb-0 d-none d-md-block">SMAN 1 Purwosari</h4>
+                    </div>
+                    <button type="button" id="btn-open-nav" class="d-inline-block d-md-none" data-status="hidden">
+                        <i class="bi bi-list"></i>
+                    </button>
                 </div>
-                <div class="d-flex gap-2">
-                    <a href="{{ route('scan.index') }}" class="btn btn-primary">Scan Kehadiran</a>
+                <div class="flex-column flex-md-row gap-0 gap-md-2 mt-3 mt-md-0" id="btn-header-group">
+                    <a href="{{ route('scan.index') }}" class="btn btn-header btn-primary">Scan Kehadiran</a>
                     @if(Auth::check())
-                    <a href="{{ route('dashboard') }}" class="btn btn-primary">Dashboard</a>
+                    <a href="{{ route('dashboard') }}" class="btn btn-header btn-primary">Dashboard</a>
                     @else
-                    <a href="{{ route('login') }}" class="btn btn-primary">Masuk</a>
+                    <a href="{{ route('login') }}" class="btn btn-header btn-primary">Masuk</a>
                     @endif
                 </div>
             </div>
         </nav>
     </header>
+
 
     <main>
         <div class="d-flex flex-column gap-3">
@@ -127,10 +154,47 @@
         </div>
     </main>
 
-    <script src="{{ asset('assets/static/js/initTheme.js') }}"></script>
+    <script src="{{ asset('assets/static/js/initTheme.js') }}"></sty>
     <script src="{{ asset('assets/static/js/components/dark.js') }}"></script>
     <script src="{{ asset('assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ asset('assets/compiled/js/app.js') }}"></script>
+    <script src="{{ asset('assets/extensions/jquery/jquery.min.js') }}"></script>
+    <script>
+        $(document).on('click', '#btn-open-nav', function() {
+            setNavDisplay()
+        })
+
+        $(window).on('resize', function() {
+            setDisplay()
+        })
+
+        setDisplay()
+        
+        function setDisplay() {
+            if($(window).width() < 768) {
+                $('#btn-header-group').hide()
+                $("#btn-open-nav").data('status', 'hidden')
+                $('#btn-open-nav > i').addClass('bi-list')
+                $('#btn-open-nav > i').removeClass('bi-x')
+            } else {
+                $('#btn-header-group').css('display', 'flex')
+            }
+
+        }
+        function setNavDisplay() {
+            if($("#btn-open-nav").data('status') == 'hidden') {
+                $("#btn-open-nav").data('status', 'show');
+                $('#btn-header-group').show()
+                $('#btn-open-nav > i').addClass('bi-x')
+                $('#btn-open-nav > i').removeClass('bi-list')
+            } else {
+                $('#btn-header-group').hide()
+                $("#btn-open-nav").data('status', 'hidden')
+                $('#btn-open-nav > i').addClass('bi-list')
+                $('#btn-open-nav > i').removeClass('bi-x')
+            }
+        }
+    </script>
 </body>
 
 </html>
