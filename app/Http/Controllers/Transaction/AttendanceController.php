@@ -59,6 +59,12 @@ class AttendanceController extends Controller
         return view('admin.pages.scanner.index', $data);
     }
 
+    public function scanAttendanceCamera()
+    {
+        $data = $this->attendanceService->getPageData('attendance-scan', 'Scan Kehadiran', [], [], 'Scan Kehadiran');
+        return view('admin.pages.scanner.scanner', $data);
+    }
+
     public function report()
     {
         $tahun = \App\Models\Attendance::selectRaw('YEAR(created_at) as tahun')->orderBy('tahun','ASC')->groupBy('tahun')->get();

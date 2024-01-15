@@ -26,7 +26,3 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/', [HomeController::class, 'landingPage'])->name('landing-page');
 
 Auth::routes();
-
-Route::get('scan-test', function() {
-    return view('admin.pages.scanner.scanner');
-})->name('scan-manual');
