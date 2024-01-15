@@ -197,8 +197,11 @@ class AttendanceController extends Controller
                         $date_from = date('Y-m-d');
                         $date_to = date('Y-m-d');
                     }else {
-                        $date_from = $check_date[0]."-".$check_date[1]."-".$check_date[2];
-                        $date_to = $check_date[3]."-".$check_date[4]."-".$check_date[5];
+                        $date_from = Carbon::parse($check_date[0])->format('Y-m-d');
+                        $date_to = Carbon::parse($check_date[1])->hour(23)
+                        ->minute(59)
+                        ->second(0)
+                        ->format('Y-m-d H:i:s');
                     }
                     $data = $this->attendanceRepository->getDataCustomDate($date_from,$date_to,["student"]);
                 }else if(count($check_date) == 3){

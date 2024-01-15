@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\{StudentRepository, ViolationTypeRepository};
 use App\Repositories\MasterTransaction\ViolationRepository;
 use App\Services\MasterTransaction\ViolationService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -56,14 +57,17 @@ class ViolationController extends Controller
                 $data = $this->violationRepository->getDataYears($request->year,["violationType","student"]);
                 break;
             case "custom":
-                $check_date = explode("-",$request->date);
-                if(count($check_date) > 3){
+                $check_date = explode("s/d",$request->date);
+                if(count($check_date) > 1){
                     if(!$request->date){
                         $date_from = date('Y-m-d');
                         $date_to = date('Y-m-d');
                     }else {
-                        $date_from = $check_date[0]."-".$check_date[1]."-".$check_date[2];
-                        $date_to = $check_date[3]."-".$check_date[4]."-".$check_date[5];
+                        $date_from = Carbon::parse($check_date[0])->format('Y-m-d');
+                        $date_to = Carbon::parse($check_date[1])->hour(23)
+                        ->minute(59)
+                        ->second(0)
+                        ->format('Y-m-d H:i:s');
                     }
                     $data = $this->violationRepository->getDataCustomDate($date_from,$date_to,["student"]);
                 }else if(count($check_date) == 3){
