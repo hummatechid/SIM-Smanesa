@@ -38,8 +38,8 @@ class ViolationController extends Controller
 
     public function getDatatablesData(Request $request)
     {
-        if($request->student_id) $data = $this->violationRepository->OneConditionOneRelation("student_id",str_replace("?","",$request->student_id),["violationType","student"]);
-        else $data = $this->violationRepository->relationship(["student","violationType"]);
+        if($request->student_id) $data = $this->violationRepository->OneConditionOneRelation("student_id",str_replace("?","",$request->student_id),["violationType","student","user_created","user_updated"]);
+        else $data = $this->violationRepository->relationship(["student","violationType","user_created","user_updated"]);
 
         return $this->violationService->getDataDatatable($data);
     }

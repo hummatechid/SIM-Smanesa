@@ -3,6 +3,8 @@
 namespace App\Services\MasterTransaction;
 
 use App\Repositories\MasterTransaction\ViolationRepository;
+use App\Repositories\PenggunaRepository;
+use App\Repositories\TeacherRepository;
 use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\Facades\DataTables;
 use App\Services\BaseService;
@@ -10,10 +12,13 @@ use Carbon\Carbon;
 use stdClass;
 
 class ViolationService extends BaseService {
+    private $teacherRepository, $penggunaRepository;
 
-    public function __construct(ViolationRepository $violationRepository)
+    public function __construct(ViolationRepository $violationRepository, TeacherRepository $teacherRepository, PenggunaRepository $penggunaRepository)
     {
         $this->repository = $violationRepository;
+        $this->teacherRepository = $teacherRepository;
+        $this->penggunaRepository = $penggunaRepository;
         $this->pageTitle = "Pelanggaran";
         $this->mainUrl = "violation";
         $this->mainMenu = "violation";
@@ -37,6 +42,10 @@ class ViolationService extends BaseService {
                 return $item->score;
             })->addColumn('date', function($item) {
                 return Carbon::parse($item->created_at)->isoFormat('DD-MM-YYYY');
+            })->addColumn('user_created', function($item) {
+                return $item->user_created ? $item->user_created->full_name : "-";
+            })->addColumn('user_updated', function($item) {
+                return $item->user_updated ? $item->user_updated->full_name : "-";
             })->addColumn('action', function($item) {
                 return view('admin.pages.violation.datatables-action', ['item' => $item]);
             })
