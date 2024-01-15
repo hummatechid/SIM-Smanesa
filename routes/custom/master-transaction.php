@@ -35,6 +35,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/waiting-acception', [PermitController::class, 'showAccListPage']);
         Route::get('/get-main-data', [PermitController::class, 'getDatatablesData'])->name('get-main-datatables');
         Route::patch('/update/many-data', [PermitController::class, 'updateManyData'])->name('updateManyData');
+        Route::post('/print', [PermitController::class, 'print'])->name('print');
         Route::post('/soft-delete/{id}', [PermitController::class, 'softDestroy'])->name('softDelete');
     });
     Route::resource('/permit', PermitController::class);

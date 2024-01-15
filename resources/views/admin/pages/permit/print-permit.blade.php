@@ -36,11 +36,11 @@
         <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex flex-column justify-content-between align-items-center">
                 <div class="text-center mb-5">Diizinkan oleh</div>
-                <div class="text-center">Nama Guru</div>
+                <div class="text-center">{{ $user_created ? $user_created->full_name : "-" }}</div>
             </div>
             <div class="d-flex flex-column justify-content-between align-items-center">
                 <div class="text-center mb-5">Disetujui oleh</div>
-                <div class="text-center">Nama Pimpinan</div>
+                <div class="text-center">{{ $user_acc ? $user_acc->full_name : "Belum di setujui" }}</div>
             </div>
         </div>
     </div>

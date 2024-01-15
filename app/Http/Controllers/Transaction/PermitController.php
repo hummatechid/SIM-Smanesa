@@ -129,6 +129,25 @@ class PermitController extends Controller
     }
 
     /**
+     * Show the form for printed the specified resource.
+     */
+    public function print(Request $request)
+    {
+        $permit = $this->permitRepository->oneConditionOneRelation("id",$request->permit_id,["student"], "first");
+        $user_created = $this->penggunaRepository->getOneByOther("user_id",$permit->created_by);
+        if(!$user_created) $user_created = $this->teacherRepository->getOneByOther("user_id",$permit->created_by);
+        $user_acc = $this->penggunaRepository->getOneByOther("user_id",$permit->accepted_by);
+        if(!$user_acc) $user_acc = $this->teacherRepository->getOneByOther("user_id",$permit->created_by);
+
+        $data = [
+            'permit' => $permit,
+            "user_created" => $user_created,
+            "user_acc" => $user_acc 
+        ];
+        return view('admin.pages.permit.print-permit', $data);
+    }
+
+    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)

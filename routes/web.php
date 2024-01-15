@@ -30,10 +30,3 @@ Auth::routes();
 Route::get('scan-test', function() {
     return view('admin.pages.scanner.scanner');
 })->name('scan-manual');
-
-Route::post('hehe', function(\Illuminate\Http\Request $request) {
-    $data = [
-        'permit' => \App\Models\Permit::where('id', $request->permit_id)->first()
-    ];
-    return view('admin.pages.permit.print-permit', $data);
-})->name('permit.print');
