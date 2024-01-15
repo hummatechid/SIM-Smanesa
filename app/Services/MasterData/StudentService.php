@@ -44,7 +44,7 @@ class StudentService extends BaseService
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('full_name', function($item) {
-                return $item->full_name;
+                return '<a href="'.route('student.show', $item->id).'" class="text-reset">'.$item->full_name.'</a>';
             })->addColumn('nisn', function($item) {
                 return $item->nisn;
             })->addColumn('nipd', function($item) {
@@ -56,7 +56,7 @@ class StudentService extends BaseService
             })->addColumn('action', function($item) {
                 return view('admin.pages.master-data.student.datatable', compact('item'));
 //                return '<button class="btn btn-sm btn-danger btn-detail" data-data="{{ $item }}">Detail</button>';
-            })->rawColumns(['action'])
+            })->rawColumns(['full_name', 'action'])
             ->make(true);
     }
 }

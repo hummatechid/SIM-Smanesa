@@ -304,14 +304,14 @@ class AttendanceService extends BaseService {
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('student', function($item) {
-                return $item->student->full_name . " (".$item->student->nisn.")";
+                return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nisn.')</a>';
             })->addColumn('class', function($item) {
                 return $item->student->nama_rombel;
             })->addColumn('present', function($item) {
                 return $item->status;
             })->addColumn('date', function($item) {
                 return Carbon::parse($item->present_at ?? $item->created_at)->isoFormat('DD-MM-YYYY');
-            })
+            })->rawColumns(['student'])
             ->make(true);
     }
 
@@ -329,7 +329,7 @@ class AttendanceService extends BaseService {
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('student', function($item) {
-                return $item[0]->student->full_name . " (".$item[0]->student->nisn.")";
+                return '<a href="'.route('student.show', $item[0]->student->id).'" class="text-reset">'.$item[0]->student->full_name . ' ('.$item[0]->student->nisn.')</a>';
             })->addColumn('class', function($item) {
                 return $item[0]->student->nama_rombel;
             })->addColumn('present', function($item) {
@@ -348,7 +348,7 @@ class AttendanceService extends BaseService {
                 return $item->filter(function($barang) {
                     return $barang->status == "alpha";
                 })->count();
-            })
+            })->rawColumns(['student'])
             ->make(true);
     }
 }
