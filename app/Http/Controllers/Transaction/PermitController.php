@@ -169,7 +169,7 @@ class PermitController extends Controller
             "updated_by" => $user->id
         ];
 
-        if ($request->status == "accepted") $dataUpdate["accepted_by"] = $user->id;
+        if ($request->status == "accepted" || $request->status == "rejected") $dataUpdate["accepted_by"] = $user->id;
 
         try {
             // store data 
@@ -278,7 +278,7 @@ class PermitController extends Controller
                     "updated_by" => $user->id
                 ];
 
-                if ($request->status == "accepted") $dataUpdate["accepted_by"] = $user->id;
+                if ($request->status == "accepted" || $request->status == "rejected") $dataUpdate["accepted_by"] = $user->id;
 
                 // update data
                 $permit->update($dataUpdate);
@@ -477,7 +477,7 @@ class PermitController extends Controller
             "updated_by" => $request->user_id
         ];
 
-        if ($request->status == "accepted") $data["accepted_by"] = $request->user_id;
+        if ($request->status == "accepted" || $request->status == "rejected") $data["accepted_by"] = $request->user_id;
 
         if ($request->status == "pending") $data["accepted_by"] = null;
 
