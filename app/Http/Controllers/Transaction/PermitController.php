@@ -353,20 +353,11 @@ class PermitController extends Controller
             // get data user created permit
             $user_created = $this->penggunaRepository->getOneById($permit->created_by);
             if (!$user_created) $user_created = $this->teacherRepository->getOneById($permit->created_by);
-
-            // check data user created
-            if (!$user_created) {
-                return response()->json([
-                    "status" => "error",
-                    "messages" => "Data user yang membuat tidak ditemukan",
-                    "data" => null
-                ], 404);
-            } else {
-                $permit->user_created = $user_created;
-            }
-
+            $permit->user_created = $user_created;
+            
             // get data user acepted
-            $user_accepted = $this->penggunaRepository->getOneById($permit->created_by);
+            $user_accepted = $this->penggunaRepository->getOneById($permit->accepted_by);
+            if (!$user_accepted) $user_accepted = $this->teacherRepository->getOneById($permit->accepted_by);
             $permit->user_accepted = $user_accepted;
 
             return response()->json([
