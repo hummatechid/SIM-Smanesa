@@ -20,6 +20,7 @@
                     <th>Nama Siswa</th>
                     <th>Kelas</th>
                     <th>Tanggal</th>
+                    <th>Alasan</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -28,6 +29,7 @@
                     <td>{{ $permit->student->full_name }}</td>
                     <td>{{ $permit->student->nama_rombel }}</td>
                     <td>{{ $carbon::parse($permit->created_at)->locale('id_ID')->isoFormat('DD MMMM YYYY HH:mm') }}</td>
+                    <td>{{ $permit->reason }}</td>
                     <td>{{ $permit->status }}</td>
                 </tr>
             </tbody>

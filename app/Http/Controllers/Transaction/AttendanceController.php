@@ -92,7 +92,7 @@ class AttendanceController extends Controller
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('student', function($item) {
-                return $item->student->full_name;
+                return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nisn.')</a>';
             })->addColumn('class', function($item) {
                 return $item->student->nama_rombel;
             })->addColumn('present_at', function($item) {
@@ -116,7 +116,7 @@ class AttendanceController extends Controller
             })->addColumn('action', function($item) {
                 return view('admin.pages.attendance.datatable-presence', ['item' => $item, 'student' => $item->student]);
             })
-            ->rawColumns(['status', 'action'])
+            ->rawColumns(['status', 'action', 'student'])
             ->make(true);
     }
 
@@ -128,7 +128,7 @@ class AttendanceController extends Controller
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('student', function($item) {
-                return $item->student->full_name;
+                return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nisn.')</a>';
             })->addColumn('class', function($item) {
                 return $item->student->nama_rombel;
             })->addColumn('present_at', function($item) {
@@ -152,7 +152,7 @@ class AttendanceController extends Controller
             })->addColumn('action', function($item) {
                 return view('admin.pages.attendance.datatable-presence', ['item' => $item, 'student' => $item->student]);
             })
-            ->rawColumns(['status'])
+            ->rawColumns(['status', 'student'])
             ->make(true);
     }
     
@@ -164,7 +164,7 @@ class AttendanceController extends Controller
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('student', function($item) {
-                return $item->student->full_name;
+                return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nisn.')</a>';
             })->addColumn('status', function($item) {
                 if($item->status == "izin") {
                     return '<span class="badge bg-primary">Izin</span>';
@@ -180,7 +180,7 @@ class AttendanceController extends Controller
                     return "-";
                 }
             })
-            ->rawColumns(['status'])
+            ->rawColumns(['status', 'student'])
             ->make(true);
     }
 

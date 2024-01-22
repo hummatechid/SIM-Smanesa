@@ -41,7 +41,8 @@ class PermitService extends BaseService {
                 return '<input type="checkbox" name="permit" data-response="'.$item->status.'" value="'.$item->id.'" />';
             })
             ->addColumn('student', function($item) {
-                return $item->student->full_name;
+                
+                return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nisn.')</a>';
             })->addColumn('reason', function($item) {
                 return $item->reason;
             })->addColumn('date', function($item) {
@@ -60,7 +61,7 @@ class PermitService extends BaseService {
             })->addColumn('action', function($item) {
                 return view('admin.pages.permit.datatables-action', ['item' => $item]);
             })
-            ->rawColumns(['action', 'status', 'selection'])
+            ->rawColumns(['action', 'status', 'selection', 'student'])
             ->make(true);
     }
 }
