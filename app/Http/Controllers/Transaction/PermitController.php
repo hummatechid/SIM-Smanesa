@@ -340,7 +340,7 @@ class PermitController extends Controller
         try {
             //set relationship;
             $relation = ["student"];
-            $permit = $this->permitRepository->relationship($relation, "first");
+            $permit = $this->permitRepository->oneConditionOneRelation("id",$id,$relation, "first");
 
             if (!$permit) {
                 return response()->json([
