@@ -349,16 +349,23 @@ class PermitController extends Controller
                     "data" => null
                 ], 404);
             }
-
             // get data user created permit
-            $user_created = $this->penggunaRepository->getOneById($permit->created_by);
-            if (!$user_created) $user_created = $this->teacherRepository->getOneById($permit->created_by);
-            $permit->user_created = $user_created;
+            if($permit->created_by){
+                $user_created = $this->penggunaRepository->getOneByOther("user_id",$permit->created_by);
+                if (!$user_created) $user_created = $this->teacherRepository->getOneByOther("user_id",$permit->created_by);
+                $permit->user_created = $user_created;
+            }else{
+                $permit->user_created = null;
+            }
             
             // get data user acepted
-            $user_accepted = $this->penggunaRepository->getOneById($permit->accepted_by);
-            if (!$user_accepted) $user_accepted = $this->teacherRepository->getOneById($permit->accepted_by);
-            $permit->user_accepted = $user_accepted;
+            if($permit->updated_by){
+                $user_accepted = $this->penggunaRepository->getOneByOther("user_id",$permit->accepted_by);
+                if (!$user_accepted) $user_accepted = $this->teacherRepository->getOneByOther("user_id",$permit->accepted_by);
+                $permit->user_accepted = $user_accepted;
+            }else {
+                $permit->user_accepted = null;
+            }
 
             return response()->json([
                 "status" => "success",
@@ -382,6 +389,14 @@ class PermitController extends Controller
     public function studentList(Request $request)
     {
         // get data student
+        if(!$request->student_id){
+            return response()->json([
+                "status" => "error",
+                "messages" => "Id siswa harus tercantum",
+                "data" => null
+            ], 400);
+        }
+
         $student = $this->studentRepository->getOneById($request->student_id);
         if (!$student) {
             return response()->json([
