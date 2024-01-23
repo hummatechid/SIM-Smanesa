@@ -386,18 +386,9 @@ class PermitController extends Controller
      * Student detail list permit
      *  
      * */
-    public function studentList(Request $request)
+    public function studentList(Request $request, string $student_id)
     {
-        // get data student
-        if(!$request->student_id){
-            return response()->json([
-                "status" => "error",
-                "messages" => "Id siswa harus tercantum",
-                "data" => null
-            ], 400);
-        }
-
-        $student = $this->studentRepository->getOneById($request->student_id);
+        $student = $this->studentRepository->getOneById($student_id);
         if (!$student) {
             return response()->json([
                 "status" => "error",
@@ -410,7 +401,7 @@ class PermitController extends Controller
 
             //set relationship get data permit
             $relation = [];
-            $permit = $this->permitRepository->oneConditionOneRelation("student_id", $request->student_id, $relation, "get");
+            $permit = $this->permitRepository->oneConditionOneRelation("student_id", $student_id, $relation, "get");
 
             $student->permit = $permit;
 
