@@ -46,9 +46,13 @@ class PenggunaService extends BaseService {
                 return ($item->phone_number || !$item->phone_number == "" ? $item->phone_number : '-');
             })->addColumn('action', function($item) {
                 $button = '<div class="d-flex gap-2 justify-content-start align-items-center">
-                    <a href="'.route('user.show',$item->id).'" class="btn btn-sm btn-primary">Detail</a>';
+                    <a href="'.route('user.show',$item->id).'" class="btn btn-sm btn-primary" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Detail" data-bs-placement="top">
+                    <i class="bi bi-list-ul"></i>
+                    </a>';
                 if(auth()->user()->hasRole('superadmin')) {
-                    $button .= '<button class="btn btn-sm btn-danger delete-data" data-id="'.$item->id.'">Hapus</button>';
+                    $button .= '<button class="btn btn-sm btn-danger delete-data" data-id="'.$item->id.'" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Hapus" data-bs-placement="top">
+                    <i class="bi bi-trash"></i>
+                    </button>';
                 }
                 $button .= '</div>';
                 return $button;
