@@ -45,6 +45,12 @@ class AttendanceController extends Controller
         return view('admin.pages.attendance.index', $data);
     }
 
+    public function timeSetting()
+    {
+        $data = $this->attendanceService->getPageData('attendance-setting', '', [], [], "Atur Jam Hadir & Pulang");
+        return view('admin.pages.attendance.setting', $data);
+    }
+
     public function presence()
     {
         $students = $this->studentRepository->getAll();
@@ -132,7 +138,7 @@ class AttendanceController extends Controller
             })->addColumn('class', function($item) {
                 return $item->student->nama_rombel;
             })->addColumn('present_at', function($item) {
-                return Carbon::parse($item->present_at)->format('H:i');
+                return Carbon::parse($item->present_at)->format('d/m/Y H:i');
             })->addColumn('status', function($item) {
                 $masuk = Carbon::parse($item->present_at)->format('H:i');
                 // return $item->status;

@@ -166,6 +166,12 @@
                             <a href="{{ url('attendance/report') }}" class="submenu-link">Laporan Presensi</a>
 
                         </li>
+
+                        @hasrole(['superadmin', 'guru', 'staf'])
+                        <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'attendance-setting' ? 'active' : '' }}">
+                            <a href="{{ url('attendance/time-setting') }}" class="submenu-link">Atur Jam Hadir & Pulang</a>
+                        </li>
+                        @endhasrole
                     </ul>
 
 
