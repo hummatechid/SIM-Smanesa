@@ -49,7 +49,7 @@ class ViolationService extends BaseService {
             })->addColumn('action', function($item) {
                 return view('admin.pages.violation.datatables-action', ['item' => $item]);
             })
-            ->rawColumns(['action', 'student'])
+            ->rawColumns(['action', 'name'])
             ->make(true);
     }
 
