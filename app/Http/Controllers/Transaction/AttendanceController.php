@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Transaction;
 
 use App\Helpers\UploadImage;
 use App\Http\Controllers\Controller;
+use App\Repositories\Settings\GeneralSettingRepository;
 use App\Repositories\MasterTransaction\AttendanceRepository;
 use App\Repositories\StudentRepository;
 use Illuminate\Http\Request;
@@ -16,13 +17,15 @@ class AttendanceController extends Controller
 {
     use UploadImage;
 
-    private $attendanceRepository, $attendanceService, $studentRepository;
+    private $attendanceRepository, $attendanceService, $studentRepository, $generalSettingRepository;
 
-    public function __construct(AttendanceService $attendanceService, AttendanceRepository $attendanceRepository, StudentRepository $studentRepository)
+    public function __construct(AttendanceService $attendanceService, AttendanceRepository $attendanceRepository, StudentRepository $studentRepository,
+    GeneralSettingRepository $generalSettingRepository)
     {
         $this->attendanceService = $attendanceService;
         $this->attendanceRepository = $attendanceRepository;
         $this->studentRepository = $studentRepository;
+        $this->generalSettingRepository = $generalSettingRepository;
     }
 
     /**
@@ -270,6 +273,28 @@ class AttendanceController extends Controller
                 $absensi = $this->attendanceService->storeAttendance($request->nipd, $request->status);
                 return $absensi;
         }
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function updateSetting(Request $request)
+    {
+        if(!$request->attendance) return redirect()->back()->with("error","Jam kedatangan harus di inputkan");
+        if(!$request->departure) return redirect()->back()->with("error","Jam kepulangan harus di inputkan");
+
+        $data = [
+            "time_start" => $request->attendance,
+            "time_end" => $request->departure,
+        ];
+        $settings = $this->generalSettingRepository->getDataDateSetting(now());
+        if($settings){
+            $settings->update($data);
+        }else {
+            $data["date"] = $request->date;
+            $this->generalSettingRepository->create($data);
+        }
+        return redirect()->back()->with("success","Berhasil set jam kedatangan dan kepulangan pada tanggal ".$request->date);
     }
 
     /**
