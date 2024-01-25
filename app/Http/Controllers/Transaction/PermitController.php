@@ -89,21 +89,21 @@ class PermitController extends Controller
         try {
             // store data 
             $students = [];
-            foreach($request->student_id as $student_id){
+            foreach ($request->student_id as $student_id) {
                 $validateData["student_id"] = $student_id;
                 $selected = $this->studentRepository->getOneById($student_id);
-                $students[] = $selected->full_name. " | " . $selected->nama_rombel;
+                $students[] = $selected->full_name . " | " . $selected->nama_rombel;
                 $this->permitRepository->create($validateData);
             }
 
             // send message
             $token_success = [];
-            foreach($pimpinan as $pimpin){
-                foreach(explode(",",$pimpin->device_token) as $device_token){
-                    if(!in_array($device_token, $token_success)){
-                        foreach($students as $student) $pimpin->notify(new PermitNotification($student));
+            foreach ($pimpinan as $pimpin) {
+                foreach (explode(",", $pimpin->device_token) as $device_token) {
+                    if (!in_array($device_token, $token_success)) {
+                        foreach ($students as $student) $pimpin->notify(new PermitNotification($student));
                         $token_success[] = $device_token;
-                    } 
+                    }
                 }
             }
 
@@ -133,16 +133,16 @@ class PermitController extends Controller
      */
     public function print(Request $request)
     {
-        $permit = $this->permitRepository->oneConditionOneRelation("id",$request->permit_id,["student"], "first");
-        $user_created = $this->penggunaRepository->getOneByOther("user_id",$permit->created_by);
-        if(!$user_created) $user_created = $this->teacherRepository->getOneByOther("user_id",$permit->created_by);
-        $user_acc = $this->penggunaRepository->getOneByOther("user_id",$permit->accepted_by);
-        if(!$user_acc) $user_acc = $this->teacherRepository->getOneByOther("user_id",$permit->created_by);
+        $permit = $this->permitRepository->oneConditionOneRelation("id", $request->permit_id, ["student"], "first");
+        $user_created = $this->penggunaRepository->getOneByOther("user_id", $permit->created_by);
+        if (!$user_created) $user_created = $this->teacherRepository->getOneByOther("user_id", $permit->created_by);
+        $user_acc = $this->penggunaRepository->getOneByOther("user_id", $permit->accepted_by);
+        if (!$user_acc) $user_acc = $this->teacherRepository->getOneByOther("user_id", $permit->created_by);
 
         $data = [
             'permit' => $permit,
             "user_created" => $user_created,
-            "user_acc" => $user_acc 
+            "user_acc" => $user_acc
         ];
         return view('admin.pages.permit.print-permit', $data);
     }
@@ -340,7 +340,7 @@ class PermitController extends Controller
         try {
             //set relationship;
             $relation = ["student"];
-            $permit = $this->permitRepository->oneConditionOneRelation("id",$id,$relation, "first");
+            $permit = $this->permitRepository->oneConditionOneRelation("id", $id, $relation, "first");
 
             if (!$permit) {
                 return response()->json([
@@ -350,20 +350,20 @@ class PermitController extends Controller
                 ], 404);
             }
             // get data user created permit
-            if($permit->created_by){
-                $user_created = $this->penggunaRepository->getOneByOther("user_id",$permit->created_by);
-                if (!$user_created) $user_created = $this->teacherRepository->getOneByOther("user_id",$permit->created_by);
+            if ($permit->created_by) {
+                $user_created = $this->penggunaRepository->getOneByOther("user_id", $permit->created_by);
+                if (!$user_created) $user_created = $this->teacherRepository->getOneByOther("user_id", $permit->created_by);
                 $permit->user_created = $user_created;
-            }else{
+            } else {
                 $permit->user_created = null;
             }
-            
+
             // get data user acepted
-            if($permit->updated_by){
-                $user_accepted = $this->penggunaRepository->getOneByOther("user_id",$permit->accepted_by);
-                if (!$user_accepted) $user_accepted = $this->teacherRepository->getOneByOther("user_id",$permit->accepted_by);
+            if ($permit->updated_by) {
+                $user_accepted = $this->penggunaRepository->getOneByOther("user_id", $permit->accepted_by);
+                if (!$user_accepted) $user_accepted = $this->teacherRepository->getOneByOther("user_id", $permit->accepted_by);
                 $permit->user_accepted = $user_accepted;
-            }else {
+            } else {
                 $permit->user_accepted = null;
             }
 
@@ -436,7 +436,7 @@ class PermitController extends Controller
         }
 
         // check request status
-        $status = ["pending","accepted", "rejected", "back"];
+        $status = ["pending", "accepted", "rejected", "back"];
         if (!$request->status) {
             return response()->json([
                 "status" => "error",
@@ -483,7 +483,7 @@ class PermitController extends Controller
             ], 404);
         }
 
-        if($request->notes) {
+        if ($request->notes) {
             $data["notes"] = $request->notes;
         }
 
