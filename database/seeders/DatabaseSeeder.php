@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
             PenggunaSeeder::class,
             ViolationTypeSeeder::class,
             TreatmentSeeder::class,
-            StudentSeeder::class
+            StudentSeeder::class,
+            GeneralSettingSeeder::class
         ]);
     }
 }

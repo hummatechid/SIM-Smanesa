@@ -26,6 +26,7 @@
             <h5 class="card-title">Atuh Jam Hadir & Pulang</h5>
         </div>
         <div class="card-body">
+            <x-session-alert />
             @csrf
             <div class="form-group mb-3">
                 <label for="date" class="form-label">Tanggal</label>

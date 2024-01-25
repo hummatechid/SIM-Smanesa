@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Transaction;
 
 use App\Helpers\UploadImage;
 use App\Http\Controllers\Controller;
+use App\Repositories\Settings\GeneralSettingRepository;
 use App\Repositories\MasterTransaction\AttendanceRepository;
 use App\Repositories\StudentRepository;
 use Illuminate\Http\Request;
@@ -16,13 +17,15 @@ class AttendanceController extends Controller
 {
     use UploadImage;
 
-    private $attendanceRepository, $attendanceService, $studentRepository;
+    private $attendanceRepository, $attendanceService, $studentRepository, $generalSettingRepository;
 
-    public function __construct(AttendanceService $attendanceService, AttendanceRepository $attendanceRepository, StudentRepository $studentRepository)
+    public function __construct(AttendanceService $attendanceService, AttendanceRepository $attendanceRepository, StudentRepository $studentRepository,
+    GeneralSettingRepository $generalSettingRepository)
     {
         $this->attendanceService = $attendanceService;
         $this->attendanceRepository = $attendanceRepository;
         $this->studentRepository = $studentRepository;
+        $this->generalSettingRepository = $generalSettingRepository;
     }
 
     /**
@@ -95,6 +98,8 @@ class AttendanceController extends Controller
             return $item->present_at;
         })->sortByDesc('present_at');
 
+        $settings = $this->generalSettingRepository->getDataDateSetting(now());
+
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('student', function($item) {
@@ -103,11 +108,11 @@ class AttendanceController extends Controller
                 return $item->student->nama_rombel;
             })->addColumn('present_at', function($item) {
                 return Carbon::parse($item->present_at)->format('H:i');
-            })->addColumn('status', function($item) {
+            })->addColumn('status', function($item) use ($settings) {
                 $masuk = Carbon::parse($item->present_at)->format('H:i');
                 // return $item->status;
                 if($item->status == "masuk"){
-                    if($masuk < '07:00') {
+                    if($masuk < ($settings ? $settings->start_time : "07:15")) {
                         return '<span class="badge bg-success">Tepat Waktu</span>';
                     } else {
                         return '<span class="badge bg-secondary">Terlambat</span>';
@@ -131,6 +136,8 @@ class AttendanceController extends Controller
         $data = $this->attendanceRepository->getTodayAttendance(10);
         $data = $data->sortByDesc("present_at");
 
+        $settings = $this->generalSettingRepository->getDataDateSetting(now());
+
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('student', function($item) {
@@ -139,11 +146,11 @@ class AttendanceController extends Controller
                 return $item->student->nama_rombel;
             })->addColumn('present_at', function($item) {
                 return Carbon::parse($item->present_at)->format('d/m/Y H:i');
-            })->addColumn('status', function($item) {
+            })->addColumn('status', function($item) use ($settings){
                 $masuk = Carbon::parse($item->present_at)->format('H:i');
                 // return $item->status;
                 if($item->status == "masuk"){
-                    if($masuk < '07:00') {
+                if($masuk < ($settings ? $settings->start_time : "07:15")) {
                         return '<span class="badge bg-success">Tepat Waktu</span>';
                     } else {
                         return '<span class="badge bg-secondary">Terlambat</span>';
@@ -270,6 +277,28 @@ class AttendanceController extends Controller
                 $absensi = $this->attendanceService->storeAttendance($request->nipd, $request->status);
                 return $absensi;
         }
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function updateSetting(Request $request)
+    {
+        if(!$request->attendance) return redirect()->back()->with("error","Jam kedatangan harus di inputkan");
+        if(!$request->departure) return redirect()->back()->with("error","Jam kepulangan harus di inputkan");
+
+        $data = [
+            "time_start" => $request->attendance,
+            "time_end" => $request->departure,
+        ];
+        $settings = $this->generalSettingRepository->getDataDateSetting(now());
+        if($settings){
+            $settings->update($data);
+        }else {
+            $data["date"] = $request->date;
+            $this->generalSettingRepository->create($data);
+        }
+        return redirect()->back()->with("success","Berhasil set jam kedatangan dan kepulangan pada tanggal ".$request->date);
     }
 
     /**
@@ -465,9 +494,11 @@ class AttendanceController extends Controller
         if($request->status) $status = $request->status;
         else $status = "masuk";
         
+        $settings = $this->generalSettingRepository->getDataDateSetting(now());
+
         // if have status validation
         if($request->time) $time = $request->time;
-        else $time = "07:00";
+        else $time = ($settings ? $settings->start_time : "07:15");
 
         // date now
         $now = date('Y-m-d');
@@ -497,10 +528,12 @@ class AttendanceController extends Controller
         // if have status validation
         if($request->status) $status = $request->status;
         else $status = "masuk";
+
+        $settings = $this->generalSettingRepository->getDataDateSetting(now());
         
         // if have status validation
         if($request->time) $time = $request->time;
-        else $time = "07:00";
+        else $time = ($settings ? $settings->start_time : "07:15");
 
         // get data
         $data = $this->attendanceRepository->oneNotNullConditionOneRelation("present_at",["student"]);
