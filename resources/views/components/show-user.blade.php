@@ -30,12 +30,12 @@
                         @if(auth()->user()->hasRole('superadmin') && $formFor == 'guru' && !$dataUser->user->hasRole('pimpinan'))
                         <form action="{{ route('teacher.assign-role', $dataUser->id) }}" method="post">
                             @csrf
-                            <button type="submit" class="btn btn-primary">Jadikan Pimpinan</button>
+                            <button type="submit" class="btn btn-primary">Jadikan Waka</button>
                         </form>
                         @elseif(auth()->user()->hasRole('superadmin') && $formFor == 'guru' && $dataUser->user->hasRole('pimpinan'))
                         <form action="{{ route('teacher.remove-role', $dataUser->id) }}" method="post">
                             @csrf
-                            <button type="submit" class="btn btn-primary">Hapus Pimpinan</button>
+                            <button type="submit" class="btn btn-primary">Hapus Waka</button>
                         </form>
                         @endif
                     </div>

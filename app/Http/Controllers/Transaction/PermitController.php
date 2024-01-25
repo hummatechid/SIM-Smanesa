@@ -129,6 +129,25 @@ class PermitController extends Controller
     }
 
     /**
+     * Show the form for printed the specified resource.
+     */
+    public function print(Request $request)
+    {
+        $permit = $this->permitRepository->oneConditionOneRelation("id",$request->permit_id,["student"], "first");
+        $user_created = $this->penggunaRepository->getOneByOther("user_id",$permit->created_by);
+        if(!$user_created) $user_created = $this->teacherRepository->getOneByOther("user_id",$permit->created_by);
+        $user_acc = $this->penggunaRepository->getOneByOther("user_id",$permit->accepted_by);
+        if(!$user_acc) $user_acc = $this->teacherRepository->getOneByOther("user_id",$permit->created_by);
+
+        $data = [
+            'permit' => $permit,
+            "user_created" => $user_created,
+            "user_acc" => $user_acc 
+        ];
+        return view('admin.pages.permit.print-permit', $data);
+    }
+
+    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
@@ -150,7 +169,7 @@ class PermitController extends Controller
             "updated_by" => $user->id
         ];
 
-        if ($request->status == "accepted") $dataUpdate["accepted_by"] = $user->id;
+        if ($request->status == "accepted" || $request->status == "rejected") $dataUpdate["accepted_by"] = $user->id;
 
         try {
             // store data 
@@ -259,7 +278,7 @@ class PermitController extends Controller
                     "updated_by" => $user->id
                 ];
 
-                if ($request->status == "accepted") $dataUpdate["accepted_by"] = $user->id;
+                if ($request->status == "accepted" || $request->status == "rejected") $dataUpdate["accepted_by"] = $user->id;
 
                 // update data
                 $permit->update($dataUpdate);
@@ -321,7 +340,7 @@ class PermitController extends Controller
         try {
             //set relationship;
             $relation = ["student"];
-            $permit = $this->permitRepository->relationship($relation, "first");
+            $permit = $this->permitRepository->oneConditionOneRelation("id",$id,$relation, "first");
 
             if (!$permit) {
                 return response()->json([
@@ -330,25 +349,23 @@ class PermitController extends Controller
                     "data" => null
                 ], 404);
             }
-
             // get data user created permit
-            $user_created = $this->penggunaRepository->getOneById($permit->created_by);
-            if (!$user_created) $user_created = $this->teacherRepository->getOneById($permit->created_by);
-
-            // check data user created
-            if (!$user_created) {
-                return response()->json([
-                    "status" => "error",
-                    "messages" => "Data user yang membuat tidak ditemukan",
-                    "data" => null
-                ], 404);
-            } else {
+            if($permit->created_by){
+                $user_created = $this->penggunaRepository->getOneByOther("user_id",$permit->created_by);
+                if (!$user_created) $user_created = $this->teacherRepository->getOneByOther("user_id",$permit->created_by);
                 $permit->user_created = $user_created;
+            }else{
+                $permit->user_created = null;
             }
-
+            
             // get data user acepted
-            $user_accepted = $this->penggunaRepository->getOneById($permit->created_by);
-            $permit->user_accepted = $user_accepted;
+            if($permit->updated_by){
+                $user_accepted = $this->penggunaRepository->getOneByOther("user_id",$permit->accepted_by);
+                if (!$user_accepted) $user_accepted = $this->teacherRepository->getOneByOther("user_id",$permit->accepted_by);
+                $permit->user_accepted = $user_accepted;
+            }else {
+                $permit->user_accepted = null;
+            }
 
             return response()->json([
                 "status" => "success",
@@ -369,10 +386,9 @@ class PermitController extends Controller
      * Student detail list permit
      *  
      * */
-    public function studentList(Request $request)
+    public function studentList(Request $request, string $student_id)
     {
-        // get data student
-        $student = $this->studentRepository->getOneById($request->student_id);
+        $student = $this->studentRepository->getOneById($student_id);
         if (!$student) {
             return response()->json([
                 "status" => "error",
@@ -385,7 +401,7 @@ class PermitController extends Controller
 
             //set relationship get data permit
             $relation = [];
-            $permit = $this->permitRepository->oneConditionOneRelation("student_id", $request->student_id, $relation, "get");
+            $permit = $this->permitRepository->oneConditionOneRelation("student_id", $student_id, $relation, "get");
 
             $student->permit = $permit;
 
@@ -420,7 +436,7 @@ class PermitController extends Controller
         }
 
         // check request status
-        $status = ["accepted", "rejected", "back"];
+        $status = ["pending","accepted", "rejected", "back"];
         if (!$request->status) {
             return response()->json([
                 "status" => "error",
@@ -452,7 +468,9 @@ class PermitController extends Controller
             "updated_by" => $request->user_id
         ];
 
-        if ($request->status == "accepted") $data["accepted_by"] = $request->user_id;
+        if ($request->status == "accepted" || $request->status == "rejected") $data["accepted_by"] = $request->user_id;
+
+        if ($request->status == "pending") $data["accepted_by"] = null;
 
         $permit = $this->permitRepository->getOneById($request->id);
 
@@ -463,6 +481,10 @@ class PermitController extends Controller
                 "messages" => "Surat izin tidak ditemukan",
                 "data" => null
             ], 404);
+        }
+
+        if($request->notes) {
+            $data["notes"] = $request->notes;
         }
 
         // update data

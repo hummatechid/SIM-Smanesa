@@ -55,7 +55,7 @@
         card-title="Tabel Data Kehadiran Terbaru"
         data-url="{{ route('attendance.get-limit-datatables') }}"
         :table-columns="$data_column"
-        default-order="2"
+        default-order="3"
         arrange-order="desc"
         :pagging-table="false"
         :searchable-table="false"

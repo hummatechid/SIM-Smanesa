@@ -29,7 +29,7 @@
                     data-bs-toggle="modal"
                     data-bs-target="#staticBackdrop"
                 >
-                    Sinkronisasi Guru
+                    Sinkronisasi GTK
                 </button>
 
                 <!--Basic Modal -->
@@ -50,7 +50,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="myModalLabel1">
-                                    Sinkronisasi Guru Dapodik
+                                    Sinkronisasi GTK Dapodik
                                 </h5>
                             </div>
                             <div class="modal-body">
@@ -78,12 +78,12 @@
 
     @php $data_column = [ "full_name" => "Nama", "email" => "Email / NIK",
     "phone_number" => "Nomor", "action" => "Aksi" ]; $custom_group = [ "status"
-    => [ "title" => "Status", "options" => [ "" => "Semua", 1 => "Dari Dapodik",
-    0 => "Luar Dapodik", ] ], "role" => [ "title" => "Role", "options" => [ ""
-    => "Semua", "pimpinan" => "Pimpinan", "non-pimpinan" => "Bukan Pimpinan", ]
+    => [ "title" => "Status", "options" => [ "semua" => "Semua", 1 => "Dari
+    Dapodik", 0 => "Luar Dapodik", ] ], "role" => [ "title" => "Role", "options"
+    => [ "" => "Semua", "pimpinan" => "Waka", "non-pimpinan" => "Bukan Waka", ]
     ] ] @endphp @hasrole('superadmin')
     <x-datatable
-        card-title="Tabel Guru"
+        card-title="Tabel GTK"
         data-url="{{ route('teacher.get-main-datatables') }}"
         :table-columns="$data_column"
         delete-option="teacher/soft-delete/deleted_id"
@@ -92,7 +92,7 @@
     />
     @else
     <x-datatable
-        card-title="Tabel Guru"
+        card-title="Tabel GTK"
         data-url="{{ route('teacher.get-main-datatables') }}"
         :table-columns="$data_column"
         :with-custom-groups="$custom_group"

@@ -23,9 +23,9 @@
 
     @php
         if(auth()->user()->hasRole('superadmin')) {
-            $data_column = ["name" => "Pelanggar", "violation" => "Pelanggaran", "score" => "Poin", "date" => 'Tanggal', 'action' => 'Aksi'];
+            $data_column = ["name" => "Pelanggar", "violation" => "Pelanggaran", "score" => "Poin", "date" => 'Tanggal', "user_created" => "Dibuat Oleh", "user_updated" => "Diubah Oleh" , 'action' => 'Aksi'];
         } else {
-            $data_column = ["name" => "Pelanggar", "violation" => "Pelanggaran", "score" => "Poin", "date" => 'Tanggal'];
+            $data_column = ["name" => "Pelanggar", "violation" => "Pelanggaran", "score" => "Poin", "date" => 'Tanggal', "user_created" => "Dibuat Oleh", "user_updated" => "Diubah Oleh" ];
         }
     @endphp
     <x-datatable

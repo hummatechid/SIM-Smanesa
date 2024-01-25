@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\{StudentRepository, ViolationTypeRepository};
 use App\Repositories\MasterTransaction\ViolationRepository;
 use App\Services\MasterTransaction\ViolationService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -38,8 +39,8 @@ class ViolationController extends Controller
 
     public function getDatatablesData(Request $request)
     {
-        if($request->student_id) $data = $this->violationRepository->OneConditionOneRelation("student_id",str_replace("?","",$request->student_id),["violationType","student"]);
-        else $data = $this->violationRepository->relationship(["student","violationType"]);
+        if($request->student_id) $data = $this->violationRepository->OneConditionOneRelation("student_id",str_replace("?","",$request->student_id),["violationType","student","user_created","user_updated"]);
+        else $data = $this->violationRepository->relationship(["student","violationType","user_created","user_updated"]);
 
         return $this->violationService->getDataDatatable($data);
     }
@@ -56,14 +57,17 @@ class ViolationController extends Controller
                 $data = $this->violationRepository->getDataYears($request->year,["violationType","student"]);
                 break;
             case "custom":
-                $check_date = explode("-",$request->date);
-                if(count($check_date) > 3){
+                $check_date = explode("s/d",$request->date);
+                if(count($check_date) > 1){
                     if(!$request->date){
                         $date_from = date('Y-m-d');
                         $date_to = date('Y-m-d');
                     }else {
-                        $date_from = $check_date[0]."-".$check_date[1]."-".$check_date[2];
-                        $date_to = $check_date[3]."-".$check_date[4]."-".$check_date[5];
+                        $date_from = Carbon::parse($check_date[0])->format('Y-m-d');
+                        $date_to = Carbon::parse($check_date[1])->hour(23)
+                        ->minute(59)
+                        ->second(0)
+                        ->format('Y-m-d H:i:s');
                     }
                     $data = $this->violationRepository->getDataCustomDate($date_from,$date_to,["student"]);
                 }else if(count($check_date) == 3){
@@ -131,8 +135,10 @@ class ViolationController extends Controller
             if(!$value) return redirect()->back()->with("error","Data pelanggaran tidak boleh ada yang kosong");
         }
 
-        DB::beginTransaction();
+        $user = auth()->user();
+
         try{
+            DB::beginTransaction();
             // foreach data student
             foreach($request->student_id as $student_id){
                 // set default score
@@ -153,7 +159,8 @@ class ViolationController extends Controller
                     $data = [
                         "student_id" => $student_id,
                         "violation_type_id" => $violation_type->id,
-                        "score" => $scoreViolation
+                        "score" => $scoreViolation,
+                        "created_by" => $user->id
                     ];
     
                     // save data violation
@@ -221,6 +228,8 @@ class ViolationController extends Controller
         $student = $this->studentRepository->getOneById($violation->student_id);
         if(!$student) return redirect()->back()->with("error","Siswa tidak ditemukan");
 
+        $user = auth()->user();
+
         // update new score
         $student->score -= $violation->score;
         $student->save();
@@ -233,6 +242,7 @@ class ViolationController extends Controller
         $violation->violation_type_id = $request->violation_type_id;
         $violation->student_id = $request->student_id;
         $violation->score = $selected_violation->score;
+        $violation->updated_by = $user->id;
         
         // update score new student
         $selected_student->score += $selected_violation->score;

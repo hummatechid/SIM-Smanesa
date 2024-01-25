@@ -3,6 +3,8 @@
 namespace App\Services\MasterTransaction;
 
 use App\Repositories\MasterTransaction\ViolationRepository;
+use App\Repositories\PenggunaRepository;
+use App\Repositories\TeacherRepository;
 use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\Facades\DataTables;
 use App\Services\BaseService;
@@ -10,10 +12,13 @@ use Carbon\Carbon;
 use stdClass;
 
 class ViolationService extends BaseService {
+    private $teacherRepository, $penggunaRepository;
 
-    public function __construct(ViolationRepository $violationRepository)
+    public function __construct(ViolationRepository $violationRepository, TeacherRepository $teacherRepository, PenggunaRepository $penggunaRepository)
     {
         $this->repository = $violationRepository;
+        $this->teacherRepository = $teacherRepository;
+        $this->penggunaRepository = $penggunaRepository;
         $this->pageTitle = "Pelanggaran";
         $this->mainUrl = "violation";
         $this->mainMenu = "violation";
@@ -30,17 +35,21 @@ class ViolationService extends BaseService {
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('name', function($item) {
-                return $item->student->full_name;
+                return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nisn.')</a>';
             })->addColumn('violation', function($item) {
                 return $item->violationType->name;
             })->addColumn('phone_number', function($item) {
                 return $item->score;
             })->addColumn('date', function($item) {
                 return Carbon::parse($item->created_at)->isoFormat('DD-MM-YYYY');
+            })->addColumn('user_created', function($item) {
+                return $item->user_created ? $item->user_created->full_name : "-";
+            })->addColumn('user_updated', function($item) {
+                return $item->user_updated ? $item->user_updated->full_name : "-";
             })->addColumn('action', function($item) {
                 return view('admin.pages.violation.datatables-action', ['item' => $item]);
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action', 'name'])
             ->make(true);
     }
 
@@ -55,14 +64,14 @@ class ViolationService extends BaseService {
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('name', function($item) {
-                return $item->student->full_name . "(".$item->student->nisn.") | ".$item->student->nama_rombel;
+                return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nisn.') | '.$item->student->nama_rombel.'</a>';
             })->addColumn('violation', function($item) {
                 return $item->violationType->name;
             })->addColumn('score', function($item) {
                 return $item->score;
             })->addColumn('date', function($item) {
                 return Carbon::parse($item->created_at)->isoFormat('DD-MM-YYYY');
-            })
+            })->rawColumns(['name'])
             ->make(true);
     }
 
@@ -80,7 +89,7 @@ class ViolationService extends BaseService {
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('name', function($item) {
-                return $item[0]->student->full_name . "(".$item[0]->student->nisn.")";
+                return '<a href="'.route('student.show', $item[0]->student->id).'" class="text-reset">'.$item[0]->student->full_name . ' ('.$item[0]->student->nisn.')</a>';
             })->addColumn('class', function($item) {
                 return $item[0]->student->nama_rombel;
             })->addColumn('violation_score', function($item) {
@@ -89,7 +98,7 @@ class ViolationService extends BaseService {
                 return count($item);
             })->addColumn('action', function($item) {
                 return view('admin.pages.violation.datatables-report-action', ['item' => $item[0]]);
-            })->rawColumns(['action'])
+            })->rawColumns(['action', 'name'])
             ->make(true);
     }
 

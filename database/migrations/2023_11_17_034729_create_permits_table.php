@@ -19,6 +19,7 @@ return new class extends Migration
             $table->uuid('updated_by')->nullable();
             $table->uuid('accepted_by')->nullable();
             $table->string('reason');
+            $table->string('notes')->nullable();
             $table->string('status');
             $table->dateTime('deleted_at')->nullable();
             $table->timestamps();

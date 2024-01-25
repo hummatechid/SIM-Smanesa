@@ -23,8 +23,8 @@ class TeacherRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "nip" => "required",
-            "nik" => "nullable",
+            "nik" => "required",
+            "nip" => "nullable",
             "nuptk" => "nullable",
             "full_name" => "required",
             'gender' => 'required|in:Laki-laki,Perempuan',

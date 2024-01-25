@@ -45,6 +45,12 @@ class AttendanceController extends Controller
         return view('admin.pages.attendance.index', $data);
     }
 
+    public function timeSetting()
+    {
+        $data = $this->attendanceService->getPageData('attendance-setting', '', [], [], "Atur Jam Hadir & Pulang");
+        return view('admin.pages.attendance.setting', $data);
+    }
+
     public function presence()
     {
         $students = $this->studentRepository->getAll();
@@ -57,6 +63,12 @@ class AttendanceController extends Controller
     {
         $data = $this->attendanceService->getPageData('attendance-scan', 'Scan Kehadiran', [], [], 'Scan Kehadiran');
         return view('admin.pages.scanner.index', $data);
+    }
+
+    public function scanAttendanceCamera()
+    {
+        $data = $this->attendanceService->getPageData('attendance-scan', 'Scan Kehadiran', [], [], 'Scan Kehadiran');
+        return view('admin.pages.scanner.scanner', $data);
     }
 
     public function report()
@@ -81,12 +93,12 @@ class AttendanceController extends Controller
         $data = $this->attendanceRepository->getDataDate($date);
         $data = $data->filter(function($item){
             return $item->present_at;
-        })->sortBy('present_at');
+        })->sortByDesc('present_at');
 
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('student', function($item) {
-                return $item->student->full_name;
+                return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nisn.')</a>';
             })->addColumn('class', function($item) {
                 return $item->student->nama_rombel;
             })->addColumn('present_at', function($item) {
@@ -110,22 +122,23 @@ class AttendanceController extends Controller
             })->addColumn('action', function($item) {
                 return view('admin.pages.attendance.datatable-presence', ['item' => $item, 'student' => $item->student]);
             })
-            ->rawColumns(['status', 'action'])
+            ->rawColumns(['status', 'action', 'student'])
             ->make(true);
     }
 
     public function getDatatablesLimit()
     {
         $data = $this->attendanceRepository->getTodayAttendance(10);
+        $data = $data->sortByDesc("present_at");
 
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('student', function($item) {
-                return $item->student->full_name;
+                return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nisn.')</a>';
             })->addColumn('class', function($item) {
                 return $item->student->nama_rombel;
             })->addColumn('present_at', function($item) {
-                return Carbon::parse($item->present_at)->format('H:i');
+                return Carbon::parse($item->present_at)->format('d/m/Y H:i');
             })->addColumn('status', function($item) {
                 $masuk = Carbon::parse($item->present_at)->format('H:i');
                 // return $item->status;
@@ -145,18 +158,19 @@ class AttendanceController extends Controller
             })->addColumn('action', function($item) {
                 return view('admin.pages.attendance.datatable-presence', ['item' => $item, 'student' => $item->student]);
             })
-            ->rawColumns(['status'])
+            ->rawColumns(['status', 'student'])
             ->make(true);
     }
     
     public function getDatatablesPermit()
     {
         $data = $this->attendanceRepository->getTodayAbsent();
+        $data = $data->sortByDesc("present_at");
 
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('student', function($item) {
-                return $item->student->full_name;
+                return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nisn.')</a>';
             })->addColumn('status', function($item) {
                 if($item->status == "izin") {
                     return '<span class="badge bg-primary">Izin</span>';
@@ -172,7 +186,7 @@ class AttendanceController extends Controller
                     return "-";
                 }
             })
-            ->rawColumns(['status'])
+            ->rawColumns(['status', 'student'])
             ->make(true);
     }
 
@@ -195,8 +209,11 @@ class AttendanceController extends Controller
                         $date_from = date('Y-m-d');
                         $date_to = date('Y-m-d');
                     }else {
-                        $date_from = $check_date[0]."-".$check_date[1]."-".$check_date[2];
-                        $date_to = $check_date[3]."-".$check_date[4]."-".$check_date[5];
+                        $date_from = Carbon::parse($check_date[0])->format('Y-m-d');
+                        $date_to = Carbon::parse($check_date[1])->hour(23)
+                        ->minute(59)
+                        ->second(0)
+                        ->format('Y-m-d H:i:s');
                     }
                     $data = $this->attendanceRepository->getDataCustomDate($date_from,$date_to,["student"]);
                 }else if(count($check_date) == 3){

@@ -13,9 +13,13 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+// route scanner
 Route::get('scan-attendance', [AttendanceController::class, 'scanAttendance'])->name('scan.index');
+// Route::get('scan-attendance-camera', [AttendanceController::class, 'scanAttendanceCamera'])->name('scan-manual');
 Route::get('attendance/get-main-data',[AttendanceController::class, 'getDatatablesData'])->name('attendance.get-main-datatables');
-Route::post('attendance/present',[AttendanceController::class, 'store'])->name('test');
+Route::post('attendance/present',[AttendanceController::class, 'store'])->name('presence.attendance');
+
 Route::middleware(['auth'])->group(function () {
     Route::prefix('attendance')->name('attendance.')->controller(AttendanceController::class)->group(function() {
         Route::get('get-limited-data','getDatatablesLimit')->name('get-limit-datatables');
@@ -27,6 +31,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('sync-attendances','syncAttendanceToday')->name('sync');
         Route::get('/new-attendance','newAttendences')->name('new-list');
         Route::get('/count-must-late','studentMustLate')->name('must-late');
+        Route::get('time-setting', 'timeSetting')->name('time-setting');
+        Route::post('time-setting', '')->name('store-time-setting');
+        Route::get('/time-setting/get-time', '')->name('get-time-setting');
     });
     Route::resource('attendance', AttendanceController::class);
     
@@ -35,6 +42,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/waiting-acception', [PermitController::class, 'showAccListPage']);
         Route::get('/get-main-data', [PermitController::class, 'getDatatablesData'])->name('get-main-datatables');
         Route::patch('/update/many-data', [PermitController::class, 'updateManyData'])->name('updateManyData');
+        Route::post('/print', [PermitController::class, 'print'])->name('print');
         Route::post('/soft-delete/{id}', [PermitController::class, 'softDestroy'])->name('softDelete');
     });
     Route::resource('/permit', PermitController::class);

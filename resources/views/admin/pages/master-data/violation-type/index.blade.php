@@ -156,9 +156,10 @@
     function updateDataDetail() {
         $.ajax({
             url: `{{ route('violation.stats') }}?violation_type_id=${violation_id}&year=${$('#year').val()}&month=${$('#month').val()}`,
+            headers: {
+                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            },
             success: (rows) => {
-                console.log(rows)
-                
                 chart.updateOptions({
                     series: [{
                         name: 'total',

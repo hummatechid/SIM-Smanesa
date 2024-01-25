@@ -40,15 +40,16 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        $data = $this->teacherService->getPageData('teacher-list', "", [], null, "Guru");
+        $data = $this->teacherService->getPageData('teacher-list', "", [], null, "GTK");
         return view('admin.pages.master-data.teacher.index', $data);
     }
 
     public function getDatatablesData(Request $request)
     {
-
-        if ($request->status) {
-            $data = $this->teacherRepository->OneConditionOneRelation("is_dapodik", $request->status, ["user" => function ($q) {
+        if($request->status != "semua") {
+            if($request->status == 1) $status = true;
+            else $status = false;
+            $data = $this->teacherRepository->OneConditionOneRelation("is_dapodik", $status, ["user" => function ($q) {
                 $q->with("roles");
             }]);
         } else {
@@ -59,8 +60,7 @@ class TeacherController extends Controller
 
         if ($request->role == "pimpinan") {
             $data = $data->filter(function ($item) {
-                $check = $item->user->roles->filter(fn ($item) => $item->name == "pimpinan");
-                return count($check) > 1;
+                return count($item->user->roles) > 1;
             });
         } else if ($request->role == "non-pimpinan") {
             $data = $data->filter(function ($item) {
@@ -77,7 +77,7 @@ class TeacherController extends Controller
     public function create()
     {
         $data_role = $this->roleRepository->getCustomColumnValue('name', 'guru');
-        $data = $this->teacherService->getPageData('teacher-add', '', ['data_role' => $data_role], [], 'Tambah Guru');
+        $data = $this->teacherService->getPageData('teacher-add', '', ['data_role' => $data_role], [], 'Tambah GTK');
 
         return view('admin.pages.master-data.teacher.create', $data);
     }

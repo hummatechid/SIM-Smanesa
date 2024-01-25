@@ -8,11 +8,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>SIM Smanesa | Absensi</title>
-    <link rel="shortcut icon" href="{{ asset('assets/compiled/logos/favicon.ico') }}" type="image/x-icon"/>
     <link rel="stylesheet" href="{{ asset('assets/compiled/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/compiled/css/app-dark.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/extensions/sweetalert2/sweetalert2.min.css') }}">
-    <link href="https://cdn.datatables.net/v/bs5/jszip-3.10.1/dt-1.13.8/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/datatables.min.css" rel="stylesheet">
     <style>
         .card {
             margin-bottom: 0!important;
@@ -134,9 +132,8 @@
                     </div>
                     <div class="card-body">
                         <ol>
-                            <li>Buka laman <a href="{{ route('scan.index') }}">"{{ route('scan.index') }}"</a></li>
-                            <li>Jika terdapat area berwarna merah, klik area tersebut</li>
-                            <li>Area akan berubah berwarna hijau</li>
+                            <li>Buka laman <a href="{{ route('scan-manual') }}">"{{ route('scan-manual') }}"</a></li>
+                            <li>Berikan izin penggunaan kamera pada website</li>
                             <li>Mulailah melakukan scan untuk melakukan absensi</li>
                             <li>Pastikan data siswa telah ditambahkan pada tabel</li>
                         </ol>    
@@ -144,9 +141,9 @@
                 </div>
             </div>
             <div id="wrapper-scan">
-                <input type="text" autofocus class="form-control" id="nisn">
-                <div id="background-scan"></div>
-                <div id="msg" class="text-center lead fs-4 fw-bold">Siap Melakukan Scan</div>
+                <div class="card">
+                    <video id="preview" class="class-img-top rounded-4"></video>
+                </div>
             </div>
         </div>
     </div>
@@ -163,22 +160,37 @@
     <script src="{{ asset('assets/compiled/js/app.js') }}"></script>
     <script src="{{ asset('assets/extensions/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/extensions/sweetalert2/sweetalert2.all.min.js') }}"></script>
-    <script>
-        const time_before_send = 300;
+    <script type="text/javascript" src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+    <script type="text/javascript">
+        const time_before_send = 100;
         const waiting_detect_time = 3000;
         var waiting_on_detect = false;
         var timer_timeout;
     
         $(window).on('load',  () => {
-    
-            $('#nisn').on('change input', () => {
+
+            let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+
+            Instascan.Camera.getCameras().then(function (cameras) {
+                if (cameras.length > 0) {
+                scanner.start(cameras[0]);
+                } else {
+                console.error('No cameras found.');
+                }
+            }).catch(function (e) {
+                console.error(e);
+            });
+
+            scanner.addListener('scan', function(qr) {
+                console.log(qr)
+                sendStudent(qr)
+            })
+
+            function sendStudent(nipd) {
                 if(timer_timeout) clearTimeout(timer_timeout)
-                
+
                 if(!waiting_on_detect) {
                     timer_timeout = setTimeout(() => {
-                        var nipd = $('#nisn').val()
-                        $('#nisn').val("")
-    
                         waiting_on_detect = true;
                         setTimeout(() => {
                             waiting_on_detect = false;
@@ -206,7 +218,7 @@
                 } else {
                     $('#nisn').val("")
                 }
-            })
+            }
     
             const toast = (type = "success", message = "message") => {
                 Swal.fire({

@@ -65,7 +65,7 @@
                     class="sidebar-item {{ isset($main_menu) && $main_menu == 'student' ? 'active' : '' }}">
                     <a href="{{ route('student.index') }}" class='sidebar-link'>
                         <i class="bi bi-mortarboard-fill"></i>
-                        <span>Siswa</span>
+                        <span>Peserta Didik</span>
                     </a>
 
 
@@ -77,17 +77,17 @@
                     class="sidebar-item {{ isset($main_menu) && $main_menu == 'teacher' ? 'active' : '' }} has-sub">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-person-fill"></i>
-                        <span>Guru</span>
+                        <span>GTK</span>
                     </a>
 
                     <ul class="submenu active">
                         @hasrole('superadmin')
                         <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'teacher-add' ? 'active' : '' }}">
-                            <a href="{{ url('teacher/create') }}" class="submenu-link">Tambah Guru</a>
+                            <a href="{{ url('teacher/create') }}" class="submenu-link">Tambah GTK</a>
                         </li>
                         @endhasrole
                         <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'teacher-list' ? 'active' : '' }}">
-                            <a href="{{ url('teacher') }}" class="submenu-link">List Guru</a>
+                            <a href="{{ url('teacher') }}" class="submenu-link">List GTK</a>
 
                         </li>
 
@@ -166,6 +166,12 @@
                             <a href="{{ url('attendance/report') }}" class="submenu-link">Laporan Presensi</a>
 
                         </li>
+
+                        @hasrole(['superadmin', 'guru', 'staf'])
+                        <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'attendance-setting' ? 'active' : '' }}">
+                            <a href="{{ url('attendance/time-setting') }}" class="submenu-link">Atur Jam Hadir & Pulang</a>
+                        </li>
+                        @endhasrole
                     </ul>
 
 
