@@ -17,7 +17,7 @@ class IpController extends Controller
             DB::statement("FLUSH PRIVILEGES");
         }
 
-        dd($check);
+        dd($check, $request);
 
         return redirect()->back();
     }
