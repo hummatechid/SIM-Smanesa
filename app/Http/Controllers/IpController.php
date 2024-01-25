@@ -11,6 +11,7 @@ class IpController extends Controller
     {
         $check = DB::query()->select("SELECT count(*) FROM mysql.user WHERE user = 'admin' and host = '" . $request->ip_public . "'");
         // $check = DB::statement("SELECT * FROM mysql.user WHERE user = 'admin' and host = '" . $request->ip_public . "'");
+        dd($check, $request);
 
         if ($check == 0) {
             DB::statement("CREATE USER 'admin'@'" . $request->ip_public . "' IDENTIFIED BY 'password'");
@@ -18,7 +19,6 @@ class IpController extends Controller
             DB::statement("FLUSH PRIVILEGES");
         }
 
-        dd($check, $request);
 
         return redirect()->back();
     }
