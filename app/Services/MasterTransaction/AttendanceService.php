@@ -3,6 +3,7 @@
 namespace App\Services\MasterTransaction;
 
 use App\Repositories\MasterTransaction\AttendanceRepository;
+use App\Repositories\Settings\GeneralSettingRepository;
 use App\Repositories\StudentRepository;
 use Illuminate\Http\JsonResponse;
 use Yajra\DataTables\Facades\DataTables;
@@ -12,12 +13,14 @@ use DateTime;
 use stdClass;
 
 class AttendanceService extends BaseService {
-    private $studentRepository;
+    private $studentRepository, $generalSettingRepository;
 
-    public function __construct(AttendanceRepository $attendanceRepository, StudentRepository $studentRepository)
+    public function __construct(AttendanceRepository $attendanceRepository, StudentRepository $studentRepository,
+    GeneralSettingRepository $generalSettingRepository)
     {
         $this->repository = $attendanceRepository;
         $this->studentRepository = $studentRepository;
+        $this->generalSettingRepository = $generalSettingRepository;
         $this->pageTitle = "Presensi";
         $this->mainUrl = "attendance";
         $this->mainMenu = "attendance";
@@ -210,6 +213,8 @@ class AttendanceService extends BaseService {
             ], 400);
         }
 
+        $settings = $this->generalSettingRepository->getDataDateSetting(now());
+
         // get data student
         $student = $this->studentRepository->getOneByOther("nipd",$nipd);
         if(!$student){
@@ -220,6 +225,7 @@ class AttendanceService extends BaseService {
         }
 
         $now = now();
+        $jam = Carbon::parse($now)->format('H:i');
         $attendance = $this->repository->getDataDateWithCondition($now, [], "student_id",$student->id, "first");
         if(!$attendance){
             return response()->json([
@@ -228,17 +234,29 @@ class AttendanceService extends BaseService {
             ], 404);
         }
 
-        if($attendance->present_at){
-            return response()->json([
-                "status" => "error",
-                "message" => "Siswa telah melakukan absensi"
-            ], 400);
+        if($jam < ($settings ? $settings->time_end : "14:00")){
+            if($attendance->present_at){
+                return response()->json([
+                    "status" => "error",
+                    "message" => "Siswa telah melakukan absensi masuk"
+                ], 400);
+            }
+    
+            $attendance->update([
+                "status" => "masuk",
+                "present_at" => now()
+            ]);
+        } else {
+            if($attendance->return_at){
+                return response()->json([
+                    "status" => "error",
+                    "message" => "Siswa telah melakukan absensi pulang"
+                ], 400);
+            }
+            $attendance->update([
+                "return_at" => now()
+            ]);
         }
-
-        $attendance->update([
-            "status" => "masuk",
-            "present_at" => now()
-        ]);
 
         return response()->json([
             "status" => "success",
@@ -279,15 +297,17 @@ class AttendanceService extends BaseService {
 
     public function countPresentStudent(array|object $data, string $type = "present")
     {
+        $settings = $this->generalSettingRepository->getDataDateSetting(now());
+
         if($type == "late"){
-            $result = $data->filter(function ($item){
+            $result = $data->filter(function ($item) use ($settings){
                 $masuk = Carbon::parse($item->present_at)->format("H:i");
-                if($masuk > "07:00") return $item;
+                if($masuk > ($settings ? $settings->start_time : "07:15")) return $item;
             });
         } else {
-            $result = $data->filter(function ($item){
+            $result = $data->filter(function ($item) use ($settings){
                 $masuk = Carbon::parse($item->present_at)->format("H:i");
-                if($masuk < "07:00") return $item;
+                if($masuk < ($settings ? $settings->start_time : "07:15")) return $item;
             });
         }
 

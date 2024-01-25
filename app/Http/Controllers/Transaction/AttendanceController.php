@@ -98,6 +98,8 @@ class AttendanceController extends Controller
             return $item->present_at;
         })->sortByDesc('present_at');
 
+        $settings = $this->generalSettingRepository->getDataDateSetting(now());
+
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('student', function($item) {
@@ -106,11 +108,11 @@ class AttendanceController extends Controller
                 return $item->student->nama_rombel;
             })->addColumn('present_at', function($item) {
                 return Carbon::parse($item->present_at)->format('H:i');
-            })->addColumn('status', function($item) {
+            })->addColumn('status', function($item) use ($settings) {
                 $masuk = Carbon::parse($item->present_at)->format('H:i');
                 // return $item->status;
                 if($item->status == "masuk"){
-                    if($masuk < '07:00') {
+                    if($masuk < ($settings ? $settings->start_time : "07:15")) {
                         return '<span class="badge bg-success">Tepat Waktu</span>';
                     } else {
                         return '<span class="badge bg-secondary">Terlambat</span>';
@@ -134,6 +136,8 @@ class AttendanceController extends Controller
         $data = $this->attendanceRepository->getTodayAttendance(10);
         $data = $data->sortByDesc("present_at");
 
+        $settings = $this->generalSettingRepository->getDataDateSetting(now());
+
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('student', function($item) {
@@ -142,11 +146,11 @@ class AttendanceController extends Controller
                 return $item->student->nama_rombel;
             })->addColumn('present_at', function($item) {
                 return Carbon::parse($item->present_at)->format('d/m/Y H:i');
-            })->addColumn('status', function($item) {
+            })->addColumn('status', function($item) use ($settings){
                 $masuk = Carbon::parse($item->present_at)->format('H:i');
                 // return $item->status;
                 if($item->status == "masuk"){
-                    if($masuk < '07:00') {
+                if($masuk < ($settings ? $settings->start_time : "07:15")) {
                         return '<span class="badge bg-success">Tepat Waktu</span>';
                     } else {
                         return '<span class="badge bg-secondary">Terlambat</span>';
@@ -490,9 +494,11 @@ class AttendanceController extends Controller
         if($request->status) $status = $request->status;
         else $status = "masuk";
         
+        $settings = $this->generalSettingRepository->getDataDateSetting(now());
+
         // if have status validation
         if($request->time) $time = $request->time;
-        else $time = "07:00";
+        else $time = ($settings ? $settings->start_time : "07:15");
 
         // date now
         $now = date('Y-m-d');
@@ -522,10 +528,12 @@ class AttendanceController extends Controller
         // if have status validation
         if($request->status) $status = $request->status;
         else $status = "masuk";
+
+        $settings = $this->generalSettingRepository->getDataDateSetting(now());
         
         // if have status validation
         if($request->time) $time = $request->time;
-        else $time = "07:00";
+        else $time = ($settings ? $settings->start_time : "07:15");
 
         // get data
         $data = $this->attendanceRepository->oneNotNullConditionOneRelation("present_at",["student"]);
