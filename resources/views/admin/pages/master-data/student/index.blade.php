@@ -201,9 +201,9 @@
                         duration: 3000,
                         backgroundColor: "#DD3B4B",
                     }).showToast();
-                    // setTimeout(function () {
-                    //     location.reload();
-                    // }, 3000);
+                    setTimeout(function () {
+                        location.reload();
+                    }, 3000);
                 },
             });
         });
