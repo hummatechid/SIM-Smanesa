@@ -76,30 +76,12 @@
         </div>
     </div>
 
-    @php
-        $data_column = [ "full_name" => "Nama", "email" => "Email / NIK",
-        "phone_number" => "Nomor", "action" => "Aksi" ];
-
-        $custom_group = [
-            "status" => [
-                "title" => "Status",
-                "options" => [
-                    "" => "Semua",
-                    1 => "Dari Dapodik",
-                    0 => "Luar Dapodik",
-                ]
-            ],
-            "role" => [
-                "title" => "Role",
-                "options" => [
-                    "" => "Semua",
-                    "pimpinan" => "Pimpinan",
-                    "non-pimpinan" => "Bukan Pimpinan",
-                ]
-            ]
-        ]
-    @endphp
-    @hasrole('superadmin')
+    @php $data_column = [ "full_name" => "Nama", "email" => "Email / NIK",
+    "phone_number" => "Nomor", "action" => "Aksi" ]; $custom_group = [ "status"
+    => [ "title" => "Status", "options" => [ "" => "Semua", 1 => "Dari Dapodik",
+    0 => "Luar Dapodik", ] ], "role" => [ "title" => "Role", "options" => [ ""
+    => "Semua", "pimpinan" => "Pimpinan", "non-pimpinan" => "Bukan Pimpinan", ]
+    ] ] @endphp @hasrole('superadmin')
     <x-datatable
         card-title="Tabel Guru"
         data-url="{{ route('teacher.get-main-datatables') }}"
