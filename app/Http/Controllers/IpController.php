@@ -9,9 +9,13 @@ class IpController extends Controller
 {
     public function changeIp(Request $request)
     {
-        DB::statement("CREATE USER 'admin'@'" . $request->ip_public . "' IDENTIFIED BY 'password'");
-        DB::statement("GRANT ALL PRIVILEGES ON *.* TO 'admin'@'" . $request->ip_public . "'");
-        DB::statement("FLUSH PRIVILEGES");
+        $check = DB::statement("SELECT count(*) FROM mysql.user WHERE user = 'admin' and host = '" . $request->ip_public . "'");
+
+        if ($check == 0) {
+            DB::statement("CREATE USER 'admin'@'" . $request->ip_public . "' IDENTIFIED BY 'password'");
+            DB::statement("GRANT ALL PRIVILEGES ON *.* TO 'admin'@'" . $request->ip_public . "'");
+            DB::statement("FLUSH PRIVILEGES");
+        }
 
         return redirect()->back();
     }
