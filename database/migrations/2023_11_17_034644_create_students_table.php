@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('nik');
             $table->string('nisn');
-            $table->string('nipd');
+            $table->string('nipd')->nullable();
             $table->string('full_name');
             $table->enum('gender', ['Laki-laki', 'Perempuan']);
             $table->string('phone_number');
