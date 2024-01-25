@@ -1,6 +1,4 @@
-@extends('admin.layouts.app')
-
-@section('content')
+@extends('admin.layouts.app') @section('content')
 <div class="page-heading">
     <div class="page-title">
         <div class="row">
@@ -8,12 +6,19 @@
                 <h3>{{ $page_title }}</h3>
             </div>
             <div class="col-12 col-md-6 order-md-2 order-first">
-                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                <nav
+                    aria-label="breadcrumb"
+                    class="breadcrumb-header float-start float-lg-end"
+                >
                     <ol class="breadcrumb">
                         @foreach($bread_crumbs as $title => $url)
-                        <li class="breadcrumb-item"><a href="{{ $url }}">{{ $title }}</a></li>
+                        <li class="breadcrumb-item">
+                            <a href="{{ $url }}">{{ $title }}</a>
+                        </li>
                         @endforeach
-                        <li class="breadcrumb-item active" aria-current="page">{{ $now_page }}</li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            {{ $now_page }}
+                        </li>
                     </ol>
                 </nav>
             </div>
@@ -21,30 +26,112 @@
     </div>
 
     <div class="row mb-3">
+        <div class="col-12">
+            <button
+                type="button"
+                class="btn btn-primary block"
+                data-bs-toggle="modal"
+                data-bs-target="#default"
+            >
+                Edit IP Publik
+            </button>
+
+            <!--Basic Modal -->
+            <div
+                class="modal fade text-left"
+                id="default"
+                tabindex="-1"
+                role="dialog"
+                aria-labelledby="myModalLabel1"
+                aria-hidden="true"
+            >
+                <div
+                    class="modal-dialog modal-dialog-scrollable"
+                    role="document"
+                >
+                    <div class="modal-content">
+                        <form action="{{ route('change-ip') }}" method="POST">
+                            @csrf
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="myModalLabel1">
+                                    Edit IP Publik
+                                </h5>
+                                <button
+                                    type="button"
+                                    class="close rounded-pill"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"
+                                >
+                                    <i data-feather="x"></i>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <label for="">IP Publik</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="118.99.112.0"
+                                    name="ip_public"
+                                />
+                            </div>
+                            <div class="modal-footer">
+                                <button
+                                    type="button"
+                                    class="btn"
+                                    data-bs-dismiss="modal"
+                                >
+                                    <i class="bx bx-x d-block d-sm-none"></i>
+                                    <span class="d-none d-sm-block">Tutup</span>
+                                </button>
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary ms-1"
+                                    data-bs-dismiss="modal"
+                                >
+                                    <i
+                                        class="bx bx-check d-block d-sm-none"
+                                    ></i>
+                                    <span class="d-none d-sm-block">Edit</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3">
         <div class="col-sm-6 col-12 mb-2">
             <div class="card bg-primary mb-0">
-                <div class="border-white card-header border-bottom m-0 p-2 fw-bold bg-primary text-center text-white">Siswa Aktif</div>
-                <div class="card-body m-0 p-3 lead fs-5 text-center text-white">{{ $data->student }}</div>
+                <div
+                    class="border-white card-header border-bottom m-0 p-2 fw-bold bg-primary text-center text-white"
+                >
+                    Siswa Aktif
+                </div>
+                <div class="card-body m-0 p-3 lead fs-5 text-center text-white">
+                    {{ $data->student }}
+                </div>
             </div>
         </div>
         <div class="col-sm-6 col-12 mb-2">
             <div class="card bg-success mb-0">
-                <div class="border-white card-header border-bottom m-0 p-2 fw-bold bg-success text-center text-white">Guru</div>
-                <div class="card-body m-0 p-3 lead fs-5 text-center text-white">{{ $data->teacher }}</div>
+                <div
+                    class="border-white card-header border-bottom m-0 p-2 fw-bold bg-success text-center text-white"
+                >
+                    Guru
+                </div>
+                <div class="card-body m-0 p-3 lead fs-5 text-center text-white">
+                    {{ $data->teacher }}
+                </div>
             </div>
         </div>
     </div>
 
     <div class="row">
-        @if(auth()->user()->hasExactRoles('satpam'))
-        @php
-            $permit_column = [
-                "date" => "Waktu",
-                "student" => "Siswa",
-                "reason" => "Alasan",
-                "status" => "Status",
-            ];
-        @endphp
+        @if(auth()->user()->hasExactRoles('satpam')) @php $permit_column = [
+        "date" => "Waktu", "student" => "Siswa", "reason" => "Alasan", "status"
+        => "Status", ]; @endphp
         <div class="col-12">
             <x-datatable
                 card-title="Tabel Izin Terbaru"
@@ -98,6 +185,5 @@
         </div>
         @endif
     </div>
-
 </div>
 @endsection

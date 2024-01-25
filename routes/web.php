@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\IpController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -18,8 +19,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard');
-    Route::prefix('dashboard')->group(function (){
-    
+    Route::post('change-ip', [IpController::class, 'changeIp'])->name('change-ip');
+    Route::prefix('dashboard')->group(function () {
     });
 });
 
