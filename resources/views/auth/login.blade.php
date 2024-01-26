@@ -36,10 +36,14 @@
                 border-color: var(--bs-danger) !important;
             }
 
+            /* #auth-left {
+                position: relative;
+            } */
+
             #back-button {
-                position: fixed;
-                bottom: 25px;
-                left: 30px;
+                position: absolute;
+                top: 25px;
+                right: 32px;
                 z-index: 999;
             }
         </style>
@@ -48,8 +52,20 @@
     <body>
         <div id="auth">
             <div class="row h-100">
-                <div class="col-lg-5 col-12">
+                <div class="col-lg-5 col-12" style="position: relative">
                     <div id="auth-left">
+                        <div id="back-button" class="btn-group">
+                            <a
+                                href="{{ route('landing-page') }}"
+                                class="btn btn-lg btn-primary fs-6 mr-2"
+                                ><i class="bi bi-house-fill"></i> Kembali</a
+                            >
+                            <!-- <div
+                                id="clock"
+                                class="btn btn-lg bg-secondary text-white"
+                                style="cursor: default"
+                            ></div> -->
+                        </div>
                         <div class="d-lg-none d-block mb-5">
                             <a
                                 href="{{ url('login') }}"
@@ -158,17 +174,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div id="back-button" class="btn-group">
-            <a href="{{ route('landing-page') }}" class="btn btn-lg btn-primary"
-                ><i class="bi bi-house-fill"></i
-            ></a>
-            <div
-                id="clock"
-                class="btn btn-lg bg-secondary text-white"
-                style="cursor: default"
-            ></div>
         </div>
 
         <script src="{{ asset('assets/static/js/initTheme.js') }}"></script>
