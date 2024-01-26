@@ -48,7 +48,7 @@
                     </button>
                 </div>
                 <div class="flex-column flex-md-row gap-0 gap-md-2 mt-3 mt-md-0" id="btn-header-group">
-                    <a href="{{ route('scan.index') }}" class="btn btn-header btn-primary">Scan Kehadiran</a>
+                    {{-- <a href="{{ route('scan.index') }}" class="btn btn-header btn-primary">Scan Kehadiran</a> --}}
                     @if(Auth::check())
                     <a href="{{ route('dashboard') }}" class="btn btn-header btn-primary">Dashboard</a>
                     @else

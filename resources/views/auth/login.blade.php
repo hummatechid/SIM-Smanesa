@@ -57,7 +57,10 @@
                                 <i class="bi bi-eye-fill fs-3 text-muted"></i>
                             </button>
                         </div>
-                        <button class="btn btn-primary btn-block btn-lg shadow-lg mt-5">Masuk</button>
+                        <div class="btn-group w-100">
+                            <a href="{{ route('landing-page') }}" class="btn btn-secondary btn-lg shadow-lg mt-5"><i class="bi bi-arrow-left"></i></a>
+                            <button class="btn btn-primary btn-block btn-lg shadow-lg mt-5">Masuk</button>
+                        </div>
                     </form>
                     <div class="text-center mt-3 fs-5">
                         <a class="font-bold" href="{{ route('password.request') }}">Lupa password?</a>
