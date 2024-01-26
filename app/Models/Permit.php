@@ -20,7 +20,6 @@ class Permit extends Model
         return $this->belongsTo(Student::class, 'student_id', 'id');
     }
 
-
     /**
      * Prepare a date for array / JSON serialization.
      *
