@@ -291,7 +291,7 @@ class AttendanceController extends Controller
             "time_start" => $request->attendance,
             "time_end" => $request->departure,
         ];
-        $settings = $this->generalSettingRepository->getDataDateSetting(now());
+        $settings = $this->generalSettingRepository->getDataDateSetting($request->date);
         if($settings){
             $settings->update($data);
         }else {
