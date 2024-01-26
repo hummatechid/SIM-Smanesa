@@ -30,16 +30,16 @@
             @csrf
             <div class="form-group mb-3">
                 <label for="date" class="form-label">Tanggal</label>
-                <input type="date" name="date" id="date" class="form-control" value="{{ date('Y-m-d') }}">
+                <input type="date" name="date" id="date" class="form-control" value="{{ $time->date ?? date('Y-m-d') }}">
             </div>
             <div class="row">
                 <div class="col-md-6 col-12 form-group mb-3">
                     <label for="attendance" class="form-label">Jam Kehadiran</label>
-                    <input type="time" name="attendance" id="attendance" class="form-control" value="07:00">
+                    <input type="time" name="attendance" id="attendance" class="form-control" value="{{ $time->time_start ?? "07:00" }}">
                 </div>
                 <div class="col-md-6 col-12 form-group mb-3">
                     <label for="departure" class="form-label">Jam Pulang</label>
-                    <input type="time" name="departure" id="departure" class="form-control" value="16:00">
+                    <input type="time" name="departure" id="departure" class="form-control" value="{{ $time->time_start ?? "14:00" }}">
                 </div>
             </div>
         </div>
@@ -70,8 +70,8 @@
                 data: {
                     date
                 }, success: function(rows) {
-                    let attendance = rows.data.attendance
-                    let departure = rows.data.departure
+                    let attendance = rows.data?.time_start ?? "07:00"
+                    let departure = rows.data?.time_end ?? "16:00"
                     setAttendanceDepartureTime(attendance, departure)
                 }, error: function() {
                     setAttendanceDepartureTime()

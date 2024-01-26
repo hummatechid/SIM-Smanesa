@@ -33,6 +33,12 @@
             href="{{ asset('assets/extensions/toastify-js/src/toastify.css') }}"
         />
         <style>
+            .sidebar-wrapper .menu .submenu-item {
+                list-style: disc!important;
+            }
+            .sidebar-wrapper .menu .submenu-item::marker {
+                color: var(--bs-secondary);
+            }
             .btn-password {
                 position: absolute;
                 transform: translateY(-50%);

@@ -50,7 +50,8 @@ class AttendanceController extends Controller
 
     public function timeSetting()
     {
-        $data = $this->attendanceService->getPageData('attendance-setting', '', [], [], "Atur Jam Hadir & Pulang");
+        $time = $this->generalSettingRepository->getDataDateSetting(now());
+        $data = $this->attendanceService->getPageData('attendance-setting', '', [$time], [], "Atur Jam Hadir & Pulang");
         return view('admin.pages.attendance.setting', $data);
     }
 
@@ -544,6 +545,19 @@ class AttendanceController extends Controller
         return response()->json([
             "message" => "Berhasil menmapilkan data",
             "data" => $result
+        ]);
+    }
+
+    /**
+     * Api get setting time
+     * METHOD @GET
+     */
+    public function getTimeSettting(Request $request)
+    {
+        $time = $this->generalSettingRepository->getDataDateSetting($request->date);
+        return response()->json([
+            "message" => "Berhasil menmapilkan data",
+            "data" => $time
         ]);
     }
 }

@@ -1,12 +1,12 @@
 @extends('admin.layouts.app') @section('content')
 <div class="page-heading">
     <div class="page-title">
-        <div class="row">
-            <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3>{{ $page_title }}</h3>
-            </div>
-            <div class="col-12 col-md-6 order-md-2 order-first">
-                <nav
+        <div class="d-flex justify-content-between">
+            <h3>{{ $page_title }}</h3>
+            @hasrole('superadmin')
+            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#default"> Edit IP Publik </button>
+            @else
+            <nav
                     aria-label="breadcrumb"
                     class="breadcrumb-header float-start float-lg-end"
                 >
@@ -21,20 +21,12 @@
                         </li>
                     </ol>
                 </nav>
-            </div>
+                @endhasrole
         </div>
     </div>
 
     <div class="row mb-3">
         <div class="col-12">
-            <button
-                type="button"
-                class="btn btn-primary block"
-                data-bs-toggle="modal"
-                data-bs-target="#default"
-            >
-                Edit IP Publik
-            </button>
 
             <!--Basic Modal -->
             <div
