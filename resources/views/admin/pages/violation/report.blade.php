@@ -47,7 +47,7 @@
                     <label for="year">Tahun</label>
                     <select name="year" id="year" class="form-select input-data" required>
                         @foreach($years as $year)
-                        <option value="{{ $year->tahun }}">{{ $year->tahun }}</option>
+                        <option value="{{ $year }}">{{ $year }}</option>
                         @endforeach
                     </select>
                 </div>
