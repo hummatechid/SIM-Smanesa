@@ -27,6 +27,10 @@
                     margin: 0;
                     background: transparent;
                     border: 0;
+                    color: var(--bs-dark);
+                }
+                html[data-bs-theme="dark"] #btn-header-group > .btn-header {
+                    color: var(--bs-white);
                 }
                 #btn-header-group > .btn-header:hover,
                 #btn-header-group > .btn-header:focus,
@@ -111,7 +115,7 @@
                                 <img
                                     src="{{
                                         asset(
-                                            'images/illustration/illustration-2.jpg'
+                                            'images/illustration/illustration-2-sm.jpg'
                                         )
                                     }}"
                                     class="d-block mx-lg-auto img-fluid rounded-4"
