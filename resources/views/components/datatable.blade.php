@@ -144,6 +144,7 @@
         dom: 'Bfrtip',
         @endif
         serverSide: "{{ $serverSide }}",
+        responsive: "{{ $datatableResponsive }}",
         paging: "{{ $paggingTable }}",
         info: "{{ $infoTable }}",
         searching: "{{ $searchableTable }}",

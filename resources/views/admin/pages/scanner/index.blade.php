@@ -44,7 +44,7 @@
                 box-sizing: border-box;
             }
             body {
-                height: 100dvh;
+                min-height: 100dvh;
             }
             #wrapper-scan {
                 position: relative;
@@ -140,11 +140,17 @@
                 <div id="tb">
                     @php $data_column = ["student" => "Siswa", "class" =>
                     "Kelas", "present_at" => "Waktu Kehadiran", "status" =>
-                    "Status"]; $card_title = 'Data Kehadiran Terbaru
-                    <span class="badge bg-primary"
-                        >'.$carbon::parse(now())->locale('id_ID')->isoFormat('DD
-                        MMMM YYYY').'</span
-                    >'; @endphp
+                    "Status"]; $card_title = '<div class="row">
+                        <div class="col-12 col-lg-6 mb-2">
+                            Data Kehadiran Terbaru
+                        </div>
+                        <div class="col-12 col-lg-6 mb-2">
+                            <span class="badge bg-primary">
+                                '.$carbon::parse(now())->locale('id_ID')->isoFormat('DD MMMM YYYY').'
+                                <span id="clock"></span>
+                            </span>
+                        </div>
+                    </div>'; @endphp
                     <x-datatable
                         :card-title="$card_title"
                         data-url="{{ route('attendance.get-main-datatables') }}"
@@ -153,6 +159,7 @@
                         arrange-order="desc"
                         :searchable-table="false"
                         :is-responsive="false"
+                        :datatable-responsive="true"
                     />
                 </div>
                 <div id="howto">
@@ -199,11 +206,11 @@
             <a href="{{ route('landing-page') }}" class="btn btn-lg btn-primary"
                 ><i class="bi bi-house-fill"></i
             ></a>
-            <div
+            {{-- <div
                 id="clock"
                 class="btn btn-lg bg-secondary text-white"
                 style="cursor: default"
-            ></div>
+            ></div> --}}
         </div>
 
         <script src="{{ asset('assets/static/js/initTheme.js') }}"></script>
