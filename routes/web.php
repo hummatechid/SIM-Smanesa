@@ -27,3 +27,13 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/', [HomeController::class, 'landingPage'])->name('landing-page');
 
 Auth::routes();
+
+Route::get('/public_ip', function() {
+    $data = [
+        'page_title' => "IP Publik",
+        'bread_crumbs' => [],
+        'now_page' => 'IP Publik',
+        'main_menu' => 'ip-public',
+    ];
+    return view('admin.pages.settings.public_ip.index', $data);
+});

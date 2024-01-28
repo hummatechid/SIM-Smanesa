@@ -226,6 +226,21 @@
                 </li>
                 @endhasrole
 
+                @hasrole('superadmin')
+                <li class="sidebar-title">Pengaturan Lainnya</li>
+                @endhasrole
+
+                @hasrole('superadmin')
+                <li
+                    class="sidebar-item {{ isset($main_menu) && $main_menu == 'ip-public' ? 'active' : '' }}">
+                    <a href="{{ url('public_ip') }}" class='sidebar-link'>
+                        <i class="bi bi-globe"></i>
+                        <span>IP Publik</span>
+                    </a>
+
+                </li>
+                @endhasrole
+
                 {{-- <li class="sidebar-title">Pengaturan</li>
 
                 <li
