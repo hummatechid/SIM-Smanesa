@@ -82,7 +82,7 @@ class PenggunaController extends Controller
             // storage photo
             $path = 'images/pengguna/';
             !is_dir($path) &&
-            mkdir($path, 0777, true);
+            mkdir($path, 0755, true);
             if($requestPengguna->photo) {
                 $file = $requestPengguna->file('photo');
                 $fileData = $this->uploads($file,$path);
@@ -165,7 +165,7 @@ class PenggunaController extends Controller
             // set image
             $path = 'images/pengguna/';
             !is_dir($path) &&
-            mkdir($path, 0777, true);
+            mkdir($path, 0755, true);
             if($requestPengguna->photo) {
                 if($pengguna->photo) $this->deleteImage($pengguna->photo);
                 $file = $requestPengguna->file('photo');

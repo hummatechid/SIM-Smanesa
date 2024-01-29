@@ -98,7 +98,7 @@ class TeacherController extends Controller
 
             // set image
             $path = 'images/teacher/';
-            !is_dir($path) && mkdir($path, 0777, true);
+            !is_dir($path) && mkdir($path, 0755, true);
 
             if ($teacherRequest->photo) {
                 $file = $teacherRequest->file('photo');
@@ -182,7 +182,7 @@ class TeacherController extends Controller
             // set image
             $path = 'images/teacher/';
             !is_dir($path) &&
-                mkdir($path, 0777, true);
+                mkdir($path, 0755, true);
             if ($teacherRequest->photo) {
                 if ($pengguna->photo) $this->deleteImage($pengguna->photo);
                 $file = $teacherRequest->file('photo');
