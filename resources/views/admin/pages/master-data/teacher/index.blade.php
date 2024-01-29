@@ -76,7 +76,7 @@
         </div>
     </div>
 
-    @php $data_column = [ "full_name" => "Nama", "email" => "Email / NIK",
+    @php $data_column = [ "full_name" => "Nama", "gtk" => "GTK", "email" => "Email / NIK",
     "phone_number" => "Nomor", "action" => "Aksi" ]; $custom_group = [ "status"
     => [ "title" => "Status", "options" => [ "semua" => "Semua", 1 => "Dari
     Dapodik", 0 => "Luar Dapodik", ] ], "role" => [ "title" => "Role", "options"

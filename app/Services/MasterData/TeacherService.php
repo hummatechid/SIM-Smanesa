@@ -43,6 +43,8 @@ class TeacherService extends BaseService
                 return $item->user->email;
             })->addColumn('phone_number', function ($item) {
                 return $item->phone_number;
+            })->addColumn('gtk', function ($item) {
+                return $item->jenis_ptk ?? "-";
             })->addColumn('action', function ($item) {
                 $button = '<div class="d-flex gap-2 justify-content-start align-items-center">
                     <a href="' . route('teacher.show', $item->id) . '" class="btn btn-sm btn-primary" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Detail" data-bs-placement="top">
