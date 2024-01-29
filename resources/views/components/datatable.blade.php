@@ -78,7 +78,7 @@
             @if(isset($deleteOption))
             <div id="alert-delete"></div>
             @endif
-            <div class="{{ $isResponsive ?? 'table-responsive' }} datatable-minimal">
+            <div class="{{ $isResponsive ? 'table-responsive' : '' }} datatable-minimal">
                 <table class="table w-100" id="{{ $tableId }}">
                 </table>
             </div>

@@ -43,9 +43,6 @@
                 padding: 0;
                 box-sizing: border-box;
             }
-            body {
-                min-height: 100dvh;
-            }
             #wrapper-scan {
                 position: relative;
                 min-height: var(--height-scanner);
@@ -104,9 +101,11 @@
                 grid-template-areas: "tb howto" "tb scan";
                 grid-template-rows: 1fr auto;
                 grid-template-columns: repeat(2, 1fr);
-                min-height: 100dvh;
                 gap: 1.5rem;
                 padding: 1.5rem;
+                max-width: 100vw;
+                min-height: 100dvh;
+                overflow: hidden;
             }
             #tb {
                 grid-area: tb;
@@ -117,7 +116,7 @@
             #back-button {
                 position: fixed;
                 bottom: 25px;
-                left: 30px;
+                left: 25px;
                 z-index: 999;
             }
 
@@ -128,37 +127,51 @@
                 #main-container {
                     grid-template-areas: "scan" "howto" "tb";
                     grid-template-rows: repeat(3, auto);
-                    grid-template-columns: auto;
+                    grid-template-columns: 100%;
                 }
             }
         </style>
         @stack('custom-style')
     </head>
     <body>
-        <div class="container-fluid">
+        <div id="custom-container">
             <div id="main-container">
                 <div id="tb">
-                    @php $data_column = ["student" => "Siswa", "class" =>
-                    "Kelas", "present_at" => "Waktu Kehadiran", "status" =>
-                    "Status"]; $card_title = '<div class="row">
-                        <div class="col-12 col-lg-6 mb-2">
-                            Data Kehadiran Terbaru
-                        </div>
-                        <div class="col-12 col-lg-6 mb-2">
-                            <span class="badge bg-primary">
-                                '.$carbon::parse(now())->locale('id_ID')->isoFormat('DD MMMM YYYY').'
-                                <span id="clock"></span>
-                            </span>
-                        </div>
-                    </div>'; @endphp
+                    @php 
+                        $data_column = [
+                            "student" => [
+                                "title" => "Siswa",
+                                "width" => "200px"
+                            ], "class" => [
+                                "title" => "Kelas",
+                                "width" => "75px",
+                            ], "present_at" => [
+                                "title" => "Waktu Kehadiran",
+                                "width" => "170px",
+                            ], "status" => [
+                                "title" => "Status",
+                                "width" => "75px",
+                            ]
+                        ];
+                        $card_title = '<div class="row">
+                            <div class="col-12 col-lg-6 mb-2">
+                                Data Kehadiran Terbaru
+                            </div>
+                            <div class="col-12 col-lg-6 mb-2">
+                                <span class="badge bg-primary">
+                                    '.$carbon::parse(now())->locale('id_ID')->isoFormat('DD MMMM YYYY').' - 
+                                    <span id="clock"></span>
+                                </span>
+                            </div>
+                        </div>';
+                    @endphp
                     <x-datatable
                         :card-title="$card_title"
                         data-url="{{ route('attendance.get-main-datatables') }}"
                         :table-columns="$data_column"
-                        default-order="2"
+                        default-order="3"
                         arrange-order="desc"
                         :searchable-table="false"
-                        :is-responsive="false"
                         :datatable-responsive="true"
                     />
                 </div>
