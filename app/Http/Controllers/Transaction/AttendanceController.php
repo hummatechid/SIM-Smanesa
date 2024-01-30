@@ -10,6 +10,7 @@ use App\Repositories\StudentRepository;
 use Illuminate\Http\Request;
 use App\Services\MasterTransaction\AttendanceService;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 use stdClass;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -320,7 +321,9 @@ class AttendanceController extends Controller
 
         // set image
         $path = 'images/permit/'.$year.'/'.$data->student->tingkat_pendidikan.'/'.$data->student->nama_rombel;
-        !is_dir($path) && mkdir($path, 0777, true);
+        if (!is_dir($path)) {
+            Storage::makeDirectory($path);
+        }
         
         
         if($request->file('permit_file')) {

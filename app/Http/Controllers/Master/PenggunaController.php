@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Services\MasterData\PenggunaService;
 use App\Services\UserService;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PenggunaController extends Controller
 {
@@ -81,8 +82,9 @@ class PenggunaController extends Controller
 
             // storage photo
             $path = 'images/pengguna/';
-            !is_dir($path) &&
-            mkdir($path, 0777, true);
+            if (!is_dir($path)) {
+                Storage::makeDirectory($path);
+            }
             if($requestPengguna->photo) {
                 $file = $requestPengguna->file('photo');
                 $fileData = $this->uploads($file,$path);
@@ -164,8 +166,9 @@ class PenggunaController extends Controller
 
             // set image
             $path = 'images/pengguna/';
-            !is_dir($path) &&
-            mkdir($path, 0777, true);
+            if (!is_dir($path)) {
+                Storage::makeDirectory($path);
+            }
             if($requestPengguna->photo) {
                 if($pengguna->photo) $this->deleteImage($pengguna->photo);
                 $file = $requestPengguna->file('photo');

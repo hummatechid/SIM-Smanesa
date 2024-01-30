@@ -104,10 +104,6 @@ class TeacherController extends Controller
             }
             
             if ($teacherRequest->hasFile('photo')) {
-                // if ($pengguna->photo) {
-                //     // Hapus foto pengguna menggunakan metode storage
-                //     Storage::delete($pengguna->photo);
-                // }
                 $file = $teacherRequest->file('photo');
                 $fileData = $this->uploads($file, $path);
                 $validateDataTeacher["photo"] = $fileData["filePath"] . "." . $fileData["fileType"];
