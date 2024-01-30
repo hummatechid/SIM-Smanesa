@@ -320,7 +320,7 @@ class AttendanceController extends Controller
 
         // set image
         $path = 'images/permit/'.$year.'/'.$data->student->tingkat_pendidikan.'/'.$data->student->nama_rombel;
-        !is_dir($path) && mkdir($path, 0755, true);
+        !is_dir($path) && mkdir($path, 0777, true);
         
         
         if($request->file('permit_file')) {
