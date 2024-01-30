@@ -31,7 +31,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('sync-attendances','syncAttendanceToday')->name('sync');
         Route::get('/new-attendance','newAttendences')->name('new-list');
         Route::get('/count-must-late','studentMustLate')->name('must-late');
-        Route::get('time-setting', 'timeSetting')->name('time-setting');
+        Route::get('time-setting', 'indexTimeSetting')->name('list-time-setting');
+        Route::get('time-setting/create', 'timeSetting')->name('time-setting');
         Route::post('time-setting', 'updateSetting')->name('store-time-setting');
         Route::get('/time-setting/get-all', 'getDataTimeSetting')->name('all-time-setting');
         Route::get('/time-setting/get-time', 'getTimeSettting')->name('get-time-setting');
