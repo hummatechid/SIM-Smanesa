@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Repositories\BaseRepository;
 use App\Models\{User, Role};
+use Carbon\Carbon;
 
 class UserRepository extends BaseRepository
 {
@@ -76,11 +77,13 @@ class UserRepository extends BaseRepository
     {
         $teacherRole = $this->role->where("name", "guru")->first();
 
+        $password = Carbon::createFromFormat("Y-m-d", $teacher["tanggal_lahir"])->format("dmY");
+
         $newTeacher = $this->model->query()
             ->create([
                 'role_id' => $teacherRole->id,
                 'email' => $teacher['nik'],
-                'password' => bcrypt($teacher['nik']),
+                'password' => bcrypt($password),
             ]);
 
         $newTeacher->assignRole($teacherRole->name);
