@@ -385,7 +385,7 @@ class AttendanceService extends BaseService {
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('date', function($item) {
-                return Carbon::parse($item->date)->format("DD MM YYYY");
+                return Carbon::parse($item->date)->format("l, d F Y");
             })->addColumn('attendance', function($item) {
                 return Carbon::parse($item->time_start)->format("h:i");
             })->addColumn('departure', function($item) {
