@@ -14,6 +14,7 @@ use App\Services\MasterData\TeacherService;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class TeacherController extends Controller
 {
@@ -98,9 +99,15 @@ class TeacherController extends Controller
 
             // set image
             $path = 'images/teacher/';
-            !is_dir($path) && mkdir($path, 0777, true);
-
-            if ($teacherRequest->photo) {
+            if (!is_dir($path)) {
+                Storage::makeDirectory($path);
+            }
+            
+            if ($teacherRequest->hasFile('photo')) {
+                // if ($pengguna->photo) {
+                //     // Hapus foto pengguna menggunakan metode storage
+                //     Storage::delete($pengguna->photo);
+                // }
                 $file = $teacherRequest->file('photo');
                 $fileData = $this->uploads($file, $path);
                 $validateDataTeacher["photo"] = $fileData["filePath"] . "." . $fileData["fileType"];
@@ -181,8 +188,11 @@ class TeacherController extends Controller
 
             // set image
             $path = 'images/teacher/';
-            !is_dir($path) &&
-                mkdir($path, 0777, true);
+            // !is_dir($path) &&
+            //     mkdir($path, 0777, true);
+            if (!is_dir($path)) {
+                Storage::makeDirectory($path);
+            }
             if ($teacherRequest->photo) {
                 if ($pengguna->photo) $this->deleteImage($pengguna->photo);
                 $file = $teacherRequest->file('photo');
