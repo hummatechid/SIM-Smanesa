@@ -35,16 +35,16 @@
             <div class="row">
                 <div class="col-md-6 col-12 form-group mb-3">
                     <label for="attendance" class="form-label">Jam Kehadiran</label>
-                    <input type="time" name="attendance" id="attendance" class="form-control" value="{{ $time->time_start ?? "07:00" }}">
+                    <input type="time" name="attendance" id="attendance" class="form-control" value="{{ $time->time_start ?? "07:05" }}">
                 </div>
                 <div class="col-md-6 col-12 form-group mb-3">
                     <label for="departure" class="form-label">Jam Pulang</label>
-                    <input type="time" name="departure" id="departure" class="form-control" value="{{ $time->time_start ?? "14:00" }}">
+                    <input type="time" name="departure" id="departure" class="form-control" value="{{ $time->time_start ?? "12:00" }}">
                 </div>
             </div>
         </div>
         <div class="card-footer d-flex justify-content-between">
-            <a href="{{ url('attendance') }}" class="btn btn-secondary">&#10094; Kembali</a>
+            <a href="{{ route('attendance.list-time-setting') }}" class="btn btn-secondary">&#10094; Kembali</a>
             <button type="submit" class="btn btn-primary">Simpan</button>
         </div>
     </form>
@@ -70,8 +70,8 @@
                 data: {
                     date
                 }, success: function(rows) {
-                    let attendance = rows.data?.time_start ?? "07:00"
-                    let departure = rows.data?.time_end ?? "16:00"
+                    let attendance = rows.data?.time_start ?? "07:05"
+                    let departure = rows.data?.time_end ?? "12:00"
                     setAttendanceDepartureTime(attendance, departure)
                 }, error: function() {
                     setAttendanceDepartureTime()
@@ -79,7 +79,7 @@
             })
         }
 
-        function setAttendanceDepartureTime(attendance = "07:00", departure = "16:00") {
+        function setAttendanceDepartureTime(attendance = "07:05", departure = "12:00") {
             $('#attendance').val(attendance)
             $('#departure').val(departure)
         }

@@ -49,10 +49,17 @@ class AttendanceController extends Controller
         return view('admin.pages.attendance.index', $data);
     }
 
+    public function indexTimeSetting()
+    {
+        $time = $this->generalSettingRepository->getDataDateSetting(now());
+        $data = $this->attendanceService->getPageData('attendance-setting', '', [$time], [], "Jam Hadir & Pulang");
+        return view('admin.pages.attendance.list-setting', $data);
+    }
+
     public function timeSetting()
     {
         $time = $this->generalSettingRepository->getDataDateSetting(now());
-        $data = $this->attendanceService->getPageData('attendance-setting', '', [$time], [], "Atur Jam Hadir & Pulang");
+        $data = $this->attendanceService->getPageData('attendance-setting', '', [$time], ['Jam Hadir & Pulang' => route('attendance.list-time-setting')], "Tambah");
         return view('admin.pages.attendance.setting', $data);
     }
 

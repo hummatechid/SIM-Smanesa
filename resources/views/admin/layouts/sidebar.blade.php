@@ -169,7 +169,7 @@
 
                         @hasrole(['superadmin', 'guru', 'staf'])
                         <li class="submenu-item {{ isset($sub_menu) && $sub_menu == 'attendance-setting' ? 'active' : '' }}">
-                            <a href="{{ url('attendance/time-setting') }}" class="submenu-link">Atur Jam Hadir & Pulang</a>
+                            <a href="{{ url('attendance/time-setting') }}" class="submenu-link">Jam Hadir & Pulang</a>
                         </li>
                         @endhasrole
                     </ul>
