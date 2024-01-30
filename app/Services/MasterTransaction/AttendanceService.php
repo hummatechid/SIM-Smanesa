@@ -372,4 +372,26 @@ class AttendanceService extends BaseService {
             })->rawColumns(['student'])
             ->make(true);
     }
+
+     /**
+     * Get data for datatables in index page
+     *
+     * @return DataTables
+     */
+    public function getTimeSettingDatatable(array|object $data) :JsonResponse
+    {
+        $data = $data->sortByDesc("date");
+
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->addColumn('date', function($item) {
+                return Carbon::parse($item->date)->format("DD MM YYYY");
+            })->addColumn('attendance', function($item) {
+                return Carbon::parse($item->time_start)->format("h:i");
+            })->addColumn('departure', function($item) {
+                return Carbon::parse($item->time_end)->format("h:i");
+            })
+            ->rawColumns([])
+            ->make(true);
+    }
 }

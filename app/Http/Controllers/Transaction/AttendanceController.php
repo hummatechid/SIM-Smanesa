@@ -258,6 +258,12 @@ class AttendanceController extends Controller
         return $this->attendanceService->getReportDataDatatableV2($data);
     }
 
+    public function getDataTimeSetting()
+    {
+        $data = $this->generalSettingRepository->getAll();
+        return $this->attendanceService->getTimeSettingDatatable($data);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

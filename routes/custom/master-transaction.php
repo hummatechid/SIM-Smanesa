@@ -33,6 +33,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/count-must-late','studentMustLate')->name('must-late');
         Route::get('time-setting', 'timeSetting')->name('time-setting');
         Route::post('time-setting', 'updateSetting')->name('store-time-setting');
+        Route::get('/time-setting/get-all', 'getDataTimeSetting')->name('all-time-setting');
         Route::get('/time-setting/get-time', 'getTimeSettting')->name('get-time-setting');
     });
     Route::resource('attendance', AttendanceController::class);
