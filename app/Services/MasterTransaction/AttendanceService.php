@@ -226,11 +226,12 @@ class AttendanceService extends BaseService {
 
         $now = now();
         $jam = Carbon::parse($now)->format('H:i');
+
         $attendance = $this->repository->getDataDateWithCondition($now, [], "student_id",$student->id, "first");
         if(!$attendance){
             return response()->json([
                 "status" => "error",
-                "message" => "Data asbsensi siswa tidak ditemukan"
+                "message" => "Data absensi siswa tidak ditemukan"
             ], 404);
         }
 
