@@ -174,7 +174,7 @@
             @endforeach
         ],
         ajax: {
-            url: "{{ url($dataUrl) }}?" + getParams{{ $tableId }}(),
+            url: "{{ url($dataUrl) }}?&" + getParams{{ $tableId }}(),
             data: {
                 _token: "{{ csrf_token() }}",
             }
