@@ -127,8 +127,6 @@
     Object.keys(customGroups).forEach((key) => {
         params += (`${key}=${customGroups[key]}&`)
     })
-    console.log(params)
-    console.log(customGroups)
     const getParams{{ $tableId }} = () => {
         @foreach ($withCustomGroups as $name => $props)
             params = "";
