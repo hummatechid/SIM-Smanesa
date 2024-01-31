@@ -48,8 +48,7 @@ class TeacherController extends Controller
 
     public function getDatatablesData(Request $request)
     {
-        dd($request->status, $request->status != "semua");
-        if($request->status != "semua") {
+        if($request->status && $request->status != "semua") {
             if($request->status == 1) $status = true;
             else $status = false;
             $data = $this->teacherRepository->OneConditionOneRelation("is_dapodik", $status, ["user" => function ($q) {
@@ -59,7 +58,6 @@ class TeacherController extends Controller
             $data = $this->teacherRepository->relationship(["user" => function ($q) {
                 $q->with("roles");
             }]);
-            dd($data);
         }
 
         if ($request->role == "pimpinan") {
