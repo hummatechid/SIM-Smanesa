@@ -235,7 +235,7 @@
             params += (`${key}=${customGroups[key]}&`)
         })
 
-        {{ $tableId }}.ajax.url("{{ url($dataUrl) }}?" + getParams{{ $tableId }}()).load()
+        {{ $tableId }}.ajax.url("{{ url($dataUrl) }}?&" + getParams{{ $tableId }}()).load()
     })
     @endforeach
 
