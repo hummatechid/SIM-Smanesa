@@ -81,7 +81,7 @@
     => [ "title" => "Status", "options" => [ "semua" => "Semua", 1 => "Dari
     Dapodik", 0 => "Luar Dapodik", ] ], "role" => [ "title" => "Role", "options"
     => [ "" => "Semua", "pimpinan" => "Waka", "non-pimpinan" => "Bukan Waka", ]
-    ],"status_guru" => "semua" ] @endphp @hasrole('superadmin')
+    ] ] @endphp @hasrole('superadmin')
     <x-datatable
         card-title="Tabel GTK"
         data-url="{{ route('teacher.get-main-datatables') }}"
