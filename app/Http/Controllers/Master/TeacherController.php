@@ -58,6 +58,8 @@ class TeacherController extends Controller
                 $q->with("roles");
             }]);
         }
+        info("data pertama");
+        info($data);
 
         if ($request->role == "pimpinan") {
             $data = $data->filter(function ($item) {
@@ -68,6 +70,8 @@ class TeacherController extends Controller
                 return count($item->user->roles) == 1;
             });
         }
+        info("data kedua");
+        info($data);
 
         return $this->teacherService->getDataDatatable($data);
     }
