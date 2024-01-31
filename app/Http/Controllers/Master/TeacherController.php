@@ -58,8 +58,8 @@ class TeacherController extends Controller
             $data = $this->teacherRepository->relationship(["user" => function ($q) {
                 $q->with("roles");
             }]);
+            dd($data);
         }
-        dd($data);
 
         if ($request->role == "pimpinan") {
             $data = $data->filter(function ($item) {
