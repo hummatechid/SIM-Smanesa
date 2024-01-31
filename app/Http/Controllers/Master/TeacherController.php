@@ -48,6 +48,7 @@ class TeacherController extends Controller
 
     public function getDatatablesData(Request $request)
     {
+        dd($request->all(),$request->status, $request->status != "semua");
         if($request->status && $request->status != "semua") {
             if($request->status == 1) $status = true;
             else $status = false;
