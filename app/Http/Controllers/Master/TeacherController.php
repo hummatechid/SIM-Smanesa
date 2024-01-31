@@ -14,6 +14,7 @@ use App\Services\MasterData\TeacherService;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class TeacherController extends Controller
@@ -58,8 +59,8 @@ class TeacherController extends Controller
                 $q->with("roles");
             }]);
         }
-        info("data pertama");
-        info($data);
+        Log::console("data pertama");
+        Log::console($data);
 
         if ($request->role == "pimpinan") {
             $data = $data->filter(function ($item) {
@@ -70,8 +71,8 @@ class TeacherController extends Controller
                 return count($item->user->roles) == 1;
             });
         }
-        info("data kedua");
-        info($data);
+        Log::console("data kedua");
+        Log::console($data);
 
         return $this->teacherService->getDataDatatable($data);
     }
