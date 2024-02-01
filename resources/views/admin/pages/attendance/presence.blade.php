@@ -153,14 +153,24 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror --}}
                 </div>
-                <div class="form-group mb-">
-                    <label for="status" class="form-lael">Status <span class="text-danger">*</span></label>
+                <div class="form-group mb-3">
+                    <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
                     <select name="status" id="status" class="form-select" required>
                         <option value="masuk">Hadir</option>
                         <option value="sakit">Sakit</option>
                         <option value="izin">Izin</option>
                         <option value="alpha">Alpa</option>
                     </select>
+                </div>
+                <div id="time-container">
+                    <div class="form-group mb-3">
+                        <label for="present_at" class="form-label">Jam Kehadiran <span class="text-danger">*</span></label>
+                        <input type="time" class="form-control" id="present_at" name="time_present_at" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="return_at" class="form-label">Jam Pulang</label>
+                        <input type="time" class="form-control" id="return_at" name="time_return_at">
+                    </div>
                 </div>
                 <div class="form-group mb-3" id="edit-img-container">
                     <label for="permit_file" class="form-label">File Izin <span class="text-danger">*</span></label>
@@ -269,13 +279,27 @@
             if(item.status == el.value) el.setAttribute('selected', true)
             else el.removeAttribute('selected')
         })
-        if($('#form-edit #status').val() == 'izin' || $('#form-edit #status').val() == 'sakit') $('#edit-img-container').show()
-        else $('#edit-img-container').hide()
+
+        if(item.status == 'masuk') {
+            $('#form-edit #present_at').val(item.present_at?.split(" ")[1].slice(0, 5))
+            $('#form-edit #return_at').val(item.return_at?.split(" ")[1].slice(0, 5))
+        }
+        
+        showHideTimeImage()
     })
-    $(document).on('change input', '#form-edit #status', function(){
-        if($('#form-edit #status').val() == 'izin' || $('#form-edit #status').val() == 'sakit') $('#edit-img-container').show()
-        else $('#edit-img-container').hide()
-    })
+    $(document).on('change input', '#form-edit #status', showHideTimeImage)
+
+    function showHideTimeImage() {
+        if($('#form-edit #status').val() == 'izin' || $('#form-edit #status').val() == 'sakit') {
+            $('#edit-img-container').show()
+            $('#time-container').hide()
+            $('#form-edit #present_at').removeAttr('required')
+        } else {
+            $('#edit-img-container').hide()
+            $('#time-container').show()
+            $('#form-edit #present_at').attr('required', 'required')
+        }
+    }
 
     $(document).on('click', '.btn-image', function() {
         let img_url = $(this).data('image');
