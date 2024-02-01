@@ -14,6 +14,7 @@ use App\Services\MasterData\TeacherService;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class TeacherController extends Controller
