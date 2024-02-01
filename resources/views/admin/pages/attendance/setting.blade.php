@@ -29,17 +29,17 @@
             <x-session-alert />
             @csrf
             <div class="form-group mb-3">
-                <label for="date" class="form-label">Tanggal</label>
-                <input type="date" name="date" id="date" class="form-control" value="{{ $time->date ?? date('Y-m-d') }}">
+                <label for="date" class="form-label">Tanggal <span class="text-danger">*</span></label>
+                <input type="date" name="date" id="date" class="form-control" value="{{ $time->date ?? date('Y-m-d') }}" required>
             </div>
             <div class="row">
                 <div class="col-md-6 col-12 form-group mb-3">
-                    <label for="attendance" class="form-label">Jam Kehadiran</label>
-                    <input type="time" name="attendance" id="attendance" class="form-control" value="{{ $time->time_start ?? "07:05" }}">
+                    <label for="attendance" class="form-label">Jam Kehadiran <span class="text-danger">*</span></label>
+                    <input type="time" name="attendance" id="attendance" class="form-control" value="{{ $time->time_start ?? "07:05" }}" required>
                 </div>
                 <div class="col-md-6 col-12 form-group mb-3">
-                    <label for="departure" class="form-label">Jam Pulang</label>
-                    <input type="time" name="departure" id="departure" class="form-control" value="{{ $time->time_start ?? "12:00" }}">
+                    <label for="departure" class="form-label">Jam Pulang <span class="text-danger">*</span></label>
+                    <input type="time" name="departure" id="departure" class="form-control" value="{{ $time->time_start ?? "12:00" }}" required>
                 </div>
             </div>
         </div>

@@ -390,8 +390,10 @@ class AttendanceService extends BaseService {
                 return Carbon::parse($item->time_start)->format("H:i");
             })->addColumn('departure', function($item) {
                 return Carbon::parse($item->time_end)->format("H:i");
+            })->addColumn('action', function($item) {
+                return view('admin.pages.attendance.datatable-setting', ['item' => $item]);
             })
-            ->rawColumns([])
+            ->rawColumns(['action'])
             ->make(true);
     }
 }

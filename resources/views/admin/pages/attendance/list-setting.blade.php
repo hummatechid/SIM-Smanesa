@@ -22,7 +22,7 @@
     </div>
 
     @php
-        $data_column = ["date" => "Tanggal", "attendance" => "Jam Hadir", "departure" => "Jam Pulang"];
+        $data_column = ["date" => "Tanggal", "attendance" => "Jam Hadir", "departure" => "Jam Pulang", "action" => "Aksi"];
     @endphp
     <x-datatable
         card-title="Tabel Jam Hadir & Pulang"
@@ -35,4 +35,50 @@
 
 </div>
 
+<div class="modal fade" id="modal-edit-data" tabindex="-1">
+    <div class="modal-dialog">
+        <form action="{{ route('attendance.store-time-setting') }}" method="post" class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ubah Jam Hadir & Pulang</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                @csrf
+                <div class="form-group mb-3">
+                    <label for="date" class="form-label">Tanggal</label>
+                    <input type="hidden" name="date" id="date" value="{{ $time->date ?? date('Y-m-d') }}" required readonly>
+                    <input type="date" id="date_show" class="form-control" value="{{ $time->date ?? date('Y-m-d') }}" disabled>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-12 form-group mb-3">
+                        <label for="attendance" class="form-label">Jam Kehadiran <span class="text-danger">*</span></label>
+                        <input type="time" name="attendance" id="attendance" class="form-control" value="{{ $time->time_start ?? "07:05" }}" required>
+                    </div>
+                    <div class="col-md-6 col-12 form-group mb-3">
+                        <label for="departure" class="form-label">Jam Pulang <span class="text-danger">*</span></label>
+                        <input type="time" name="departure" id="departure" class="form-control" value="{{ $time->time_start ?? "12:00" }}" required>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Ubah</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 @endsection
+
+@push('custom-script')
+<script>
+    $(document).on('click', '.btn-change', function() {
+        let data = $(this).data('data')
+
+        $('#date').val(data.date)
+        $('#date_show').val(data.date)
+        $('#attendance').val(data.time_start)
+        $('#departure').val(data.time_end)
+    })
+</script>
+@endpush
