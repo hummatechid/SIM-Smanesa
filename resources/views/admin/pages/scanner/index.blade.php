@@ -87,8 +87,11 @@
             #nisn:not(:focus) ~ #msg::before {
                 content: "Belum ";
             }
-            #nisn:not(:focus) ~ #msg::after {
-                content: ", Tap Area Ini";
+            #nisn:focus ~ #msg > #msg-invalid, #nisn:focus ~ #msg > #msg-break {
+                display: none;
+            }
+            #nisn:not(:focus) ~ #msg > #msg-invalid, #nisn:not(:focus) ~ #msg > #msg-break {
+                display: inline;
             }
             #msg {
                 position: absolute;
@@ -209,7 +212,7 @@
                     />
                     <div id="background-scan"></div>
                     <div id="msg" class="text-center lead fs-4 fw-bold">
-                        Siap Melakukan Scan
+                        Siap Melakukan Scan<div id="msg-break">,</div> <span id="msg-invalid">Tap Area Ini</span>
                     </div>
                 </div>
             </div>
