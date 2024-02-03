@@ -42,7 +42,7 @@ class PermitService extends BaseService {
             })
             ->addColumn('student', function($item) {
                 
-                return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nisn.')</a>';
+                return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nipd.')</a>';
             })->addColumn('reason', function($item) {
                 return $item->reason;
             })->addColumn('date', function($item) {

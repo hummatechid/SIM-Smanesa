@@ -52,7 +52,7 @@
                         <label for="student_id" class="form-label">Siswa</label>
                         <select name="student_id" id="student_id" class="choices">
                             @foreach($users as $user)
-                                <option value="{{ $user->id }}">{{$user->full_name}} | {{ $user->nisn }} | {{ $user->gender }} | {{ $user->nama_rombel }}</option>
+                                <option value="{{ $user->id }}">{{$user->full_name}} | {{ $user->nipd }} | {{ $user->gender }} | {{ $user->nama_rombel }}</option>
                             @endforeach
                         </select>
                     </div>

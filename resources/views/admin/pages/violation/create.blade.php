@@ -42,7 +42,7 @@
                             <select id="student_id" class="form-select choices" name="student_id[]">
                                 <option value="" selected>-- pilih siswa --</option>
                                 @foreach($users as $user)
-                                <option value="{{ $user->id }}">{{$user->full_name}} | {{ $user->nisn }} | {{ $user->gender }} | {{ $user->nama_rombel }}</option>
+                                <option value="{{ $user->id }}">{{$user->full_name}} | {{ $user->nipd }} | {{ $user->gender }} | {{ $user->nama_rombel }}</option>
                                 @endforeach
                             </select>
                             <button type="button" data-index="0" class="btn-del-siswa del-choices text-danger">&times;</button>
@@ -161,7 +161,7 @@
 
             var siswa_lists = `<option value="" disabled selected>-- pilih siswa --</option>`;
             siswas.forEach((siswa) => {
-                siswa_lists += `<option value="${siswa.id}">${siswa.full_name} | ${siswa.nisn} | ${siswa.gender} | ${siswa.nama_rombel}</option>`;
+                siswa_lists += `<option value="${siswa.id}">${siswa.full_name} | ${siswa.nipd} | ${siswa.gender} | ${siswa.nama_rombel}</option>`;
             })
 
             var violation_lists = `<option value="" selected>-- pilih pelanggaran --</option>`;
