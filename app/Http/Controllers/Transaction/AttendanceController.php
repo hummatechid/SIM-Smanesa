@@ -313,7 +313,7 @@ class AttendanceController extends Controller
             $data["date"] = $request->date;
             $this->generalSettingRepository->create($data);
         }
-        return redirect()->back()->with("success","Berhasil set jam kedatangan dan kepulangan pada tanggal ".$request->date);
+        return redirect()->route('attendance.index')->with("success","Berhasil set jam kedatangan dan kepulangan pada tanggal ".$request->date);
     }
 
     /**
@@ -364,6 +364,26 @@ class AttendanceController extends Controller
         if($type == "update" && $status == "alpha") $dataChange["present_at"] = null;
         
         if($type == "create" && $data->present_at) return redirect()->back()->with("error","Siswa ini telah absensi");
+
+        if($status == "masuk" && $type == "update") {
+            // $dateTimestamp = strtotime($request->date);
+            // if(date('ymd', $dateTimestamp) !== date('ymd')) return redirect()->back()->with("error","Tidak boleh mengganti data yang bukan hari ini!");
+
+            $dataChange["present_at"] = Carbon::parse(now())->hour(explode(":",$request->time_present_at)[0])
+            ->minute(explode(":",$request->time_present_at)[1])
+            ->second(0)
+            ->format('Y-m-d H:i:s');
+
+            // $settings = $this->generalSettingRepository->getDataDateSetting(now());
+            // $now = Carbon::parse(now())->format('H:i');
+
+            if($data->return_at){
+                $dataChange["return_at"] = Carbon::parse(now())->hour(explode(":",$request->time_return_at)[0])
+                    ->minute(explode(":",$request->time_return_at)[1])
+                    ->second(0)
+                    ->format('Y-m-d H:i:s');
+            }
+        }
         
         $data->update($dataChange);
 
