@@ -1,13 +1,13 @@
 @extends('admin.layouts.app') @section('content')
 <div class="page-heading">
     <div class="page-title">
-        <div class="row">
-            <div class="col-12 col-md-6 order-md-1 order-last">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="">
                 <h3>{{ $page_title }}</h3>
                 <p class="text-subtitle text-muted">{{ $sub_title }}</p>
             </div>
             @role('superadmin')
-            <div class="col-12 col-md-6 text-end order-md-2 order-first">
+            <div class="">
                 <!-- <nav
                     aria-label="breadcrumb"
                     class="breadcrumb-header float-start float-lg-end"

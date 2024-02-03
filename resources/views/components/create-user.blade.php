@@ -18,11 +18,11 @@
             @endif
             <div class="form-group mb-3">
                 <label for="photo">Foto</label>
-                <div class="d-flex mt-3 gap-3 justify-content-stretch">
+                <div class="d-flex flex-column flex-md-row mt-3 gap-3 justify-content-stretch">
                     @if($isEdit)
                     <img src="{{ $dataUser->photo ? asset(Storage::url($dataUser->photo)) : asset('assets/compiled/jpg/0.webp') }}" alt="foto pengguna" class="rounded-4 mb-2" style="width: 200px; height: 200px; object-fit: cover;">
                     @endif
-                    <div class="w-100 m-0 p-0" @if($isEdit) style="height: 200px; overflow-y: auto;" @endif>
+                    <div class="w-100 m-0 p-0" @if($isEdit) style="max-height: 200px; overflow-y: auto;" @endif>
                         <input type="file" id="upload-image" class="my-pond" name="photo"/>
                         @error('photo')
                             <div class="text-danger">{{ $message }}</div>
