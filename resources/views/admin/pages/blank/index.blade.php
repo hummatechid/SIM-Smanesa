@@ -55,7 +55,7 @@
         <div class="col-12">
             <x-datatable
                 card-title="Tabel Izin Terbaru"
-                data-url="{{ route('permit.get-main-datatables',).'?status=accepted&limit=5' }}"
+                data-url="{{ route('permit.get-main-datatables',).'?&status=accepted&limit=5' }}"
                 :table-columns="$permit_column"
                 arrange-order="desc"
                 default-order="1"
@@ -65,7 +65,7 @@
         <div class="col-md-6 col-12 mb-4">
             <x-datatable
                 card-title="Siswa Sering Melanggar"
-                data-url="{{ route('violation.count-student').'?limit=6' }}"
+                data-url="{{ route('violation.count-student').'?&limit=6' }}"
                 :table-columns="$data_violation"
                 default-order="3"
                 arrange-order="desc"
@@ -78,7 +78,7 @@
         <div class="col-md-6 col-12 mb-4">
             <x-datatable
                 card-title="Siswa Sering Terlambat"
-                data-url="{{ route('attendance.must-late',).'?status=masuk&limit=6' }}"
+                data-url="{{ route('attendance.must-late',).'?&status=masuk&limit=6' }}"
                 :table-columns="$data_late"
                 default-order="3"
                 arrange-order="desc"
@@ -92,7 +92,7 @@
         <div class="col-12 mb-4">
             <x-datatable
                 card-title="Kehadiran Terbaru"
-                data-url="{{ route('attendance.new-list',).'?status=masuk&limit=6' }}"
+                data-url="{{ route('attendance.new-list',).'?&status=masuk&limit=6' }}"
                 :table-columns="$data_presence"
                 default-order="3"
                 arrange-order="desc"
