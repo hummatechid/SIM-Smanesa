@@ -15,12 +15,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 // route scanner
-Route::get('scan-attendance', [AttendanceController::class, 'scanAttendance'])->name('scan.index');
-// Route::get('scan-attendance-camera', [AttendanceController::class, 'scanAttendanceCamera'])->name('scan-manual');
-Route::get('attendance/get-main-data',[AttendanceController::class, 'getDatatablesData'])->name('attendance.get-main-datatables');
-Route::post('attendance/present',[AttendanceController::class, 'store'])->name('presence.attendance');
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('scan-attendance', [AttendanceController::class, 'scanAttendance'])->name('scan.index');
+    // Route::get('scan-attendance-camera', [AttendanceController::class, 'scanAttendanceCamera'])->name('scan-manual');
+    Route::get('attendance/get-main-data',[AttendanceController::class, 'getDatatablesData'])->name('attendance.get-main-datatables');
+    Route::post('attendance/present',[AttendanceController::class, 'store'])->name('presence.attendance');
+    
     Route::prefix('attendance')->name('attendance.')->controller(AttendanceController::class)->group(function() {
         Route::get('get-limited-data','getDatatablesLimit')->name('get-limit-datatables');
         Route::get('get-permit-data','getDatatablesPermit')->name('get-permit-datatables');
