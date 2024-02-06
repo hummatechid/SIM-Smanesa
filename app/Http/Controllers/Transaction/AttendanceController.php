@@ -313,7 +313,7 @@ class AttendanceController extends Controller
             $data["date"] = $request->date;
             $this->generalSettingRepository->create($data);
         }
-        return redirect()->route('attendance.index')->with("success","Berhasil set jam kedatangan dan kepulangan pada tanggal ".$request->date);
+        return redirect()->route('attendance.list-time-setting')->with("success","Berhasil set jam kedatangan dan kepulangan pada tanggal ".$request->date);
     }
 
     /**
