@@ -492,6 +492,7 @@ class AttendanceController extends Controller
             $data = $data->sortByDesc("present_at")->take($limit); 
         } else {
             $data = $this->attendanceRepository->limitOrderBy('present_at',"desc",$limit,["student"]);   
+            dd($data);
         }
 
         $result = [];
