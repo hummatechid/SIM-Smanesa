@@ -490,7 +490,7 @@ class AttendanceController extends Controller
         $status = $request->status ?? "masuk";
         
         $data = $this->attendanceRepository->getDataDateWithCondition(now(),["student"], "status", $status);
-        $data = $data->sortByDesc("present_at")->take($limit); 
+        $data = collect($data)->sortByDesc("present_at")->take($limit); 
         
         $result = [];
         $i = 1;
