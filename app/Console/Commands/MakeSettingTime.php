@@ -28,8 +28,8 @@ class MakeSettingTime extends Command
     {
         $data = [
             "date" => now(),
-            "time_start" => "07:00",
-            "time_end" => "14:00",
+            "time_start" => "07:05",
+            "time_end" => "14:55",
         ];
 
         $settings = GeneralSetting::whereDate("date",now());
