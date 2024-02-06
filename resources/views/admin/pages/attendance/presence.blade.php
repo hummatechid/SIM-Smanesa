@@ -96,7 +96,7 @@
                     <select name="student_id" id="student_id" class="form-select choices" required>
                         <option value="" selected disabled>-- pilih siswa --</option>
                         @foreach($students as $student)
-                        <option value="{{ $student->id }}">{{ $student->full_name }} | {{ $student->nisn }} | {{ $student->gender }} | {{ $student->nama_rombel }}</option>
+                        <option value="{{ $student->id }}">{{ $student->full_name }} | {{ $student->nipd }} | {{ $student->gender }} | {{ $student->nama_rombel }}</option>
                         @endforeach
                     </select>
                     @error('student_id')
@@ -146,7 +146,7 @@
                     {{-- <select name="student_id" id="student_id" class="form-select choices" required>
                         <option value="" selected disabled>-- pilih siswa --</option>
                         @foreach($students as $student)
-                        <option value="{{ $student->id }}">{{ $student->full_name }} | {{ $student->nisn }} | {{ $student->gender }} | {{ $student->nama_rombel }}</option>
+                        <option value="{{ $student->id }}">{{ $student->full_name }} | {{ $student->nipd }} | {{ $student->gender }} | {{ $student->nama_rombel }}</option>
                         @endforeach
                     </select>
                     @error('student_id')

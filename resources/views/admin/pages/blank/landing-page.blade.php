@@ -105,7 +105,7 @@
         </header>
 
         <main>
-            <div class="d-flex flex-column gap-3">
+            <div class="d-flex flex-column gap-0">
                 <section id="about" class="bg-primary">
                     <div class="container px-4 py-5">
                         <div
@@ -146,7 +146,7 @@
                         </div>
                     </div>
                 </section>
-                <section id="list" class="my-5">
+                {{-- <section id="list" class="my-5">
                     <div class="container">
                         <div class="text-center mb-3 pb-0 mb-lg-5 pb-lg-3">
                             <h2 class="mb-0">SMAN 1 Purwosari</h2>
@@ -186,7 +186,7 @@
                             </div>
                         </div>
                     </div>
-                </section>
+                </section> --}}
                 <footer id="footer" class="bg-body-secondary">
                     <div class="container mt-3">
                         <div class="row">

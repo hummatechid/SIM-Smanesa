@@ -85,7 +85,8 @@
             delete-option="permit/soft-delete/deleted_id"
             data-add-url="{{ url('permit/create') }}"
             :with-multiple-select="true"
-            multiple-select-all='<div class="d-flex justify-content-between align-items-center gap-3 mb-3">
+            multiple-select-all='
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
                 <div class="">
                     <input type="checkbox" name="select-all" id="select-all" class="me-2">
                     <label for="select-all">pilih semua data pending</label>
@@ -97,10 +98,8 @@
                         <option value="rejected">Tolak</option>
                     </select>
                 </div>
-
             </div>'
             :with-custom-groups="$custom_group"
-            arrange-order="desc"
         />
     @endif
 
@@ -132,13 +131,6 @@
     </div>
 </div>
 @endsection
-@push('custom-style')
-<style>
-    .table-responsive {
-        overflow-x: visible!important;
-    }
-</style>
-@endpush
 @push('custom-script')
     <script>
         $(window).on('load', function(){

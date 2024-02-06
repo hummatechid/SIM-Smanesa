@@ -1,13 +1,13 @@
 @extends('admin.layouts.app') @section('content')
 <div class="page-heading">
     <div class="page-title">
-        <div class="row">
-            <div class="col-12 col-md-6 order-md-1 order-last">
+        <div class="row mb-3">
+            <div class="col-12 col-sm-6">
                 <h3>{{ $page_title }}</h3>
                 <p class="text-subtitle text-muted">{{ $sub_title }}</p>
             </div>
             @role('superadmin')
-            <div class="col-6 order-md-2 order-last align-items-end text-end">
+            <div class="col-12 col-sm-6 align-items-sm-end text-end">
                 <button
                     id="sync-siswa"
                     class="btn btn-primary"

@@ -112,7 +112,7 @@ class AttendanceController extends Controller
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('student', function($item) {
-                return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nisn.')</a>';
+                return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nipd.')</a>';
             })->addColumn('class', function($item) {
                 return $item->student->nama_rombel;
             })->addColumn('present_at', function($item) {
@@ -150,7 +150,7 @@ class AttendanceController extends Controller
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('student', function($item) {
-                return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nisn.')</a>';
+                return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nipd.')</a>';
             })->addColumn('class', function($item) {
                 return $item->student->nama_rombel;
             })->addColumn('present_at', function($item) {
@@ -186,7 +186,7 @@ class AttendanceController extends Controller
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('student', function($item) {
-                return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nisn.')</a>';
+                return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nipd.')</a>';
             })->addColumn('status', function($item) {
                 if($item->status == "izin") {
                     return '<span class="badge bg-primary">Izin</span>';

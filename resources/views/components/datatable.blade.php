@@ -41,7 +41,7 @@
 
     <div class="card h-100">
         <div class="card-header">
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex flex-wrap justify-content-between align-items-center">
                 <h5 class="card-title">
                     {!! $cardTitle !!}
                 </h5>

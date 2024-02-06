@@ -35,7 +35,7 @@ class ViolationService extends BaseService {
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('name', function($item) {
-                return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nisn.')</a>';
+                return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nipd.')</a>';
             })->addColumn('violation', function($item) {
                 return $item->violationType->name;
             })->addColumn('phone_number', function($item) {
@@ -64,7 +64,7 @@ class ViolationService extends BaseService {
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('name', function($item) {
-                return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nisn.') | '.$item->student->nama_rombel.'</a>';
+                return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nipd.') | '.$item->student->nama_rombel.'</a>';
             })->addColumn('violation', function($item) {
                 return $item->violationType->name;
             })->addColumn('score', function($item) {
@@ -89,7 +89,7 @@ class ViolationService extends BaseService {
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('name', function($item) {
-                return '<a href="'.route('student.show', $item[0]->student->id).'" class="text-reset">'.$item[0]->student->full_name . ' ('.$item[0]->student->nisn.')</a>';
+                return '<a href="'.route('student.show', $item[0]->student->id).'" class="text-reset">'.$item[0]->student->full_name . ' ('.$item[0]->student->nipd.')</a>';
             })->addColumn('class', function($item) {
                 return $item[0]->student->nama_rombel;
             })->addColumn('violation_score', function($item) {

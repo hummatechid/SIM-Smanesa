@@ -39,7 +39,7 @@
                         <div class="mb-3 text-center">
                             <div class="lead">{{ $student->full_name }}</div>
                             <div class="fw-bold">{{ $student->email ? $student->email : "-" }}</div>
-                            <div class="fw-bold">{{ $student->nama_rombel ? $student->nama_rombel : '-' }} / {{ $student->nisn ? $student->nisn : '-' }}</div>
+                            <div class="fw-bold">{{ $student->nama_rombel ? $student->nama_rombel : '-' }} / {{ $student->nipd ? $student->nipd : '-' }}</div>
                         </div>
                         <div class="d-flex flex-column align-items-center gap-2">
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#violation-modal">Poin Pelanggaran : {{ $student->score }}</button>
