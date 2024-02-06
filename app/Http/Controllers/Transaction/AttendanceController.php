@@ -486,6 +486,7 @@ class AttendanceController extends Controller
     {
         if($request->limit) $limit = $request->limit;
         else $limit = 10;
+        dd($request->all());
 
         if($request->status){
             $data = $this->attendanceRepository->oneConditionOneRelation('status',$request->status,["student"]);   
