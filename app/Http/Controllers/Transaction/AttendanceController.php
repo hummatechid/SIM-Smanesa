@@ -490,10 +490,11 @@ class AttendanceController extends Controller
         if($request->status){
             $data = $this->attendanceRepository->oneConditionOneRelation('status',$request->status,["student"]);   
             $data = $data->sortByDesc("present_at")->take($limit); 
+            dd($data);
+
         } else {
             $data = $this->attendanceRepository->limitOrderBy('present_at',"desc",$limit,["student"]);   
         }
-        dd($data);
 
         $result = [];
         $i = 1;
