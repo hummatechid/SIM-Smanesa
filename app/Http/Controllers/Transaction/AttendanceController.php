@@ -487,13 +487,10 @@ class AttendanceController extends Controller
         if($request->limit) $limit = $request->limit;
         else $limit = 10;
 
-        if($request->status){
-            $data = $this->attendanceRepository->oneConditionOneRelation('status',$request->status,["student"]);   
-        } else {
-            $data = $this->attendanceRepository->getDataDate(now(),["student"]);
-        }
-        $data = $data->sortByDesc("present_at")->take($limit);   
-        dd($data);
+        $status = $request->status ?? "masuk";
+        
+        $data = $this->attendanceRepository->getDataDateWithCondition(now(),["student"], "status", $status);
+        $data = $data->sortByDesc("present_at")->take($limit); 
         
         $result = [];
         $i = 1;
