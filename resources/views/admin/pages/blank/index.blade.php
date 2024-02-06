@@ -92,7 +92,7 @@
         <div class="col-12 mb-4">
             <x-datatable
                 card-title="Kehadiran Terbaru"
-                data-url="{{ route('attendance.new-list').'?&status=masuk&limit=6' }}"
+                data-url="{{ route('attendance.new-list') }}"
                 :table-columns="$data_presence"
                 default-order="3"
                 arrange-order="desc"
