@@ -25,8 +25,11 @@
                 </h5>
             </div>
             <div class="card-body">
-                <label for="ip_public">IP Publik</label>
-                <input type="text" class="form-control" placeholder="118.99.112.0" name="ip_public" required pattern="/^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/" data-parsley-pattern-message="format dns salah (contoh: 118.99.112.0)"/>
+                <x-session-alert />
+                <div class="form-group">
+                    <label for="ip_public">IP Publik</label>
+                    <input type="text" class="form-control" placeholder="255.255.255.255" name="ip_public" required pattern="/^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$/" data-parsley-pattern-message="format ip salah (contoh: 255.255.255.255)"/>
+                </div>
             </div>
             <div class="card-footer">
                 <button type="submit" class="btn btn-primary">Ubah</button>
