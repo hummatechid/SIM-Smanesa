@@ -19,7 +19,7 @@ class IpController extends Controller
 
             return redirect()->back()->with('success', 'IP Publik berhasil didaftarkan');
         }catch(\Throwable $th){
-            return redirect()->back()->with('error', 'Kesalahan dalam mendaftarkan IP');
+            return redirect()->back()->with('error', 'Kesalahan dalam mendaftarkan IP '. $th->getMessage());
         }
 
     }
