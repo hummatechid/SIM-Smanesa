@@ -384,6 +384,8 @@ class AttendanceService extends BaseService {
                 //     return $barang->status == "alpha";
                 // })->count();
                 return 0;
+            })->addColumn('data_item', function($item) {
+                return $item;
             })->rawColumns(['student'])
             ->make(true);
     }
