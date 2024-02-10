@@ -356,7 +356,6 @@ class AttendanceService extends BaseService {
         $result = $data->whereHas('student', function ($query) {
             $query->orderBy('full_name', "DESC");
         })->groupBy("student_id")->select("student_id")->get();
-        // $data = $data->groupBy("student_id");
 
         return Datatables::of($result)
             ->addIndexColumn()
@@ -366,24 +365,12 @@ class AttendanceService extends BaseService {
                 return $item->student->nama_rombel;
             })->addColumn('present', function($item) use ($data){
                 return $data->where('status', "masuk")->where("student_id",$item->student_id)->count();
-                // return 0;
-            })->addColumn('permit', function($item) {
-                // return $item->filter(function($barang) {
-                //     return $barang->status == "izin";
-                // })->count();
-                return 0;
-            })->addColumn('sick', function($item) {
-                // return $item->filter(function($barang) {
-                //     return $barang->status == "sakit";
-                // })->count();
-                return 0;
-            })->addColumn('alpa', function($item) {
-                // return $item->filter(function($barang) {
-                //     return $barang->status == "alpha";
-                // })->count();
-                return 0;
-            })->addColumn('data_item', function($item) {
-                return $item;
+            })->addColumn('permit', function($item) use ($data){
+                return $data->where('status', "izin")->where("student_id",$item->student_id)->count();
+            })->addColumn('sick', function($item) use ($data) {
+                return $data->where('status', "sakit")->where("student_id",$item->student_id)->count();
+            })->addColumn('alpa', function($item) use ($data) {
+                return $data->where('status', "masuk")->where("student_id",$item->student_id)->count();
             })->rawColumns(['student'])
             ->make(true);
     }
