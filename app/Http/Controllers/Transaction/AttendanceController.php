@@ -262,7 +262,7 @@ class AttendanceController extends Controller
             });
         }
 
-        // $data = $data->take(5);
+        $data = $data->take(100);
         
         return $this->attendanceService->getReportDataDatatableV2($data);
     }
