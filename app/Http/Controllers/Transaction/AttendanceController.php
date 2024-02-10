@@ -261,8 +261,8 @@ class AttendanceController extends Controller
                 return $item->student->tingkat_pendidikan == $grade;
             });
         }
-        dd(count($data));
-        $data = $data->take(count($data));
+        // dd(count($data));
+        $data = $data->take(15000);
         
         return $this->attendanceService->getReportDataDatatableV2($data);
     }
