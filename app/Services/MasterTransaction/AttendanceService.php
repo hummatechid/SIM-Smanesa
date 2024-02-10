@@ -356,8 +356,6 @@ class AttendanceService extends BaseService {
         $data = $data->whereHas('student', function ($query) {
             $query->orderBy('full_name', "DESC");
         })->groupBy("student_id", "status")->select("student_id","status")->get();
-        
-        dd($data);
 
         return Datatables::of($data)
             ->addIndexColumn()
