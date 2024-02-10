@@ -364,8 +364,8 @@ class AttendanceService extends BaseService {
                 return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nipd.')</a>';
             })->addColumn('class', function($item) {
                 return $item->student->nama_rombel;
-            })->addColumn('present', function($item) use ($data) {
-                return $data->where('status', "masuk")->where("student_id",$data->student_id)->count();
+            })->addColumn('present', function($item) use ($data){
+                return $data->where('status', "masuk")->where("student_id",$item->student_id)->count();
                 // return 0;
             })->addColumn('permit', function($item) {
                 // return $item->filter(function($barang) {
