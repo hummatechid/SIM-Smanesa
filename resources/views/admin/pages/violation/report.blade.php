@@ -114,7 +114,7 @@
         custom-export-title="Laporan Pelanggaran"
         :server-side="false"
         :info-table="false"
-        :pagging-table="false"
+        :pagging-table="true"
         :is-report="true"
         :orderable="false"
         custom-export-settings="exportOptions: {columns: 'th:not(:last-child)'}"

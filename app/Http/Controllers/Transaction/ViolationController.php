@@ -100,6 +100,8 @@ class ViolationController extends Controller
             });
         }
 
+        $data = $data->take(count($data));
+
         return $this->violationService->getReportDataDatatableV2($data);
     }
 
