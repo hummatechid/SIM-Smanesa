@@ -351,6 +351,7 @@ class AttendanceService extends BaseService {
     public function getReportDataDatatableV2(array|object $data) :JsonResponse
     {
         $data = collect($data)->sortBy(function ($item) {
+            dd($item);
             return $item->student->full_name;
         })->groupBy("student_id");
 
