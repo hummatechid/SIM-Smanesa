@@ -353,22 +353,20 @@ class AttendanceService extends BaseService {
         // $data = $data->sortBy(function ($item) {
         //     return $item->student->full_name;
         // })->groupBy("student_id");
-        $data = $data->whereHas('student', function ($query) {
+        $result = $data->whereHas('student', function ($query) {
             $query->orderBy('full_name', "DESC");
         })->groupBy("student_id")->select("student_id")->get();
         // $data = $data->groupBy("student_id");
 
-        return Datatables::of($data)
+        return Datatables::of($result)
             ->addIndexColumn()
             ->addColumn('student', function($item) {
                 return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nipd.')</a>';
             })->addColumn('class', function($item) {
                 return $item->student->nama_rombel;
-            })->addColumn('present', function($item) {
-                // return $item->filter(function($barang) {
-                //     return $barang->status == "masuk";
-                // })->count();
-                return 0;
+            })->addColumn('present', function($item) use ($data) {
+                return $data->where('status', "masuk")->where("student_id",$data->student_id)->count();
+                // return 0;
             })->addColumn('permit', function($item) {
                 // return $item->filter(function($barang) {
                 //     return $barang->status == "izin";
