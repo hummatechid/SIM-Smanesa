@@ -358,6 +358,8 @@ class AttendanceService extends BaseService {
         })->get();
         $data = $data->groupBy("student_id");
 
+        dd($data);
+
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('student', function($item) {
