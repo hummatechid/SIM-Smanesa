@@ -170,6 +170,21 @@
                     return str + n;
                 },
                 {!! $customExportSettings !!}
+                @if ($exportBtn === 'pdf') // Check if the current button is for PDF export
+                    action: function(e, dt, button, config) {
+                        // Store the current page length
+                        var currentLength = dt.page.len();
+
+                        // Set page length to -1 (show all records)
+                        dt.page.len(-1).draw();
+
+                        // Trigger PDF export
+                        $.fn.dataTable.ext.buttons.pdfHtml5.action.call(button, e, dt, button, config);
+
+                        // Revert to the original page length
+                        dt.page.len(currentLength).draw();
+                    }
+                @endif
             },
             @endforeach
         ],

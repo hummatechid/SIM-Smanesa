@@ -97,7 +97,7 @@
         custom-export-title="Laporan Presensi"
         :server-side="false"
         :info-table="false"
-        :pagging-table="false"
+        :pagging-table="true"
         :is-report="true"
         :orderable="false"
     />
