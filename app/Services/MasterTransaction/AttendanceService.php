@@ -353,25 +353,31 @@ class AttendanceService extends BaseService {
         // $data = $data->sortBy(function ($item) {
         //     return $item->student->full_name;
         // })->groupBy("student_id");
-        $result = $data->whereHas('student', function ($query) {
-            $query->orderBy('full_name', "DESC");
-        })->groupBy("student_id")->select("student_id")->get();
-
-        return Datatables::of($result)
+        $data = $data->with(['student' => function ($query) {
+            $query->orderBy('full_name', 'DESC');
+        }])->get();
+        
+        return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('student', function($item) {
                 return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nipd.')</a>';
-            })->addColumn('class', function($item) {
+            })
+            ->addColumn('class', function($item) {
                 return $item->student->nama_rombel;
-            })->addColumn('present', function($item) use ($data){
-                return $data->where('status', "masuk")->where("student_id",$item->student_id)->count();
-            })->addColumn('permit', function($item) use ($data){
-                return $data->where('status', "izin")->where("student_id",$item->student_id)->count();
-            })->addColumn('sick', function($item) use ($data) {
-                return $data->where('status', "sakit")->where("student_id",$item->student_id)->count();
-            })->addColumn('alpa', function($item) use ($data) {
-                return $data->where('status', "masuk")->where("student_id",$item->student_id)->count();
-            })->rawColumns(['student'])
+            })
+            ->addColumn('present', function($item) {
+                return $item->where('status', 'masuk')->count();
+            })
+            ->addColumn('permit', function($item) {
+                return $item->where('status', 'izin')->count();
+            })
+            ->addColumn('sick', function($item) {
+                return $item->where('status', 'sakit')->count();
+            })
+            ->addColumn('alpa', function($item) {
+                return $item->where('status', 'alpha')->count();
+            })
+            ->rawColumns(['student'])
             ->make(true);
     }
 
