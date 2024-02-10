@@ -357,6 +357,8 @@ class AttendanceService extends BaseService {
             $query->orderBy('full_name', "DESC");
         })->get();
 
+        dd($data);
+
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('student', function($item) {
