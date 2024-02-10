@@ -361,10 +361,9 @@ class AttendanceService extends BaseService {
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('student', function($item) {
-                dd($item);
-                return '<a href="'.route('student.show', $item->student[0]->id).'" class="text-reset">'.$item->student[0]->full_name . ' ('.$item->student[0]->nipd.')</a>';
+                return '<a href="'.route('student.show', $item[0]->student->id).'" class="text-reset">'.$item[0]->student->full_name . ' ('.$item[0]->student->nipd.')</a>';
             })->addColumn('class', function($item) {
-                return $item->student[0]->nama_rombel;
+                return $item[0]->student->nama_rombel;
             })->addColumn('present', function($item) {
                 return $item->filter(function($barang) {
                     return $barang->status == "masuk";
