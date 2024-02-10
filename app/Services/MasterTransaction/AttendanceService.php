@@ -355,31 +355,35 @@ class AttendanceService extends BaseService {
         // })->groupBy("student_id");
         $data = $data->whereHas('student', function ($query) {
             $query->orderBy('full_name', "DESC");
-        })->get();
-        $data = $data->groupBy("student_id");
+        })->groupBy("student_id")->select("student_id")->get();
+        // $data = $data->groupBy("student_id");
 
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('student', function($item) {
-                return '<a href="'.route('student.show', $item[0]->student->id).'" class="text-reset">'.$item[0]->student->full_name . ' ('.$item[0]->student->nipd.')</a>';
+                return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nipd.')</a>';
             })->addColumn('class', function($item) {
-                return $item[0]->student->nama_rombel;
+                return $item->student->nama_rombel;
             })->addColumn('present', function($item) {
-                return $item->filter(function($barang) {
-                    return $barang->status == "masuk";
-                })->count();
+                // return $item->filter(function($barang) {
+                //     return $barang->status == "masuk";
+                // })->count();
+                return 0;
             })->addColumn('permit', function($item) {
-                return $item->filter(function($barang) {
-                    return $barang->status == "izin";
-                })->count();
+                // return $item->filter(function($barang) {
+                //     return $barang->status == "izin";
+                // })->count();
+                return 0;
             })->addColumn('sick', function($item) {
-                return $item->filter(function($barang) {
-                    return $barang->status == "sakit";
-                })->count();
+                // return $item->filter(function($barang) {
+                //     return $barang->status == "sakit";
+                // })->count();
+                return 0;
             })->addColumn('alpa', function($item) {
-                return $item->filter(function($barang) {
-                    return $barang->status == "alpha";
-                })->count();
+                // return $item->filter(function($barang) {
+                //     return $barang->status == "alpha";
+                // })->count();
+                return 0;
             })->rawColumns(['student'])
             ->make(true);
     }
