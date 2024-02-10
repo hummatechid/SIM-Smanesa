@@ -346,4 +346,40 @@ class BaseRepository implements RepositoryInterface {
                 return $this->model->whereNull('deleted_at')->get();
         }
     }
+
+    public function getDataMonthWithoutGet(int $year, int $month, array $relations = [], bool $history = false): object | null
+    {
+        if($history == true){
+            return $this->model->with($relations)->whereNotNull("deleted_at")->whereYear("created_at",$year)->whereMonth("created_at",$month); 
+        } else {
+            return $this->model->with($relations)->whereNull("deleted_at")->whereYear("created_at",$year)->whereMonth("created_at",$month); 
+        } 
+    }
+
+    public function getDataYearsWithoutGet(int $year, array $relations = [], bool $history = false): object | null
+    {
+        if($history == true){
+            return $this->model->with($relations)->whereNotNull("deleted_at")->whereYear("created_at",$year); 
+        } else {
+            return $this->model->with($relations)->whereNull("deleted_at")->whereYear("created_at",$year); 
+        }
+    }
+
+    public function getDataDateWithoutGet($date, array $relations = [], bool $history = false): object | null
+    {
+        if($history == true){
+            return $this->model->with($relations)->whereNotNull("deleted_at")->whereDate("created_at",$date); 
+        } else {
+            return $this->model->with($relations)->whereNull("deleted_at")->whereDate("created_at",$date); 
+        } 
+    }
+
+    public function getDataCustomDateWithoutGet($date_from, $date_to, array $relations = [], bool $history = false): object | null
+    {
+        if($history == true){
+            return $this->model->with($relations)->whereNotNull("deleted_at")->whereBetween("created_at",[$date_from, $date_to]); 
+        } else {
+            return $this->model->with($relations)->whereNull("deleted_at")->whereBetween("created_at",[$date_from, $date_to]); 
+        } 
+    }
 }

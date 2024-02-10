@@ -213,10 +213,10 @@ class AttendanceController extends Controller
                 if(!$request->year) $year = date('Y');
                 else $year = $request->year;
         
-                $data = $this->attendanceRepository->getDataMonth($year,$request->month,["student"]);
+                $data = $this->attendanceRepository->getDataMonthWithoutGet($year,$request->month,["student"]);
                 break;
             case "yearly":
-                $data = $this->attendanceRepository->getDataYears($request->year,["student"]);
+                $data = $this->attendanceRepository->getDataYearsWithoutGet($request->year,["student"]);
                 break;
             case "custom":
                 $check_date = explode("-",$request->date);
@@ -231,15 +231,15 @@ class AttendanceController extends Controller
                         ->second(0)
                         ->format('Y-m-d H:i:s');
                     }
-                    $data = $this->attendanceRepository->getDataCustomDate($date_from,$date_to,["student"]);
+                    $data = $this->attendanceRepository->getDataCustomDateWithoutGet($date_from,$date_to,["student"]);
                 }else if(count($check_date) == 3){
-                    $data = $this->attendanceRepository->getDataDate($request->date,["student"]);
+                    $data = $this->attendanceRepository->getDataDateWithoutGet($request->date,["student"]);
                 } else {
                     if(!$request->year) $year = date('Y');
                     else $year = $request->year;
                     if(!$request->month) $month = date('m');
                     else $month = $request->month;
-                    $data = $this->attendanceRepository->getDataMonth($year,$month,["student"]);
+                    $data = $this->attendanceRepository->getDataMonthWithoutGet($year,$month,["student"]);
                 }
                 break;
             default:
@@ -247,22 +247,22 @@ class AttendanceController extends Controller
                 else $year = $request->year;
                 if(!$request->month) $month = date('m');
                 else $month = $request->month;
-                $data = $this->attendanceRepository->getDataMonth($year,$month,["student"]);
+                $data = $this->attendanceRepository->getDataMonthWithoutGet($year,$month,["student"]);
                 break;
         }
         if($request->data == "per_class"){
             $class = $request->class;
-            $data = $data->filter(function($item) use ($class){
+            $data = collect($data)->filter(function($item) use ($class){
                 return $item->student->nama_rombel == $class;
             });
         }else if($request->data == "per_grade"){
             $grade = $request->grade;
-            $data = $data->filter(function($item) use ($grade){
+            $data = collect($data)->filter(function($item) use ($grade){
                 return $item->student->tingkat_pendidikan == $grade;
             });
         }
-        dd($data);
-        $data = $data->take(1000);
+
+        // $data = collect($data)->take(1000);
         
         return $this->attendanceService->getReportDataDatatableV2($data);
     }
