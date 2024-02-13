@@ -26,6 +26,7 @@
         </div>
         <div class="card-body">
             @csrf
+            <div class="alert alert-warning undismissable" role="alert">Ketika ingin mencetak / mengunduh laporan, klik "load semua data" terlebih dahulu</div>
             <div class="row">
                 <div class="form-group mb-3 col-md-6">
                     <label for="type">Tipe Laporan</label>
@@ -62,11 +63,11 @@
                     <select name="data" id="data" class="form-select" required>
                         <option value="all">Semua</option>
                         <option value="per_class">Per Kelas</option>
-                        <option value="per_grade">Per Angkatan</option>
+                        <option value="per_grade">Per Jenjang</option>
                     </select>
                 </div>
                 <div class="form-group mb-3 col-md-6" id="data_grade" style="display: none;">
-                    <label for="grade">Angkatan</label>
+                    <label for="grade">Jenjang</label>
                     <select name="grade" id="grade" class="form-select input-data">
                         @foreach($grades as $grade)
                         <option value="{{ $grade }}">{{ $grade }}</option>
@@ -112,8 +113,8 @@
         arrange-order="asc"
         :custom-export-button="['csv', 'excel', 'pdf', 'print']"
         custom-export-title="Laporan Pelanggaran"
-        :server-side="false"
-        :info-table="false"
+        :server-side="true"
+        :info-table="true"
         :pagging-table="true"
         :is-report="true"
         :orderable="false"
@@ -249,13 +250,11 @@
 
         $(document).on('click', '.btn-detail', function() {
             let data = $(this).data('data')
-            let student_id = data.student_id
-            let student_name = data.student.full_name
+            let student_id = data.id
+            let student_name = data.full_name
 
             let url = "{{ route('violation.student', 'student_id=siswa_id') }}"
             url = url.replace('siswa_id', student_id)
-
-            console.log(url)
 
             $('#student_name').html(student_name)
             violation_table.ajax.url(url).load()

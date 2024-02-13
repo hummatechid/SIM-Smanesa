@@ -117,6 +117,8 @@
 </script>
 
 <script>
+    var {{ $tableId }}_max_render = false;
+    var {{ $tableId }}_render_to;
     var export_title = '{{ $customExportTitle }}';
     var customGroups = {}
     @foreach($withCustomGroups as $name => $props)
@@ -140,7 +142,7 @@
     let {{ $tableId }} = $('#{{ $tableId }}').DataTable({
         processing: true,
         @if(!empty($customExportButton))
-        dom: 'Bfrtip',
+        dom: "B<'row mt-3'<'col'l><'col'f>>rt<'row'<'col'i><'col'p>>",
         @endif
         serverSide: "{{ $serverSide }}",
         responsive: "{{ $datatableResponsive }}",
@@ -172,11 +174,34 @@
                 {!! $customExportSettings !!}
             },
             @endforeach
+            {
+                text: 'Load Semua Data',
+                className: 'btn-primary',
+                action: function(e, dt, node, config) {
+                    Swal.fire({
+                        title: 'Menampilkan semua data',
+                        text: 'Kemungkinan akan membuat server bekerja terlalu berat, apakah anda yakin?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        cancelButtonText: "Batal"
+                    }).then((result) => {
+                        if(result.isConfirmed) {
+                            clearTimeout({{ $tableId }}_render_to)
+                            {{ $tableId }}_max_render = true;
+                            {{ $tableId }}_render_to = setTimeout(() => {
+                                {{ $tableId }}_max_render = false;
+                            }, 3000);
+                            dt.page.len(-1).draw()
+                        }
+                    })
+                }
+            }
         ],
         ajax: {
             url: "{{ url($dataUrl) }}?&" + getParams{{ $tableId }}(),
             data: {
                 _token: "{{ csrf_token() }}",
+                max_render: {{ $tableId }}_max_render
             }
         },
         order: [[{{ isset($defaultOrder) ? $defaultOrder : 1 }}, '{{ $arrangeOrder }}']],
@@ -272,7 +297,7 @@
                         </div>`
                         $('#alert-delete').append(alert_msg)
                         window.setTimeout(function() {
-                            $(".alert").fadeTo(1000, 0).slideUp(300, function(){
+                            $(".alert").not('.undismissable').fadeTo(1000, 0).slideUp(300, function(){
                                 $(this).slideUp(300); 
                             });
                         }, 5000);

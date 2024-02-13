@@ -47,37 +47,54 @@ class ViolationController extends Controller
 
     public function getReportDatatablesData(Request $request)
     {
+        if(isset($request->max_render) && $request->max_render == true) {
+            ini_set('MAX_EXECUTION_TIME', 3600);
+            set_time_limit(0);
+        }
+
+        $data = \App\Models\Student::orderBy('full_name', 'ASC');
+
         switch($request->type){
             case "monthly":
                 if(!$request->year) $year = date('Y');
                 else $year = $request->year;
-                $data = $this->violationRepository->getDataMonth($year,$request->month,["violationType","student"]);
+
+                
+                $start_date = Carbon::parse($year.'-'.$request->month.'-01')->startOfMonth();
+                $end_date = Carbon::parse($year.'-'.$request->month.'-01')->endOfMonth();
+                
                 break;
             case "yearly":
-                $data = $this->violationRepository->getDataYears($request->year,["violationType","student"]);
+                $start_date = Carbon::parse($request->year.'-01-01')->startOfYear();
+                $end_date = Carbon::parse($request->year.'-01-01')->endOfYear();
+
                 break;
             case "custom":
-                $check_date = explode("s/d",$request->date);
-                if(count($check_date) > 1){
-                    if(!$request->date){
-                        $date_from = date('Y-m-d');
-                        $date_to = date('Y-m-d');
-                    }else {
-                        $date_from = Carbon::parse($check_date[0])->format('Y-m-d');
-                        $date_to = Carbon::parse($check_date[1])->hour(23)
-                        ->minute(59)
-                        ->second(0)
-                        ->format('Y-m-d H:i:s');
-                    }
-                    $data = $this->violationRepository->getDataCustomDate($date_from,$date_to,["student"]);
-                }else if(count($check_date) == 3){
-                    $data = $this->violationRepository->getDataDate($request->date,["student"]);
+                if(!$request->date){
+                    $start_date = date('Y-m-d');
+                    $end_date = date('Y-m-d');
                 } else {
-                    if(!$request->year) $year = date('Y');
-                    else $year = $request->year;
-                    if(!$request->month) $month = date('m');
-                    else $month = $request->month;
-                    $data = $this->violationRepository->getDataMonth($year,$month,["student"]);
+                    $check_date = explode(" s/d ",$request->date);
+                    if(count($check_date) > 1){
+                        $start_date = Carbon::parse($check_date[0])->startOfDay();
+                        $end_date = Carbon::parse($check_date[1])->endOfDay();
+                    }else if(count($check_date) == 1){
+                        if($check_date){
+                            $start_date = date('Y-m-d');
+                            $end_date = date('Y-m-d');
+                        } else {
+                            $start_date = Carbon::parse($request->date)->startOfDay();
+                            $end_date = Carbon::parse($request->date)->endOfDay();
+                        }
+                    } else {
+                        if(!$request->year) $year = date('Y');
+                        else $year = $request->year;
+                        if(!$request->month) $month = date('m');
+                        else $month = $request->month;
+                        
+                        $start_date = Carbon::parse($year.'-'.$month.'-01')->startOfMonth();
+                        $end_date = Carbon::parse($year.'-'.$month.'-01')->endOfMonth();
+                    }
                 }
                 break;
             default:
@@ -85,22 +102,29 @@ class ViolationController extends Controller
                 else $year = $request->year;
                 if(!$request->month) $month = date('m');
                 else $month = $request->month;
-                $data = $this->violationRepository->getDataMonth($year,$month,["violationType","student"]);
+
+                $start_date = Carbon::parse($year.'-'.$month.'-01')->startOfMonth();
+                $end_date = Carbon::parse($year.'-'.$month.'-01')->endOfMonth();
                 break;
         }
+
+        $data = $data->withCount([
+            'violation as total_violation' => function($q) use($start_date, $end_date) {
+                $q->whereBetween('created_at', [$start_date, $end_date]);
+            }
+        ])->withSum([
+            'violation as total_score_violation' => function($q) use($start_date, $end_date) {
+                $q->whereBetween('created_at', [$start_date, $end_date]);
+            }
+        ], 'score');
+
         if($request->data == "per_class"){
             $class = $request->class;
-            $data = $data->filter(function($item) use ($class){
-                return $item->student->nama_rombel == $class;
-            });
+            $data->where('nama_rombel', $class);
         }else if($request->data == "per_grade"){
             $grade = $request->grade;
-            $data = $data->filter(function($item) use ($grade){
-                return $item->student->tingkat_pendidikan == $grade;
-            });
+            $data = $data->where('tingkat_pendidikan', $grade);
         }
-
-        $data = $data->take(count($data));
 
         return $this->violationService->getReportDataDatatableV2($data);
     }

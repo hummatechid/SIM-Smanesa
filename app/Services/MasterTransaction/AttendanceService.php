@@ -350,32 +350,25 @@ class AttendanceService extends BaseService {
      */
     public function getReportDataDatatableV2(array|object $data) :JsonResponse
     {
-        // $data = $data->sortBy(function ($item) {
-        //     return $item->student->full_name;
-        // })->groupBy("student_id");
-        $data = $data->with(['student' => function ($query) {
-            $query->orderBy('full_name', 'DESC');
-        }])->get();
-        
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('student', function($item) {
-                return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nipd.')</a>';
+                return '<a href="'.route('student.show', $item->id).'" class="text-reset">'.$item->full_name . ' ('.$item->nipd.')</a>';
             })
             ->addColumn('class', function($item) {
-                return $item->student->nama_rombel;
+                return $item->nama_rombel;
             })
             ->addColumn('present', function($item) {
-                return $item->where('status', 'masuk')->count();
+                return $item->masuk;
             })
             ->addColumn('permit', function($item) {
-                return $item->where('status', 'izin')->count();
+                return $item->izin;
             })
             ->addColumn('sick', function($item) {
-                return $item->where('status', 'sakit')->count();
+                return $item->sakit;
             })
             ->addColumn('alpa', function($item) {
-                return $item->where('status', 'alpha')->count();
+                return $item->alpha;
             })
             ->rawColumns(['student'])
             ->make(true);
