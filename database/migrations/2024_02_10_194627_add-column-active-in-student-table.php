@@ -12,17 +12,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $validator = Validator::make(['is_active' => ''], [
-            'is_active' => 'required|unique:students',
-        ]);
+        // $validator = Validator::make(['is_active' => ''], [
+        //     'is_active' => 'required|unique:students',
+        // ]);
 
-        if ($validator->fails()) {
-            throw new \Exception("Column is_actve have already exists in table students");
-        }
+        // if ($validator->fails()) {
+        //     throw new \Exception("Column is_actve have already exists in table students");
+        // }
         
-        Schema::table('students', function (Blueprint $table) {
-            $table->dropColumn('is_active')->default(true);
-        });
+        // Schema::table('students', function (Blueprint $table) {
+        //     $table->dropColumn('is_active')->default(true);
+        // });
     }
 
     /**

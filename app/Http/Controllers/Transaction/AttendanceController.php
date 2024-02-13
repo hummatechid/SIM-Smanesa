@@ -208,6 +208,11 @@ class AttendanceController extends Controller
 
     public function getReportDatatablesData(Request $request)
     {
+        if(isset($request->max_render) && $request->max_render == true) {
+            ini_set('MAX_EXECUTION_TIME', 3600);
+            set_time_limit(0);
+        }
+        
         switch($request->type){
             case "monthly":
                 if(!$request->year) $year = date('Y');

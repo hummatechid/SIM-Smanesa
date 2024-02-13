@@ -140,7 +140,7 @@
     let {{ $tableId }} = $('#{{ $tableId }}').DataTable({
         processing: true,
         @if(!empty($customExportButton))
-        dom: 'Bfrtip',
+        dom: "B<'row mt-3'<'col'l><'col'f>>rt<'row'<'col'i><'col'p>>",
         @endif
         serverSide: "{{ $serverSide }}",
         responsive: "{{ $datatableResponsive }}",
@@ -172,6 +172,20 @@
                 {!! $customExportSettings !!}
             },
             @endforeach
+            {
+                text: 'Load Semua Data',
+                action: function(e, dt, node, config) {
+                    Swal.fire({
+                        title: 'Menampilkan semua data',
+                        text: 'Kemungkinan akan membuat server bekerja terlalu berat, apakah anda yakin?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        cancelButtonText: "Batal"
+                    }).then((result) => {
+                        if(result.isConfirmed) dt.page.len(-1).draw();
+                    })
+                }
+            }
         ],
         ajax: {
             url: "{{ url($dataUrl) }}?&" + getParams{{ $tableId }}(),
