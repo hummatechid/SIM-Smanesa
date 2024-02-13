@@ -286,9 +286,6 @@ class AttendanceController extends Controller
             $data->where('nama_rombel', $class);
         }else if($request->data == "per_grade"){
             $grade = $request->grade;
-            // $data = $data->filter(function($item) use ($grade){
-            //     return $item->student->tingkat_pendidikan == $grade;
-            // });
             $data = $data->where('tingkat_pendidikan', $grade);
         }
 

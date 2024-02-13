@@ -176,6 +176,7 @@
             @endforeach
             {
                 text: 'Load Semua Data',
+                className: 'btn-primary',
                 action: function(e, dt, node, config) {
                     Swal.fire({
                         title: 'Menampilkan semua data',
@@ -296,7 +297,7 @@
                         </div>`
                         $('#alert-delete').append(alert_msg)
                         window.setTimeout(function() {
-                            $(".alert").fadeTo(1000, 0).slideUp(300, function(){
+                            $(".alert").not('.undismissable').fadeTo(1000, 0).slideUp(300, function(){
                                 $(this).slideUp(300); 
                             });
                         }, 5000);
