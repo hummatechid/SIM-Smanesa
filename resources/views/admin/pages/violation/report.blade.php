@@ -62,11 +62,11 @@
                     <select name="data" id="data" class="form-select" required>
                         <option value="all">Semua</option>
                         <option value="per_class">Per Kelas</option>
-                        <option value="per_grade">Per Angkatan</option>
+                        <option value="per_grade">Per Jenjang</option>
                     </select>
                 </div>
                 <div class="form-group mb-3 col-md-6" id="data_grade" style="display: none;">
-                    <label for="grade">Angkatan</label>
+                    <label for="grade">Jenjang</label>
                     <select name="grade" id="grade" class="form-select input-data">
                         @foreach($grades as $grade)
                         <option value="{{ $grade }}">{{ $grade }}</option>
