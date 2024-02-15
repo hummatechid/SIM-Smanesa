@@ -117,8 +117,6 @@
 </script>
 
 <script>
-    var {{ $tableId }}_max_render = false;
-    var {{ $tableId }}_render_to;
     var export_title = '{{ $customExportTitle }}';
     var customGroups = {}
     @foreach($withCustomGroups as $name => $props)
@@ -174,34 +172,11 @@
                 {!! $customExportSettings !!}
             },
             @endforeach
-            {
-                text: 'Load Semua Data',
-                className: 'btn-primary',
-                action: function(e, dt, node, config) {
-                    Swal.fire({
-                        title: 'Menampilkan semua data',
-                        text: 'Kemungkinan akan membuat server bekerja terlalu berat, apakah anda yakin?',
-                        icon: 'question',
-                        showCancelButton: true,
-                        cancelButtonText: "Batal"
-                    }).then((result) => {
-                        if(result.isConfirmed) {
-                            clearTimeout({{ $tableId }}_render_to)
-                            {{ $tableId }}_max_render = true;
-                            {{ $tableId }}_render_to = setTimeout(() => {
-                                {{ $tableId }}_max_render = false;
-                            }, 3000);
-                            dt.page.len(-1).draw()
-                        }
-                    })
-                }
-            }
         ],
         ajax: {
             url: "{{ url($dataUrl) }}?&" + getParams{{ $tableId }}(),
             data: {
                 _token: "{{ csrf_token() }}",
-                max_render: {{ $tableId }}_max_render
             }
         },
         order: [[{{ isset($defaultOrder) ? $defaultOrder : 1 }}, '{{ $arrangeOrder }}']],

@@ -27,6 +27,7 @@
         <div class="card-body">
             @csrf
             <div class="alert alert-warning undismissable" role="alert">Ketika ingin mencetak / mengunduh laporan, klik "load semua data" terlebih dahulu</div>
+            <button type="button" class="btn btn-primary mb-3" id="load-report">Load Semua Data</button>
             <div class="row">
                 <div class="form-group mb-3 col-md-6">
                     <label for="type">Tipe Laporan</label>
@@ -187,6 +188,20 @@
 
             table.ajax.url(main_url+params).load()
         }
+
+        $(document).on('click', '#load-report', function() {
+            Swal.fire({
+                title: 'Menampilkan semua data',
+                text: 'Kemungkinan akan membuat server bekerja terlalu berat, apakah anda yakin?',
+                icon: 'question',
+                showCancelButton: true,
+                cancelButtonText: "Batal"
+            }).then((result) => {
+                if(result.isConfirmed) {
+                    table.page.len(-1).draw()
+                }
+            })
+        })
         
         $('#date').flatpickr({
             mode: 'range',
