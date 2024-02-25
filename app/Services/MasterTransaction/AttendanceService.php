@@ -226,6 +226,7 @@ class AttendanceService extends BaseService {
 
         $now = now();
         $jam = Carbon::parse($now)->format('H:i');
+        $jamSetting = Carbon::parse(($settings ? $settings->time_end : "12:00"))->format('H:i');
 
         $attendance = $this->repository->getDataDateWithCondition($now, [], "student_id",$student->id, "first");
         if(!$attendance){
@@ -235,7 +236,7 @@ class AttendanceService extends BaseService {
             ], 404);
         }
 
-        if($jam < ($settings ? $settings->time_end : "14:00")){
+        if($jam < $jamSetting){
             if($attendance->present_at){
                 return response()->json([
                     "status" => "error",
@@ -310,12 +311,14 @@ class AttendanceService extends BaseService {
         if($type == "late"){
             $result = $data->filter(function ($item) use ($settings){
                 $masuk = Carbon::parse($item->present_at)->format("H:i");
-                if($masuk > ($settings ? $settings->start_time : "07:15")) return $item;
+                $masukSetting = Carbon::parse(($settings ? $settings->start_time : "07:15"))->format('H:i');
+                if($masuk > $masukSetting) return $item;
             });
         } else {
             $result = $data->filter(function ($item) use ($settings){
                 $masuk = Carbon::parse($item->present_at)->format("H:i");
-                if($masuk < ($settings ? $settings->start_time : "07:15")) return $item;
+                $masukSetting = Carbon::parse(($settings ? $settings->start_time : "07:15"))->format('H:i');
+                if($masuk < $masukSetting) return $item;
             });
         }
 
@@ -356,6 +359,26 @@ class AttendanceService extends BaseService {
         $data = $data->with(['student' => function ($query) {
             $query->orderBy('full_name', 'DESC');
         }])->get();
+
+        $groupedData = $data->groupBy('student_id');
+
+        // Membuat array kosong untuk menyimpan hasil yang akan dibuat Datatables
+        $tableData = [];
+
+        foreach ($groupedData as $studentId => $group) {
+            $rowData = [
+                "student" => {
+                    "student_id": $studentId,
+                    "full_name": $group->full_name,
+                    "nipd": $group->nipd,
+                    "nama_rombel": $group->nama_rombel
+                },
+                "present" => $group
+            ];
+
+            $tableData[] = $rowData;
+        }
+
         
         return Datatables::of($data)
             ->addIndexColumn()

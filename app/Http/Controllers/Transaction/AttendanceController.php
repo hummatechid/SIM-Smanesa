@@ -119,9 +119,9 @@ class AttendanceController extends Controller
                 return Carbon::parse($item->present_at)->format('H:i');
             })->addColumn('status', function($item) use ($settings) {
                 $masuk = Carbon::parse($item->present_at)->format('H:i');
-                // return $item->status;
+                $masukSetting = Carbon::parse(($settings ? $settings->start_time : "07:15"))->format('H:i');
                 if($item->status == "masuk"){
-                    if($masuk < ($settings ? $settings->start_time : "07:15")) {
+                    if($masuk < $masukSetting) {
                         return '<span class="badge bg-success">Tepat Waktu</span>';
                     } else {
                         return '<span class="badge bg-secondary">Terlambat</span>';
@@ -157,9 +157,9 @@ class AttendanceController extends Controller
                 return Carbon::parse($item->present_at)->format('d/m/Y H:i');
             })->addColumn('status', function($item) use ($settings){
                 $masuk = Carbon::parse($item->present_at)->format('H:i');
-                // return $item->status;
+                $masukSetting = Carbon::parse(($settings ? $settings->start_time : "07:15"))->format('H:i');
                 if($item->status == "masuk"){
-                if($masuk < ($settings ? $settings->start_time : "07:15")) {
+                if($masuk < $masukSetting) {
                         return '<span class="badge bg-success">Tepat Waktu</span>';
                     } else {
                         return '<span class="badge bg-secondary">Terlambat</span>';
