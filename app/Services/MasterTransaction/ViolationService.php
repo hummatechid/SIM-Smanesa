@@ -82,22 +82,18 @@ class ViolationService extends BaseService {
      */
     public function getReportDataDatatableV2(array|object $data) :JsonResponse
     {
-        $data = $data->sortBy(function ($item) {
-            return $item->student->full_name;
-        })->groupBy('student_id');
-
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('name', function($item) {
-                return '<a href="'.route('student.show', $item[0]->student->id).'" class="text-reset">'.$item[0]->student->full_name . ' ('.$item[0]->student->nipd.')</a>';
+                return '<a href="'.route('student.show', $item->id).'" class="text-reset">'.$item->full_name . ' ('.$item->nipd.')</a>';
             })->addColumn('class', function($item) {
-                return $item[0]->student->nama_rombel;
+                return $item->nama_rombel;
             })->addColumn('violation_score', function($item) {
-                return collect($item)->sum("score");
+                return $item->total_score_violation ?? 0;
             })->addColumn('violation_total', function($item) {
-                return count($item);
+                return $item->total_violation;
             })->addColumn('action', function($item) {
-                return view('admin.pages.violation.datatables-report-action', ['item' => $item[0]]);
+                return view('admin.pages.violation.datatables-report-action', ['item' => $item]);
             })->rawColumns(['action', 'name'])
             ->make(true);
     }

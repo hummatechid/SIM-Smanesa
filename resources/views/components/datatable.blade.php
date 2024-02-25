@@ -140,7 +140,7 @@
     let {{ $tableId }} = $('#{{ $tableId }}').DataTable({
         processing: true,
         @if(!empty($customExportButton))
-        dom: 'Bfrtip',
+        dom: "B<'row mt-3'<'col'l><'col'f>>rt<'row'<'col'i><'col'p>>",
         @endif
         serverSide: "{{ $serverSide }}",
         responsive: "{{ $datatableResponsive }}",
@@ -272,7 +272,7 @@
                         </div>`
                         $('#alert-delete').append(alert_msg)
                         window.setTimeout(function() {
-                            $(".alert").fadeTo(1000, 0).slideUp(300, function(){
+                            $(".alert").not('.undismissable').fadeTo(1000, 0).slideUp(300, function(){
                                 $(this).slideUp(300); 
                             });
                         }, 5000);

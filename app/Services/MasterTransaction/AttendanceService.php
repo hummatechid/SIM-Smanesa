@@ -353,52 +353,25 @@ class AttendanceService extends BaseService {
      */
     public function getReportDataDatatableV2(array|object $data) :JsonResponse
     {
-        // $data = $data->sortBy(function ($item) {
-        //     return $item->student->full_name;
-        // })->groupBy("student_id");
-        $data = $data->with(['student' => function ($query) {
-            $query->orderBy('full_name', 'DESC');
-        }])->get();
-
-        $groupedData = $data->groupBy('student_id');
-
-        // Membuat array kosong untuk menyimpan hasil yang akan dibuat Datatables
-        $tableData = [];
-
-        foreach ($groupedData as $studentId => $group) {
-            $rowData = [
-                "student" => {
-                    "student_id": $studentId,
-                    "full_name": $group->full_name,
-                    "nipd": $group->nipd,
-                    "nama_rombel": $group->nama_rombel
-                },
-                "present" => $group
-            ];
-
-            $tableData[] = $rowData;
-        }
-
-        
         return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('student', function($item) {
-                return '<a href="'.route('student.show', $item->student->id).'" class="text-reset">'.$item->student->full_name . ' ('.$item->student->nipd.')</a>';
+                return '<a href="'.route('student.show', $item->id).'" class="text-reset">'.$item->full_name . ' ('.$item->nipd.')</a>';
             })
             ->addColumn('class', function($item) {
-                return $item->student->nama_rombel;
+                return $item->nama_rombel;
             })
             ->addColumn('present', function($item) {
-                return $item->where('status', 'masuk')->count();
+                return $item->masuk;
             })
             ->addColumn('permit', function($item) {
-                return $item->where('status', 'izin')->count();
+                return $item->izin;
             })
             ->addColumn('sick', function($item) {
-                return $item->where('status', 'sakit')->count();
+                return $item->sakit;
             })
             ->addColumn('alpa', function($item) {
-                return $item->where('status', 'alpha')->count();
+                return $item->alpha;
             })
             ->rawColumns(['student'])
             ->make(true);

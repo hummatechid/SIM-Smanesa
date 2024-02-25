@@ -26,6 +26,8 @@
         </div>
         <div class="card-body">
             @csrf
+            <div class="alert alert-warning undismissable" role="alert">Ketika ingin mencetak / mengunduh laporan, klik "load semua data" terlebih dahulu</div>
+            <button type="button" class="btn btn-primary mb-3" id="load-report">Load Semua Data</button>
             <div class="row">
                 <div class="form-group mb-3 col-md-6">
                     <label for="type">Tipe Laporan</label>
@@ -62,11 +64,11 @@
                     <select name="data" id="data" class="form-select" required>
                         <option value="all">Semua</option>
                         <option value="per_class">Per Kelas</option>
-                        <option value="per_grade">Per Angkatan</option>
+                        <option value="per_grade">Per Jenjang</option>
                     </select>
                 </div>
                 <div class="form-group mb-3 col-md-6" id="data_grade" style="display: none;">
-                    <label for="grade">Angkatan</label>
+                    <label for="grade">Jenjang</label>
                     <select name="grade" id="grade" class="form-select input-data">
                         @foreach($grades as $grade)
                         <option value="{{ $grade }}">{{ $grade }}</option>
@@ -95,8 +97,8 @@
         :table-columns="$data_column"
         :custom-export-button="['csv', 'excel', 'pdf', 'print']"
         custom-export-title="Laporan Presensi"
-        :server-side="false"
-        :info-table="false"
+        :server-side="true"
+        :info-table="true"
         :pagging-table="true"
         :is-report="true"
         :orderable="false"
@@ -186,6 +188,20 @@
 
             table.ajax.url(main_url+params).load()
         }
+
+        $(document).on('click', '#load-report', function() {
+            Swal.fire({
+                title: 'Menampilkan semua data',
+                text: 'Kemungkinan akan membuat server bekerja terlalu berat, apakah anda yakin?',
+                icon: 'question',
+                showCancelButton: true,
+                cancelButtonText: "Batal"
+            }).then((result) => {
+                if(result.isConfirmed) {
+                    table.page.len(-1).draw()
+                }
+            })
+        })
         
         $('#date').flatpickr({
             mode: 'range',

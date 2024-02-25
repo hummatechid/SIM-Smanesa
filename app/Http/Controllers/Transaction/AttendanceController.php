@@ -10,7 +10,7 @@ use App\Repositories\StudentRepository;
 use Illuminate\Http\Request;
 use App\Services\MasterTransaction\AttendanceService;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\{Storage, DB};
 use stdClass;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -208,38 +208,54 @@ class AttendanceController extends Controller
 
     public function getReportDatatablesData(Request $request)
     {
+        if(isset($request->max_render) && $request->max_render == true) {
+            ini_set('MAX_EXECUTION_TIME', 3600);
+            set_time_limit(0);
+        }
+
+        $data = \App\Models\Student::orderBy('full_name', 'ASC');
+
         switch($request->type){
             case "monthly":
                 if(!$request->year) $year = date('Y');
                 else $year = $request->year;
-        
-                $data = $this->attendanceRepository->getDataMonthWithoutGet($year,$request->month,["student"]);
+
+                
+                $start_date = Carbon::parse($year.'-'.$request->month.'-01')->startOfMonth();
+                $end_date = Carbon::parse($year.'-'.$request->month.'-01')->endOfMonth();
+                
                 break;
             case "yearly":
-                $data = $this->attendanceRepository->getDataYearsWithoutGet($request->year,["student"]);
+                $start_date = Carbon::parse($request->year.'-01-01')->startOfYear();
+                $end_date = Carbon::parse($request->year.'-01-01')->endOfYear();
+
                 break;
             case "custom":
-                $check_date = explode("-",$request->date);
-                if(count($check_date) > 3){
-                    if(!$request->date){
-                        $date_from = date('Y-m-d');
-                        $date_to = date('Y-m-d');
-                    }else {
-                        $date_from = Carbon::parse($check_date[0])->format('Y-m-d');
-                        $date_to = Carbon::parse($check_date[1])->hour(23)
-                        ->minute(59)
-                        ->second(0)
-                        ->format('Y-m-d H:i:s');
-                    }
-                    $data = $this->attendanceRepository->getDataCustomDateWithoutGet($date_from,$date_to,["student"]);
-                }else if(count($check_date) == 3){
-                    $data = $this->attendanceRepository->getDataDateWithoutGet($request->date,["student"]);
+                if(!$request->date){
+                    $start_date = date('Y-m-d');
+                    $end_date = date('Y-m-d');
                 } else {
-                    if(!$request->year) $year = date('Y');
-                    else $year = $request->year;
-                    if(!$request->month) $month = date('m');
-                    else $month = $request->month;
-                    $data = $this->attendanceRepository->getDataMonthWithoutGet($year,$month,["student"]);
+                    $check_date = explode(" s/d ",$request->date);
+                    if(count($check_date) > 1){
+                        $start_date = Carbon::parse($check_date[0])->startOfDay();
+                        $end_date = Carbon::parse($check_date[1])->endOfDay();
+                    }else if(count($check_date) == 1){
+                        if($check_date){
+                            $start_date = date('Y-m-d');
+                            $end_date = date('Y-m-d');
+                        } else {
+                            $start_date = Carbon::parse($request->date)->startOfDay();
+                            $end_date = Carbon::parse($request->date)->endOfDay();
+                        }
+                    } else {
+                        if(!$request->year) $year = date('Y');
+                        else $year = $request->year;
+                        if(!$request->month) $month = date('m');
+                        else $month = $request->month;
+                        
+                        $start_date = Carbon::parse($year.'-'.$month.'-01')->startOfMonth();
+                        $end_date = Carbon::parse($year.'-'.$month.'-01')->endOfMonth();
+                    }
                 }
                 break;
             default:
@@ -247,29 +263,32 @@ class AttendanceController extends Controller
                 else $year = $request->year;
                 if(!$request->month) $month = date('m');
                 else $month = $request->month;
-                $data = $this->attendanceRepository->getDataMonthWithoutGet($year,$month,["student"]);
+
+                $start_date = Carbon::parse($year.'-'.$month.'-01')->startOfMonth();
+                $end_date = Carbon::parse($year.'-'.$month.'-01')->endOfMonth();
                 break;
         }
+
+        $data = $data->withCount([
+            'attendance as masuk' => function($q) use($start_date, $end_date) {
+                $q->where('status', 'masuk')->whereBetween('created_at', [$start_date, $end_date]);
+            }, 'attendance as alpha' => function($q) use($start_date, $end_date) {
+                $q->where('status', 'alpha')->whereBetween('created_at', [$start_date, $end_date]);
+            }, 'attendance as izin' => function($q) use($start_date, $end_date) {
+                $q->where('status', 'izin')->whereBetween('created_at', [$start_date, $end_date]);
+            }, 'attendance as sakit' => function($q) use($start_date, $end_date) {
+                $q->where('status', 'sakit')->whereBetween('created_at', [$start_date, $end_date]);
+            }
+        ]);
+
         if($request->data == "per_class"){
             $class = $request->class;
-            // $data = $data->filter(function($item) use ($class){
-            //     return $item->student->nama_rombel == $class;
-            // });
-            $data->whereHas('student', function ($query) use ($class) {
-                $query->where('nama_rombel', $class);
-            });
+            $data->where('nama_rombel', $class);
         }else if($request->data == "per_grade"){
             $grade = $request->grade;
-            // $data = $data->filter(function($item) use ($grade){
-            //     return $item->student->tingkat_pendidikan == $grade;
-            // });
-            $data = $data->whereHas('student', function ($query) use ($grade) {
-                $query->where('tingkat_pendidikan', $grade);
-            });
+            $data = $data->where('tingkat_pendidikan', $grade);
         }
-        // dd(count($data));
-        // $data = $data->take(15000);
-        
+
         return $this->attendanceService->getReportDataDatatableV2($data);
     }
 
